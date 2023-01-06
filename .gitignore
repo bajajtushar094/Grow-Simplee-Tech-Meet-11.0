@@ -1,0 +1,23 @@
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+
+### env 
+backend/env/
+backend/env/lib
+
+frontend/dashboard_frontend/node_modules
+
+migrations/
+node_modules/
+
+backend/dashboard_apis/digialpha/*
+backend/dashboard_apis/csv_data/*
+backend/dashboard_apis/a.py
+backend/dashboard_apis/dataentry.py
