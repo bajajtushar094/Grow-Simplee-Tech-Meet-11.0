@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-# from django.contrib.postgres.fields import ArrayField
 from .choices import *
 
 
@@ -19,17 +18,13 @@ class Rider(models.Model):
     name = models.CharField(max_length=250)
     rider_id = models.CharField(max_length=500)
     contact_number = models.CharField(max_length=10)
-    bag_volume = models.CharField(max_length=20)
+    bag_volume = models.CharField(max_length=50)
     current_address= models.ForeignKey(Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE)
     rider_status = models.CharField(_('filing form type'), max_length=50, choices=RIDER_STATUS)
-    # delievery_addresses = ArrayField(
-    #     models.ForeignKey(Address, on_delete=models.CASCADE),
-    #     blank=True,
-    #     null=True
-    # )
+    delievery_addresses = models.ManyToManyField(Address, related_name='Addresses_Assigned', blank=True) 
     manager_id = models.CharField(max_length=500)
-    arrival_time = models.DateField( auto_now=False, auto_now_add=False)
-    departure_time = models.DateField( auto_now=False, auto_now_add=False)
+    arrival_time = models.DateField( (_('arrival time')))
+    departure_time = models.DateField((_('departure time')))
 
     def __str__(self):
         return f'{self.name} + {self.rider_id}'
@@ -48,15 +43,15 @@ class Order(models.Model):
     order_id = models.CharField(max_length=500)
     rider_id = models.ForeignKey(Rider, null=True, on_delete=models.CASCADE)
     order_name = models.CharField(max_length=500,null=True)
-    shape = models.CharField(max_length=500,null=True)
-    volume = models.CharField(max_length=500)
-    length = models.CharField(max_length=500)
-    width = models.CharField(max_length=500)
-    height = models.CharField(max_length=500)
-    sku = models.CharField( max_length=500,null=True,blank=False)
+    shape = models.CharField(max_length=50,null=True)
+    volume = models.CharField(max_length=50)
+    length = models.CharField(max_length=50)
+    width = models.CharField(max_length=50)
+    height = models.CharField(max_length=50)
+    sku = models.CharField( max_length=50,null=True,blank=False)
     address_id = models.CharField(max_length=500)
-    delievery_action = models.CharField(max_length=500)
-    order_status = models.CharField(_('filing form type'), max_length=50, choices=ORDER_STATUS)
+    delievery_action = models.CharField(_('delievery action'), max_length=50, choices=DELIEVERY_ACTION)
+    order_status = models.CharField(_('order status'), max_length=50, choices=ORDER_STATUS)
     edd = models.DateField(_('EDD date'))
     owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)
 

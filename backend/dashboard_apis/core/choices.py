@@ -8,3 +8,7 @@ ORDER_STATUS = [
     ('undelievered','Undelievered'),
     ('delayed','Delayed')
 ]
+DELIEVERY_ACTION = [
+    ('drop', 'Drop'),
+    ('pickup','Pickup')
+]
