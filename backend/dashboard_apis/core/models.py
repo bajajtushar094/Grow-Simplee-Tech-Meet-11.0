@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .choices import *
+import os
+
 
 
 # Create your models here.
 
 class Address(models.Model):
-    id: models.CharField(max_length=500,primary_key=True)
+    id: models.CharField(max_length=500)
     latitude: models.CharField(max_length=50)
     longitude: models.CharField(max_length=50)
     name: models.CharField(max_length=250)
@@ -40,22 +42,30 @@ class Owner(models.Model):
         return self.name + self.address_id
 
 class Order(models.Model):
-    order_id = models.CharField(max_length=500)
-    rider_id = models.ForeignKey(Rider, null=True, on_delete=models.CASCADE)
-    order_name = models.CharField(max_length=500,null=True)
-    shape = models.CharField(max_length=50,null=True)
-    volume = models.CharField(max_length=50)
-    length = models.CharField(max_length=50)
-    width = models.CharField(max_length=50)
-    height = models.CharField(max_length=50)
-    sku = models.CharField( max_length=50,null=True,blank=False)
-    address_id = models.CharField(max_length=500)
-    delievery_action = models.CharField(_('delievery action'), max_length=50, choices=DELIEVERY_ACTION)
-    order_status = models.CharField(_('order status'), max_length=50, choices=ORDER_STATUS)
-    edd = models.DateField(_('EDD date'))
-    owner_id = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    rider = models.ForeignKey(Rider, null=True, on_delete=models.CASCADE,blank= True)
+    order_name = models.CharField(max_length=500,null=True,blank= True)
+    shape = models.CharField(max_length=50,null=True,blank= True)
+    volume = models.CharField(max_length=50,blank= True)
+    length = models.CharField(max_length=50,blank= True)
+    width = models.CharField(max_length=50,blank= True)
+    height = models.CharField(max_length=50,blank= True)
+    sku = models.CharField( max_length=50,null=True,blank= True)
+    address_id = models.CharField(max_length=500,blank= True)
+    delievery_action = models.CharField(_('delievery action'), max_length=50, choices=DELIEVERY_ACTION,blank= True)
+    order_status = models.CharField(_('order status'), max_length=50, choices=ORDER_STATUS,blank= True)
+    edd = models.DateField(_('EDD date'),blank= True)
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE,blank= True)
+    image = models.FileField(blank=True)
 
     def __str__(self):
-        return self.order_name + self.order_id
+        return self.order_name 
+
+def get_upload_to(instance, filename):
+    return os.path.join('images/', str(instance.order.id), filename)
+
+class OrderImage(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    images = models.FileField(upload_to=get_upload_to, blank=True)
+
 
 
