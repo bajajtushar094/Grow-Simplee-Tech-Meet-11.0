@@ -50,10 +50,11 @@ class Order(models.Model):
     width = models.CharField(max_length=50,blank= True)
     height = models.CharField(max_length=50,blank= True)
     sku = models.CharField( max_length=50,null=True,blank= True)
-    address_id = models.CharField(max_length=500,blank= True)
+    address = models.CharField(max_length=500,blank= True)
     delievery_action = models.CharField(_('delievery action'), max_length=50, choices=DELIEVERY_ACTION,blank= True)
     order_status = models.CharField(_('order status'), max_length=50, choices=ORDER_STATUS,blank= True)
     edd = models.DateField(_('EDD date'),blank= True)
+    edd_time = models.TimeField(auto_now=False, auto_now_add=False)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE,blank= True)
     image = models.FileField(blank=True)
 
@@ -61,7 +62,9 @@ class Order(models.Model):
         return self.order_name 
 
 def get_upload_to(instance, filename):
-    return os.path.join('images/', str(instance.order.id), filename)
+    path = 'images/'
+    format = instance.id + instance.file_extension
+    return os.path.join(path, format)
 
 class OrderImage(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

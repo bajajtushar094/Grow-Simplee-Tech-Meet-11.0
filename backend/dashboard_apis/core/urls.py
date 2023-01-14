@@ -8,5 +8,5 @@ urlpatterns = [
     path('',views.getData),
 
     #product api
-    path('product/<str:id>',order_view.order_detail_view)
+    path('product/<str:id>',order_view.order_detail)
 ]
