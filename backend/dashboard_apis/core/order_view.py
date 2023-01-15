@@ -12,7 +12,7 @@ def dummyFunction(order_images):
     return data
         
 @api_view(['GET'])
-def order_detail(request,id):
+def order_image_update(request,id):
     order = get_object_or_404(Order, order_name=id)
     attributes_calculated = dummyFunction
     data = OrderSerializer(instance=order, data=attributes_calculated)
