@@ -11,6 +11,8 @@ media
 ### env 
 backend/env/
 backend/env/lib
+backend/dashboard_apis/.env
+backend/dashboard_apis/.venv
 
 frontend/dashboard_frontend/node_modules
 
@@ -21,3 +23,4 @@ backend/dashboard_apis/digialpha/*
 backend/dashboard_apis/csv_data/*
 backend/dashboard_apis/a.py
 backend/dashboard_apis/dataentry.py
+backend/dashboard_apis/.idea
