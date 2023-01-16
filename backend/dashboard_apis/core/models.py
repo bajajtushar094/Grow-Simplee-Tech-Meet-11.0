@@ -62,6 +62,15 @@ class Order(models.Model):
         return self.order_name
 
 
+class Repository(models.Model):
+    cancelled = models.IntegerField(default=0)
+    pickups = models.IntegerField(default=0)
+    damaged = models.IntegerField(default=0)
+    history = models.TextField()
+
+    def __str__(self):
+        return f'Repository' 
+
 def get_upload_to(instance, filename):
     return os.path.join('media/', str(instance.order.order_name), filename)
 
@@ -69,3 +78,4 @@ def get_upload_to(instance, filename):
 class OrderImage(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     images = models.FileField(upload_to=get_upload_to, blank=True)
+
