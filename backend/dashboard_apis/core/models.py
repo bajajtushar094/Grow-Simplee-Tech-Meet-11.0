@@ -76,6 +76,18 @@ class OrderImage(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     images = models.FileField(upload_to=get_upload_to, blank=True)
 
+class Otpverification(models.Model):
+    otp = models.CharField(max_length=6)
+    phone_number = models.CharField(max_length=10)
+    is_verified = models.BooleanField(default=False)
+    is_expired = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+   
+    def __str__(self):
+        return f'{self.phone_number} + {self.otp}'
+
+
 
 
 
