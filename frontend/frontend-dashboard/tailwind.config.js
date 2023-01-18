@@ -1,9 +1,7 @@
 module.exports = {
-  content: [
-      './pages/**/*.{js,ts,jsx,tsx}',
-      './components/**/*.{js,ts,jsx,tsx}',
-      './shared/**/*.{js,ts,jsx,tsx}',
-  ],
+    content: [
+        "./src/**/*.{js,jsx,ts,tsx}",
+      ],
   theme: {
       extend: {
           fontFamily: {
@@ -11,19 +9,16 @@ module.exports = {
           },
           colors: {
               primary: '#00b0f5',
-              'ace-gray': '#414141',
+              'gs-gray': '#EDECE9',
+              'gs-text-gray': "#706D64",
+              'gs-dark-gray': '#706D64'
           },
           boxShadow: {
               '3xl': '0 0 32px 0 rgba(136, 152, 170, 0.15)',
           },
           keyframes: {
-              wiggle: {
-                  '0%, 100%': { opacity: 1 },
-                  '50%': { opacity: 0 },
-              },
           },
           animation: {
-              wiggle: 'wiggle 1s ease-in-out infinite',
           },
       },
       fontWeight: {
