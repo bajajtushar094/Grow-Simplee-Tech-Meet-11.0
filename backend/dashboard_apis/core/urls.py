@@ -14,5 +14,5 @@ urlpatterns = [
 
     path('order/', views.order),
     # rider api
-    path('rider-stats/', views.rider_rewards)
+    path('rider-rewards/', views.rider_rewards)
 ]    
