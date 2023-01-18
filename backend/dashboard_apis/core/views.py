@@ -7,12 +7,20 @@ from django.http import HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import RiderRewardsForm, OrderForm
+from .models import Rider
+from .serializers import *
 
 @api_view(['GET'])
 def getData(request):
     person = {'name': 'siddhartha'}
     return Response(person)
 
+@api_view(['GET'])
+def getRiderManagementMap(request):
+    all_riders = Rider.objects.all()
+    data = {}
+    data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
+    return Response(data)
 
 def upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
