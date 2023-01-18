@@ -1,12 +1,12 @@
 from django.conf import settings
 import os
-from core.models import Order, OrderImage
+from core.models import *
 import zipfile
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+from .forms import RiderRewardsForm, OrderForm
 
 @api_view(['GET'])
 def getData(request):
@@ -45,3 +45,27 @@ def upload(request):
         })
 
     return render(request, 'core/upload.html')
+
+def rider_rewards(request):
+    if request.method=='POST':
+        form = RiderRewardsForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('rider_id')
+
+    if request.method=='GET':
+        form = RiderRewardsForm()
+    
+    return render(request, 'core/rider_rewards_form.html', {'form':form})
+
+def order(request):
+    if request.method=='POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('')
+    
+    if request.method=='GET':
+        form = OrderForm()
+
+    return render(request, 'core/rider_rewards_form.html', {'form':form})
+
+

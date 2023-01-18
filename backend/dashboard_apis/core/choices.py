@@ -12,3 +12,7 @@ DELIVERY_ACTION = [
     ('drop', 'Drop'),
     ('pickup', 'Pickup')
 ]
+PICKUP_REASON = [
+    ('damaged', 'Damaged'),
+    ('wrong order', 'Wrong Order')
+]
