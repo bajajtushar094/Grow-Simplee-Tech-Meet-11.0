@@ -74,6 +74,19 @@ class Rider(models.Model):
     
     def __str__(self):
         return f"{self.name} + {self.rider_id}"
+    
+class Bags(models.Model):
+    rider_id = models.CharField(max_length=500)
+    order_name = models.CharField(max_length=500, null=True, blank=True)
+    shape = models.CharField(max_length=50, null=True, blank=True)
+    volume = models.CharField(max_length=50, blank=True)
+    length = models.CharField(max_length=50, blank=True)
+    width = models.CharField(max_length=50, blank=True)
+    height = models.CharField(max_length=50, blank=True)
+
+
+    def __str__(self):
+        return self.order_name
 
 class Repository(models.Model):
     cancelled = models.IntegerField(default=0)

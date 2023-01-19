@@ -76,3 +76,27 @@ def order(request):
     return render(request, 'core/rider_rewards_form.html', {'form':form})
 
 
+
+#dashboard APIS
+@api_view(['GET'])
+def getOrder(request):
+    all_orders = Order.objects.all()
+    data = {}
+    data['orders'] = [OrderSerializer(order).data for order in all_orders]
+    return Response(data)
+
+@api_view(['GET'])
+def getRider(request):
+    all_riders = Rider.objects.all()
+    data = {}
+    data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
+    return Response(data)
+
+
+@api_view(['GET'])
+def getBags(request):
+    all_bags = Bags.objects.all()
+    data = {}
+    data['bags'] = [RiderSerializer(bag).data for bag in all_bags]
+    return Response(data)
+
