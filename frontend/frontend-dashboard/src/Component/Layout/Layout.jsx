@@ -52,7 +52,8 @@ const Layout = ({children}) => {
         toggleSideBar={toggleSideBar}
         />
         {children}
-        </div>
+      </div>
+      {/* <ProgressBar progress="2" /> */}
     </div>
   );
 };

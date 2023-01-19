@@ -3,7 +3,7 @@ import RightSideBarCard from "./RightSideBarCard";
 
 const RightSideBar = () => {
   return (
-    <div className="w-96 mr-6">
+    <div className="w-96 mr-6 fixed right-0">
       <br />
       <RightSideBarCard
         number="1"

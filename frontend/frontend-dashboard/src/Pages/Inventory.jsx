@@ -1,12 +1,12 @@
-import React from 'react'
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
-import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
-import Table from '../Component/Global/Table'
-import Layout from '../Component/Layout'
-import PlayListAddCheckIcon from '../Shared/Icons/PlayListAddCheckIcon';
-import MopedOutlinedIcon from '@mui/icons-material/MopedOutlined';
-
+import React from "react";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
+import Table from "../Component/Global/Table";
+import Layout from "../Component/Layout";
+import PlayListAddCheckIcon from "../Shared/Icons/PlayListAddCheckIcon";
+import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
+import ProgressBar from "../Component/Layout/ProgressBar";
 
 const Inventory = () => {
   return (
@@ -47,8 +47,35 @@ const Inventory = () => {
             <Table />
           </div>
         </div>
-       </Layout>
+        {/* <div className="bg-white rounded-tl-3xl">
+          <div className="flex pb-4 pt-6 px-8">
+            <div>
+              <PlayListAddCheckIcon />
+            </div>
+            <div className="pl-4 w-full">
+              <div className="flex justify-between w-full">
+                <h4 className="text-gs-blue text-sm font-semibold">Packages</h4>
+                <div className="flex space-x-6">
+                  <button className="text-gs-text-gray text-sm font-semibold">
+                    <MopedOutlinedIcon fontSize="small" className="mr-1" />
+                    History
+                  </button>
+                  <button className="text-gs-text-gray text-sm font-semibold">
+                    <MopedOutlinedIcon fontSize="small" className="mr-1" />
+                    Inhouse
+                  </button>
+                </div>
+              </div>
+              <h2 className="text-xl font-semibold">Repository</h2>
+              <h4 className="text-md text-[#5F5D59] font-semibold">
+                List of items currently in warehouse
+              </h4>
+            </div>
+          </div>
+          <Table />
+        </div> */}
+    </Layout>
   )
-}
+};
 
-export default Inventory
+export default Inventory;

@@ -15,5 +15,8 @@ urlpatterns = [
     path('order/', views.order),
     # rider api
     path('rider-rewards/', views.rider_rewards),
-    path('rider-management/', views.getRiderManagementMap)
+    path('rider-management/', views.getRiderManagementMap),
+    path('orders/all', views.getOrder),
+    path('riders/all', views.getRider),
+    path('bags/all', views.getBags),
 ]    
