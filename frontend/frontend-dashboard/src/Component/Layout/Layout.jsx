@@ -1,38 +1,50 @@
-import { useState } from 'react'
+import { useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import cx from 'classnames'
-import TopBar from './TopBar'
-import LeftSidebar from './LeftSidebar'
-import ListViewBar from './ListViewBar';
+import cx from "classnames";
+import TopBar from "./TopBar";
+import LeftSidebar from "./LeftSidebar";
+import ListViewBar from "./ListViewBar";
+import WebcamCapture from "./Webcam";
+import RightSideBar from "./RightSidebar";
+import ProgressBar from "./ProgressBar";
 
 const Layout = (props) => {
-    console.log(props)
-    const navigate = useNavigate();
-    const lhsTabs = [{id: 1, value: 'Home'}, {id:2, value: 'Ride'}]
-    const lhsBottomTabs = [{id: 1, value: 'Support'}]
+  console.log(props);
+  const navigate = useNavigate();
+  const lhsTabs = [
+    { id: 1, value: "Home" },
+    { id: 2, value: "Ride" },
+  ];
+  const lhsBottomTabs = [{ id: 1, value: "Support" }];
 
-    const [activeTab, setActiveTab] = useState(lhsTabs[0].value)
-    const [isSideBarOpen, setIsSideBarOpen] = useState(false)
-    const [leftSidebar, hideLeftSidebar] = useState(false)
-    const [hideTopBar, setHideTopBar] = useState(false)
+  const [activeTab, setActiveTab] = useState(lhsTabs[0].value);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [leftSidebar, hideLeftSidebar] = useState(false);
+  const [hideTopBar, setHideTopBar] = useState(false);
 
-    const toggleSideBar = () => {
-        setIsSideBarOpen(!isSideBarOpen)
-    }
+  const toggleSideBar = () => {
+    setIsSideBarOpen(!isSideBarOpen);
+  };
 
-    const handleTabChange = (option) => {
-        setActiveTab(option.value)
-        navigate(option.value)
-        window.__RHS_CONTENT_BOX_NODE.scrollTop = 0
-    }
+  const handleTabChange = (option) => {
+    setActiveTab(option.value);
+    navigate(option.value);
+    window.__RHS_CONTENT_BOX_NODE.scrollTop = 0;
+  };
 
   return (
     <div>
-        <TopBar />
+      <TopBar />
+      <div className="flex justify-between">
         <LeftSidebar />
-        {/* <h1>Layout</h1>
+        <WebcamCapture />
+        <RightSideBar />
+      </div>
+      <ProgressBar progress="2" />
+      {/* <h1>Layout</h1>
         {props.children} */}
     </div>
+
     // <div className={cx('overflow-hidden w-screen h-screen')}>
     //             {children}
     //             <div className={cx('relative w-screen h-screen flex flex-row')}>
@@ -64,7 +76,7 @@ const Layout = (props) => {
     //                     )}
     //                     <div
     //                         className={`no-scrollbar w-full h-full overflow-auto relative pb-32 pt-[78px] bg-[#f7f8fa] sm:pt-[99px] `}
-                            
+
     //                     >
     //                         {children}
     //                     </div>
@@ -72,7 +84,7 @@ const Layout = (props) => {
     //             </div>
     //             <Outlet />
     //         </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
