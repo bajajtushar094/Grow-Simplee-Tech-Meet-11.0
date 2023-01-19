@@ -28,13 +28,6 @@ const WebcamCapture = () => {
           videoConstraints={videoConstraints}
           className="rounded-3xl"
         />
-        <button
-          onClick={() => {
-            setItOn(0);
-          }}
-        >
-          Stop webcam
-        </button>
         <br />
         {/* click the button below to take a snapshot and then click on anchor tag to download the snapshot */}
         {/* it gets downloaded in downloads folder by default but download location can be changed */}
