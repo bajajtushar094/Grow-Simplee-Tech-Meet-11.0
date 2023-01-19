@@ -22,6 +22,14 @@ def getRiderManagementMap(request):
     data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
     return Response(data)
 
+@api_view(['GET'])
+def rider_rewards(request):
+    rider_rewards_list = RiderRewards.objects.all()
+    data = {}
+    data['riders'] = [RiderRewardsSerializer(rider).data for rider in rider_rewards_list]
+    # serializer = RiderRewardsSerializer(rider_rewards_list, many=True)
+    return Response(data)
+
 def upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
         my_file = request.FILES['myfile']
@@ -54,16 +62,7 @@ def upload(request):
 
     return render(request, 'core/upload.html')
 
-def rider_rewards(request):
-    if request.method=='POST':
-        form = RiderRewardsForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('rider_id')
 
-    if request.method=='GET':
-        form = RiderRewardsForm()
-    
-    return render(request, 'core/rider_rewards_form.html', {'form':form})
 
 def order(request):
     if request.method=='POST':
