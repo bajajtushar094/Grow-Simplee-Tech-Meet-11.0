@@ -5,8 +5,7 @@ import TopBar from './TopBar'
 import LeftSidebar from './LeftSidebar'
 import ListViewBar from './ListViewBar';
 
-const Layout = (props) => {
-    console.log(props)
+const Layout = ({children}) => {
     const navigate = useNavigate();
     const lhsTabs = [{id: 1, value: 'Home'}, {id:2, value: 'Ride'}]
     const lhsBottomTabs = [{id: 1, value: 'Support'}]
@@ -29,7 +28,10 @@ const Layout = (props) => {
   return (
     <div>
         <TopBar />
+        <div className='flex'>
         <LeftSidebar />
+        {children}
+        </div>
         {/* <h1>Layout</h1>
         {props.children} */}
     </div>

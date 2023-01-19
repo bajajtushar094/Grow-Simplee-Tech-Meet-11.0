@@ -11,7 +11,9 @@ module.exports = {
               primary: '#00b0f5',
               'gs-gray': '#EDECE9',
               'gs-text-gray': "#706D64",
-              'gs-dark-gray': '#706D64'
+              'gs-dark-gray': '#706D64',
+              'gs-black': '#272520',
+              'gs-blue': '#3544B6'
           },
           boxShadow: {
               '3xl': '0 0 32px 0 rgba(136, 152, 170, 0.15)',
