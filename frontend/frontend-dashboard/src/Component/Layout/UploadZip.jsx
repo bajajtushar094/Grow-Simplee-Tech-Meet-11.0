@@ -1,10 +1,11 @@
 import React from "react";
 import "./UploadZip.css";
 import UploadFileSharpIcon from "@mui/icons-material/UploadFileSharp";
+import { useState } from "react";
 
 const UploadZip = () => {
   return (
-    <div className="bg-white h-fit rounded-xl p-4 w-2/5 flex flex-col items-center align-center">
+    <div className="bg-white h-fit rounded-xl py-4 px-40 w-full flex flex-col items-center align-center">
       <div class="file">
         <label for="input-file">
           <UploadFileSharpIcon style={{ color: "#3544B6" }} />

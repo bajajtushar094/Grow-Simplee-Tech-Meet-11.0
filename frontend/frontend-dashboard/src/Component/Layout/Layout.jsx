@@ -7,6 +7,8 @@ import ListViewBar from "./ListViewBar";
 import WebcamCapture from "./Webcam";
 import RightSideBar from "./RightSidebar";
 import ProgressBar from "./ProgressBar";
+import UploadZip from "./UploadZip";
+import AddFilesBtn from "./AddFilesBtn";
 
 const Layout = (props) => {
   console.log(props);
@@ -37,7 +39,11 @@ const Layout = (props) => {
       <TopBar />
       <div className="flex justify-between">
         <LeftSidebar />
-        <WebcamCapture />
+        {/* <WebcamCapture /> */}
+        <div>
+          <UploadZip />
+          <AddFilesBtn />
+        </div>
         <RightSideBar />
       </div>
       <ProgressBar progress="2" />
