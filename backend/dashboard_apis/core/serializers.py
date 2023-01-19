@@ -30,3 +30,9 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderImage
         fields = '__all__'
+
+class RiderRewardsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RiderRewards
+        fields = '__all__'

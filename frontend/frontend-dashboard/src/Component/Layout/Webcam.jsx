@@ -6,8 +6,8 @@ const WebcamCapture = () => {
   const [imgsrc, setImgsrc] = useState("");
   const [isItOn, setItOn] = useState(0); // usestate variable to check if webcam is on
   const videoConstraints = {
-    width: 1280,
-    height: 720,
+    width: 800,
+    height: 500,
     facingMode: "user",
   };
   const webcamRef = React.useRef(null);
@@ -17,16 +17,18 @@ const WebcamCapture = () => {
     setImgsrc(imageSrc);
   }, [webcamRef]);
   return (
-    <>
+    <div>
+      <br />
       {isItOn === 1 ? (
-        <>
+        <div>
           <Webcam
             audio={false}
-            height={720}
+            height={500}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            width={1280}
+            width={800}
             videoConstraints={videoConstraints}
+            className="rounded-3xl"
           />
           <button
             onClick={() => {
@@ -35,13 +37,16 @@ const WebcamCapture = () => {
           >
             Stop webcam
           </button>
+          <br />
           {/* click the button below to take a snapshot and then click on anchor tag to download the snapshot */}
           {/* it gets downloaded in downloads folder by default but download location can be changed */}
           <button onClick={capture}>Capture photo</button>
+          <br />
+
           <a download="FILENAME.png" href={imgsrc}>
             link
           </a>
-        </>
+        </div>
       ) : (
         <button
           onClick={() => {
@@ -51,7 +56,7 @@ const WebcamCapture = () => {
           Start webcam
         </button>
       )}
-    </>
+    </div>
   );
 };
 
