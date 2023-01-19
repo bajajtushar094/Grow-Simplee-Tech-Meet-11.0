@@ -4,20 +4,15 @@ import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";
 import ListViewBar from "./ListViewBar";
-import WebcamCapture from "./Webcam";
 import RightSideBar from "./RightSidebar";
 import ProgressBar from "./ProgressBar";
 import UploadZip from "./UploadZip";
 import AddFilesBtn from "./AddFilesBtn";
 
-const Layout = (props) => {
-  console.log(props);
-  const navigate = useNavigate();
-  const lhsTabs = [
-    { id: 1, value: "Home" },
-    { id: 2, value: "Ride" },
-  ];
-  const lhsBottomTabs = [{ id: 1, value: "Support" }];
+const Layout = ({children}) => {
+    const navigate = useNavigate();
+    const lhsTabs = [{id: 1, value: 'Home'}, {id:2, value: 'Ride'}]
+    const lhsBottomTabs = [{id: 1, value: 'Support'}]
 
   const [activeTab, setActiveTab] = useState(lhsTabs[0].value);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -36,19 +31,11 @@ const Layout = (props) => {
 
   return (
     <div>
-      <TopBar />
-      <div className="flex justify-between">
+        <TopBar />
+        <div className='flex'>
         <LeftSidebar />
-        {/* <WebcamCapture /> */}
-        <div>
-          <UploadZip />
-          <AddFilesBtn />
+        {children}
         </div>
-        <RightSideBar />
-      </div>
-      <ProgressBar progress="2" />
-      {/* <h1>Layout</h1>
-        {props.children} */}
     </div>
 
     // <div className={cx('overflow-hidden w-screen h-screen')}>
