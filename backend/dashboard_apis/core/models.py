@@ -8,35 +8,13 @@ import os
 
 
 class Address(models.Model):
-    id: models.CharField(max_length=500)
-    latitude: models.CharField(max_length=50)
-    longitude: models.CharField(max_length=50)
-    name: models.CharField(max_length=250)
+    id = models.CharField(max_length=500, primary_key=True)
+    latitude = models.CharField(max_length=50)
+    longitude = models.CharField(max_length=50)
+    name = models.CharField(max_length=250)
 
     def __str__(self):
         return f"Address-{self.name}"
-
-
-class Rider(models.Model):
-    name = models.CharField(max_length=250)
-    rider_id = models.CharField(max_length=500)
-    contact_number = models.CharField(max_length=10)
-    bag_volume = models.CharField(max_length=50)
-    current_address = models.ForeignKey(
-        Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
-    )
-    rider_status = models.CharField(
-        _("filing form type"), max_length=50, choices=RIDER_STATUS
-    )
-    delievery_addresses = models.ManyToManyField(
-        Address, related_name="Addresses_Assigned", blank=True
-    )
-    manager_id = models.CharField(max_length=500)
-    arrival_time = models.DateField((_("arrival time")))
-    departure_time = models.DateField((_("departure time")))
-
-    def __str__(self):
-        return f"{self.name} + {self.rider_id}"
 
 
 class Owner(models.Model):
@@ -50,7 +28,7 @@ class Owner(models.Model):
 
 
 class Order(models.Model):
-    rider = models.ForeignKey(Rider, null=True, on_delete=models.CASCADE, blank=True)
+    rider_id = models.CharField(max_length=500)
     order_name = models.CharField(max_length=500, null=True, blank=True)
     shape = models.CharField(max_length=50, null=True, blank=True)
     volume = models.CharField(max_length=50, blank=True)
@@ -66,12 +44,36 @@ class Order(models.Model):
         _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
     )
     edd = models.DateField(_("EDD date"), blank=True, null=True)
+    eta = models.CharField(max_length=50)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, blank=True, null=True)
     image = models.FileField(blank=True)
 
     def __str__(self):
         return self.order_name
 
+class Rider(models.Model):
+    name = models.CharField(max_length=250)
+    rider_id = models.CharField(max_length=500)
+    contact_number = models.CharField(max_length=10)
+    bag_volume = models.CharField(max_length=50)
+    bag_volume_used = models.CharField(max_length=50)
+    current_address = models.ForeignKey(
+        Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
+    )
+    rider_status = models.CharField(
+        _("filing form type"), max_length=50, choices=RIDER_STATUS
+    )
+    delievery_orders = models.ManyToManyField(
+        Order, related_name="Orders_Assigned", blank=True
+    )
+    last_delivered_pointer = models.IntegerField()
+    manager_id = models.CharField(max_length=500)
+    arrival_time = models.DateField((_("arrival time")))
+    departure_time = models.DateField((_("departure time")))
+    etf = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return f"{self.name} + {self.rider_id}"
 
 class Repository(models.Model):
     cancelled = models.IntegerField(default=0)
