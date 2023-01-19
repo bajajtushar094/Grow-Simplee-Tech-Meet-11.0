@@ -12,12 +12,14 @@ const Inventory = () => {
   return (
       <Layout>
         <div className='w-full flex-col'>
-          <div className='flex justify-end w-full py-3 px-8 space-x-8'>
+          <div className='flex justify-end w-full space-x-8'>
+            <div className='flex py-3 space-x-8 border-solid border-2 border-[#EDECE9] px-8 bg-[#FAFAFA] rounded-tl-sm'>
             <KeyboardDoubleArrowRightOutlinedIcon className='cursor-pointer'/>
             <button className='text-gs-black text-sm font-semibold'><FileDownloadIcon fontSize='medium' /> Download</button>
             <button className='text-gs-black text-sm font-semibold'><ContentCopyOutlinedIcon fontSize='small'/> Download</button>
             <button className='text-gs-black text-sm font-semibold'><FileDownloadIcon fontSize='medium'/> Download</button>
             <button className='text-gs-black text-sm font-semibold'><ContentCopyOutlinedIcon fontSize='small'/> Download</button>
+            </div>
           </div>
           <div className='bg-white rounded-tl-3xl'>
             <div className='flex pb-4 pt-6 px-8'>
