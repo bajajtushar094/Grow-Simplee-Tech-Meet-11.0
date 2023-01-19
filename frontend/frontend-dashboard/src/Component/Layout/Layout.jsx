@@ -8,11 +8,15 @@ import RightSideBar from "./RightSidebar";
 import ProgressBar from "./ProgressBar";
 import UploadZip from "./UploadZip";
 import AddFilesBtn from "./AddFilesBtn";
+import WebcamCapture from "./Webcam";
 
-const Layout = ({children}) => {
-    const navigate = useNavigate();
-    const lhsTabs = [{id: 1, value: 'Home'}, {id:2, value: 'Ride'}]
-    const lhsBottomTabs = [{id: 1, value: 'Support'}]
+const Layout = ({ children }) => {
+  const navigate = useNavigate();
+  const lhsTabs = [
+    { id: 1, value: "Home" },
+    { id: 2, value: "Ride" },
+  ];
+  const lhsBottomTabs = [{ id: 1, value: "Support" }];
 
   const [activeTab, setActiveTab] = useState(lhsTabs[0].value);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -31,11 +35,12 @@ const Layout = ({children}) => {
 
   return (
     <div>
-        <TopBar />
-        <div className='flex'>
+      <TopBar />
+      <div className="flex">
         <LeftSidebar />
         {children}
-        </div>
+      </div>
+      <ProgressBar progress="2" />
     </div>
 
     // <div className={cx('overflow-hidden w-screen h-screen')}>
