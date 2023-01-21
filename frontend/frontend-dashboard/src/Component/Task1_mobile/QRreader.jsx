@@ -3,6 +3,7 @@ import { useState } from "react";
 import QrReader from "react-qr-reader";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import QRinstruction from "../../dummy_files/QRInstructions.png";
 
 const App = () => {
   const [selected, setSelected] = useState("environment");
@@ -26,7 +27,7 @@ const App = () => {
   };
   return (
     <div className="App">
-      <h1>
+      <h1 className="text-2xl m-4">
         Scan Bag QR to start <QrCodeScannerIcon />{" "}
       </h1>
 
@@ -39,24 +40,24 @@ const App = () => {
       </button> */}
       {/* {startScan && (
         <> */}
-      <select onChange={(e) => setSelected(e.target.value)}>
+      {/* <select onChange={(e) => setSelected(e.target.value)}>
         <option value={"environment"}>Back Camera</option>
         <option value={"user"}>Front Camera</option>
-      </select>
+      </select> */}
       <div className="border-black rounded-xl border-2 p-4 ">
         <QrReader
-          facingMode={selected}
+          facingMode="environment"
           delay={1000}
           onError={handleError}
           onScan={handleScan}
           onResult={() => {}}
           // chooseDeviceId={()=>selected}
-          style={{ width: "300px" }}
+          style={{ width: "230px" }}
           videoContainerStyle={{ borderRadius: "20px" }}
         />
         {/* </>
       )} */}
-        <p className="my-2">
+        <p className="mt-4">
           <b>Bag ID:</b> 235GD57{" "}
           <ArrowOutwardIcon
             className="text-stone-500"
@@ -64,8 +65,10 @@ const App = () => {
           />
         </p>
       </div>
+      <p className="mt-2">Lorem ipsum dolor sit amet.</p>
       {/* {loadingScan && <p>Loading</p>}
       {data !== "" && <p>{data}</p>} */}
+      <img src={QRinstruction} alt="no img" className="fixed bottom-0" />
     </div>
   );
 };
