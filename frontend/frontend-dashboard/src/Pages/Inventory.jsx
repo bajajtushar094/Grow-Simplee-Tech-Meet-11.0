@@ -6,7 +6,6 @@ import Table from "../Component/Global/Table";
 import Layout from "../Component/Layout";
 import PlayListAddCheckIcon from "../Shared/Icons/PlayListAddCheckIcon";
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
-import ProgressBar from "../Component/Layout/ProgressBar";
 
 const Inventory = () => {
   return (
