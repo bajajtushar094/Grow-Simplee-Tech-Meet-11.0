@@ -74,7 +74,7 @@ class order(APIView):
         return render(request, 'core/rider_rewards_form.html', {'form':form})
 
     def post(self, request, *args, **kwargs):
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             return HttpResponseRedirect('')
         return render(request, 'core/rider_rewards_form.html', {'form':form})
