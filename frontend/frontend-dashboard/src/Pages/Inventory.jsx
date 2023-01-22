@@ -87,7 +87,7 @@ const Inventory = () => {
             <Table />
           </div>
         </div>
-        {/* <div className="bg-white rounded-tl-3xl">
+      {/* <div className="bg-white rounded-tl-3xl">
           <div className="flex pb-4 pt-6 px-8">
             <div>
               <PlayListAddCheckIcon />
@@ -115,7 +115,7 @@ const Inventory = () => {
           <Table />
         </div> */}
     </Layout>
-  )
+  );
 };
 
 export default Inventory;
