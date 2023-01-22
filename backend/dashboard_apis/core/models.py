@@ -19,10 +19,10 @@ class Address(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
     latitude = models.CharField(max_length=50)
     longitude = models.CharField(max_length=50)
-    name = models.CharField(max_length=250)
-
+    location = models.CharField(max_length=250)
+    name = models.CharField()
     def __str__(self):
-        return f"Address-{self.name}"
+        return f"Address-{self.location}"
 
 
 class Owner(models.Model):
