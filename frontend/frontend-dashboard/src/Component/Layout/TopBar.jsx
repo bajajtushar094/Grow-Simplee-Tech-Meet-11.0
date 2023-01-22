@@ -6,9 +6,9 @@ const Topbar = () => {
     <div className='bg-gs-gray py-3 px-8 flex justify-between'>
       <div className=''>
         <ul className='flex space-x-10 '>
-          <Link to='/about'><li className='text-gs-text-gray'>Dashboard</li></Link>
-          <Link to='/about'><li className='text-gs-text-gray'>Dashboard</li></Link>
-          <Link to='/about'><li className='text-gs-text-gray'>Dashboard</li></Link>
+          <Link to='/about'><li className='text-gs-text-gray font-semibold'>Dashboard</li></Link>
+          <Link to='/about'><li className='text-gs-text-gray font-semibold'>Rider Management</li></Link>
+          <Link to='/about'><li className='text-gs-text-gray font-semibold'>Inventory</li></Link>
         </ul>
       </div>
       <div className='flex'>

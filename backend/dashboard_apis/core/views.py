@@ -7,12 +7,28 @@ from django.http import HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .forms import RiderRewardsForm, OrderForm
+from .models import Rider
+from .serializers import *
 
 @api_view(['GET'])
 def getData(request):
     person = {'name': 'siddhartha'}
     return Response(person)
 
+@api_view(['GET'])
+def getRiderManagementMap(request):
+    all_riders = Rider.objects.all()
+    data = {}
+    data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
+    return Response(data)
+
+@api_view(['GET'])
+def rider_rewards(request):
+    rider_rewards_list = RiderRewards.objects.all()
+    data = {}
+    data['riders'] = [RiderRewardsSerializer(rider).data for rider in rider_rewards_list]
+    # serializer = RiderRewardsSerializer(rider_rewards_list, many=True)
+    return Response(data)
 
 def upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
@@ -46,16 +62,7 @@ def upload(request):
 
     return render(request, 'core/upload.html')
 
-def rider_rewards(request):
-    if request.method=='POST':
-        form = RiderRewardsForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('rider_id')
 
-    if request.method=='GET':
-        form = RiderRewardsForm()
-    
-    return render(request, 'core/rider_rewards_form.html', {'form':form})
 
 def order(request):
     if request.method=='POST':
@@ -68,4 +75,28 @@ def order(request):
 
     return render(request, 'core/rider_rewards_form.html', {'form':form})
 
+
+
+#dashboard APIS
+@api_view(['GET'])
+def getOrder(request):
+    all_orders = Order.objects.all()
+    data = {}
+    data['orders'] = [OrderSerializer(order).data for order in all_orders]
+    return Response(data)
+
+@api_view(['GET'])
+def getRider(request):
+    all_riders = Rider.objects.all()
+    data = {}
+    data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
+    return Response(data)
+
+
+@api_view(['GET'])
+def getBags(request):
+    all_bags = Bags.objects.all()
+    data = {}
+    data['bags'] = [RiderSerializer(bag).data for bag in all_bags]
+    return Response(data)
 
