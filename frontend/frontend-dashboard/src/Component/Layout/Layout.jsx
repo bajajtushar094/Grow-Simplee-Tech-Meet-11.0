@@ -14,12 +14,12 @@ import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
 import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
 
-const Layout = ({children}) => {
+const Layout = ({children, isLeftSidebarPresent=true}) => {
+  console.log(isLeftSidebarPresent)
   const navigate = useNavigate();
   const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[0].value);
   const [activeTab, setActiveTab] = useState(LHS_TABS[0].value);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [leftSidebar, hideLeftSidebar] = useState(false);
   const [hideTopBar, setHideTopBar] = useState(false);
 
   const toggleSideBar = () => {
@@ -43,14 +43,16 @@ const Layout = ({children}) => {
         onTopTabClick={handleTopTabChange}
         />
         <div className='flex'>
-        <LeftSidebar 
-        lhsOptions={LHS_TABS}
-        bottomTabs={LHS_BOTTOM_TABS}
-        activeTab={activeTab}
-        onTabClick={handleTabChange}
-        isSideBarOpen={isSideBarOpen}
-        toggleSideBar={toggleSideBar}
-        />
+          {
+            isLeftSidebarPresent && <LeftSidebar 
+            lhsOptions={LHS_TABS}
+            bottomTabs={LHS_BOTTOM_TABS}
+            activeTab={activeTab}
+            onTabClick={handleTabChange}
+            isSideBarOpen={isSideBarOpen}
+            toggleSideBar={toggleSideBar}
+            />
+          }
         {children}
       </div>
       {/* <ProgressBar progress="2" /> */}
