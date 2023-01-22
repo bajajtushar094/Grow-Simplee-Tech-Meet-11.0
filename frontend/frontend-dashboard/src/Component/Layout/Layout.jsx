@@ -42,7 +42,7 @@ const Layout = ({children, isLeftSidebarPresent=true}) => {
         activeTab={activeTopTab}
         onTopTabClick={handleTopTabChange}
         />
-        <div className='flex'>
+        <div className='flex-col'>
           {
             isLeftSidebarPresent && <LeftSidebar 
             lhsOptions={LHS_TABS}
