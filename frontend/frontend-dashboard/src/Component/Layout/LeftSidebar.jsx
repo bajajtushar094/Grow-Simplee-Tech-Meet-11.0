@@ -1,5 +1,7 @@
 import React from 'react'
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+import InventoryIcon from '../../Shared/Icons/InventoryIcon';
+import RepositoryIcon from '../../Shared/Icons/RepositoryIcon';
 
 const LeftSidebar = (props) => {
   const {lhsOptions,
@@ -18,8 +20,8 @@ const LeftSidebar = (props) => {
       <div className=''>
       {lhsOptions.map((options,index)=> {
           return (
-          <div className='w-full text-gs-text-gray font-semibold p-[14px] text-sm'>
-          <LibraryBooksOutlinedIcon fontSize='small' className='mr-2'/>
+          <div className='w-full text-gs-text-gray font-semibold p-[14px] text-sm flex'>
+          <InventoryIcon  className='mr-2'/>
             {options.label}
           </div>)
         })}
@@ -30,8 +32,8 @@ const LeftSidebar = (props) => {
       <div className=''>
         {
           bottomTabs.map((options,index)=>{
-             return <div className='w-full text-gs-text-gray font-semibold p-[14px] text-sm'>
-             <LibraryBooksOutlinedIcon fontSize='small' className='mr-2'/>
+             return <div className='w-full text-gs-text-gray font-semibold p-[14px] text-sm flex'>
+              <RepositoryIcon className='mr-2'/>
                {options.label}
              </div>
           })
