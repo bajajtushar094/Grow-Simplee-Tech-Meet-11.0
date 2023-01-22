@@ -3,7 +3,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 import Table from "../Component/Global/Table";
-import Layout from "../Component/Layout/DashboardLayout";
+import Layout from "../Component/Layout/Layout";
 import TickedWindowIcon from "../Shared/Icons/TickedWindowIcon";
 import DroneIcon from "../Shared/Icons/DroneIcon";
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
@@ -11,7 +11,7 @@ import ProgressBar from "../Component/Layout/ProgressBar";
 
 const Dashboard = () => {
   return (
-    <Layout>
+    <Layout isLeftSidebarPresent={false}>
       <div className="w-full px-10 py-4 border-b-4">
         <div className='text-3xl font-bold pb-5'>
           Welcome Captain Station Arun!
