@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";
@@ -15,9 +15,9 @@ import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
 
 const Layout = ({children, isLeftSidebarPresent=true}) => {
-  console.log(isLeftSidebarPresent)
   const navigate = useNavigate();
-  const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[0].value);
+  const location = useLocation();
+  const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[2].value);
   const [activeTab, setActiveTab] = useState(LHS_TABS[0].value);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [hideTopBar, setHideTopBar] = useState(false);
@@ -26,13 +26,12 @@ const Layout = ({children, isLeftSidebarPresent=true}) => {
     setIsSideBarOpen(!isSideBarOpen);
   };
   const handleTopTabChange =(option)=>{
-    setActiveTab(option.value)
+    setActiveTopTab(option.value)
     navigate(option.value)
   }
   const handleTabChange = (option) => {
     setActiveTab(option.value);
     navigate(option.value);
-    window.__RHS_CONTENT_BOX_NODE.scrollTop = 0;
   };
 
   return (
@@ -41,6 +40,7 @@ const Layout = ({children, isLeftSidebarPresent=true}) => {
         topTabs = {TOP_TABS}
         activeTab={activeTopTab}
         onTopTabClick={handleTopTabChange}
+        location={location}
         />
         <div className='flex'>
           {
@@ -51,6 +51,7 @@ const Layout = ({children, isLeftSidebarPresent=true}) => {
             onTabClick={handleTabChange}
             isSideBarOpen={isSideBarOpen}
             toggleSideBar={toggleSideBar}
+            location={location}
             />
           }
         {children}

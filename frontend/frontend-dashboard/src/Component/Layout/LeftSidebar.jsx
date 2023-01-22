@@ -1,5 +1,5 @@
 import React from 'react'
-import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+import cx from 'classnames'
 import InventoryIcon from '../../Shared/Icons/InventoryIcon';
 import RepositoryIcon from '../../Shared/Icons/RepositoryIcon';
 
@@ -8,7 +8,7 @@ const LeftSidebar = (props) => {
   bottomTabs,
   activeTab,
   onTabClick,
-  isSideBarOpen,
+  location,
   toggleSideBar} = props
   return (
     <div className='max-w-[224px] w-full p-6'>
@@ -20,8 +20,8 @@ const LeftSidebar = (props) => {
       <div className=''>
       {lhsOptions.map((options,index)=> {
           return (
-          <div className='w-full text-gs-text-gray font-semibold p-[14px] text-sm flex'>
-          <InventoryIcon  className='mr-2'/>
+          <div key={index} className={cx('w-full text-gs-text-gray font-semibold p-[14px] text-sm flex cursor-pointer',{'!text-gs-blue':(options.value.indexOf(location.pathname.split('/')[2].split('-')[0])> -1)})} onClick={()=>{onTabClick(options)}}>
+          <InventoryIcon  className={cx('mr-2',{'!stroke-gs-blue':(options.value.indexOf(location.pathname.split('/')[2].split('-')[0]) > -1)})}/>
             {options.label}
           </div>)
         })}
@@ -32,7 +32,7 @@ const LeftSidebar = (props) => {
       <div className=''>
         {
           bottomTabs.map((options,index)=>{
-             return <div className='w-full text-gs-text-gray font-semibold p-[14px] text-sm flex'>
+             return <div key={index} className='w-full text-gs-text-gray font-semibold p-[14px] text-sm flex'>
               <RepositoryIcon className='mr-2'/>
                {options.label}
              </div>
