@@ -1,14 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Topbar = () => {
+const Topbar = (props) => {
+
+  const {topTabs,activeTab,onTopTabClick} = props
   return (
-    <div className='bg-gs-gray py-3 px-8 flex justify-between'>
+    <div className='bg-gs-gray py-3 px-8 flex justify-between items-center mb-6'>
       <div className=''>
         <ul className='flex space-x-10 '>
-          <Link to='/about'><li className='text-gs-text-gray font-semibold'>Dashboard</li></Link>
-          <Link to='/about'><li className='text-gs-text-gray font-semibold'>Rider Management</li></Link>
-          <Link to='/about'><li className='text-gs-text-gray font-semibold'>Inventory</li></Link>
+          {topTabs.map((option)=>{
+            return (<Link to={option.value}><li className='text-gs-text-gray font-semibold'>{option.label}</li></Link>)
+          })}
         </ul>
       </div>
       <div className='flex'>

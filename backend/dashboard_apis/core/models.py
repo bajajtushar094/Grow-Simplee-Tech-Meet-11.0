@@ -6,6 +6,14 @@ import os
 
 # Create your models here.
 
+class Manager(models.Model):
+    id = models.CharField(max_length=500, primary_key=True)
+    name = models.CharField(max_length=250)
+    contact_number = models.CharField(max_length=500, null=True)
+    address_id = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name + self.id
 
 class Address(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
