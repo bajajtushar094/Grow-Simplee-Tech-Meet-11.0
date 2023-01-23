@@ -5,8 +5,8 @@ import AddFilesBtn from "./AddFilesBtn";
 
 const UploadZip = () => {
   return (
-    <div>
-      <div className="bg-white h-fit rounded-xl py-4 px-40 mb-10 w-full flex flex-col items-center align-center">
+    <div className="ml-10">
+      <div className="bg-white h-fit rounded-xl py-4 px-40 w-full flex flex-col items-center align-center">
         <div class="file">
           <label for="input-file">
             <UploadFileSharpIcon style={{ color: "#3544B6" }} />
@@ -22,7 +22,7 @@ const UploadZip = () => {
           <span style={{ textDecoration: "underline" }}>View Sample File</span>
         </p>
       </div>
-      <hr className="border-1 border-black mb-10" />
+      <hr className="border-1 border-stone-300 my-10" />
       <AddFilesBtn style={{marginTop:"40px"}} />
     </div>
   );

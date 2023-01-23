@@ -22,7 +22,7 @@ const RightSideBar = () => {
       />
       <div className="mr-4">
         <button className="bg-black text-white ml-2 p-4 w-full rounded-lg">
-          Go to Inventory
+          {"Go to Inventory ->"}
         </button>
       </div>
     </div>

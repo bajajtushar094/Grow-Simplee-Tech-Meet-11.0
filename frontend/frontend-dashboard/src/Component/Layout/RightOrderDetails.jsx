@@ -1,12 +1,14 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import CubeDimensionsIcon from "../../Shared/Icons/CubeDimensionsIcon";
 import CubeIcon from "../../Shared/Icons/CubeIcon";
 import DeliveryTruckIcon from "../../Shared/Icons/DeliveryTruckIcon";
 import ScaleIcon from "../../Shared/Icons/ScaleIcon";
 
 const RightOrderDetails = () => {
+  const location = useLocation();
   return (
-    <div className="w-1/5">
+    <div className="w-1/5 mr-10">
       <div className="flex items-center m-2 ">
         <CubeIcon />
         <div className="ml-2">
@@ -16,7 +18,7 @@ const RightOrderDetails = () => {
           </p>
         </div>
       </div>
-      <hr className="border-stone-400 border-1" />
+      <hr className="border-stone-300 border-1" />
       <div className="flex items-center m-2 ">
         <DeliveryTruckIcon />
         <div className="ml-2">
@@ -26,7 +28,7 @@ const RightOrderDetails = () => {
           </p>
         </div>
       </div>
-      <hr className="border-stone-400 border-1" />
+      <hr className="border-stone-300 border-1" />
       <div className="flex items-center m-2 ">
         <ScaleIcon />
         <div className="ml-2">
@@ -36,7 +38,7 @@ const RightOrderDetails = () => {
           </p>
         </div>
       </div>
-      <hr className="border-stone-400 border-1" />
+      <hr className="border-stone-300 border-1" />
       <div className="flex items-center m-2 ">
         <CubeDimensionsIcon />
         <div className="ml-2">
@@ -46,9 +48,11 @@ const RightOrderDetails = () => {
           </p>
         </div>
       </div>
-      <hr className="border-stone-400 border-1" />
-      <button className="bg-black text-white mt-2 p-4 w-full rounded-lg">
-        Go to Inventory {"->"}
+      <hr className="border-stone-300 border-1" />
+      <button className="bg-black text-white mt-20 p-4 w-full rounded-lg">
+        {location.pathname === "/uploadzip"
+          ? "View in detail ->"
+          : "Go to Inventory ->"}
       </button>
     </div>
   );

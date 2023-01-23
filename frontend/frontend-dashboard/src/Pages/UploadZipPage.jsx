@@ -1,13 +1,15 @@
 import React from "react";
 import Layout from "../Component/Layout";
-import RightSideBar from "../Component/Layout/RightSidebar";
+import RightOrderDetails from "../Component/Layout/RightOrderDetails";
 import UploadZip from "../Component/Layout/UploadZip";
 const UploadZipPage = () => {
   return (
     <div>
       <Layout isLeftSidebarPresent={false}>
-        <UploadZip />
-        <RightSideBar />
+        <div className="flex w-full justify-between">
+          <UploadZip />
+          <RightOrderDetails />
+        </div>
       </Layout>
     </div>
   );
