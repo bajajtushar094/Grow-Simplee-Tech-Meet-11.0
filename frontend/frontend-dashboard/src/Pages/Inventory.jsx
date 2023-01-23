@@ -6,7 +6,6 @@ import Table from "../Component/Global/Table";
 import Layout from "../Component/Layout";
 import PlayListAddCheckIcon from "../Shared/Icons/PlayListAddCheckIcon";
 import { Link, useParams } from 'react-router-dom';
-import ProgressBar from "../Component/Layout/ProgressBar";
 import BoxesIcon from "../Shared/Icons/BoxesIcon";
 import cx from 'classnames'
 import {  useLocation } from "react-router-dom";

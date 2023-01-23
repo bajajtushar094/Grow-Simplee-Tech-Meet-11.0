@@ -1,5 +1,9 @@
 img{
     border-radius: 20px;
     margin: 20px;
-    height: 200px;
+    max-height: 150px;
+}
+
+*{
+    font-family: 'Inter';
 }
