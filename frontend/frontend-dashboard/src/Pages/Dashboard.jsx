@@ -17,7 +17,7 @@ const Dashboard = () => {
           Welcome Captain Station Arun!
           
         </div>
-        <div className='text flex font-bold pb-5'>
+        <div className='text flex font-bold pb-5 px-4'>
           <TickedWindowIcon  border-radius= "50%" border= "5px solid red" padding=" 5px" font-size= "30px"/>
           <div className="w-full px-5">
             <div className='text-gs-blue font-bold'>
@@ -29,6 +29,8 @@ const Dashboard = () => {
             <h4 className="text-md text-[#5F5D59] font-semibold">
                 List of items currently in warehouse
               </h4>
+
+              
           </div>
         </div>
       </div>
@@ -46,6 +48,9 @@ const Dashboard = () => {
               <h4 className="text-md text-[#5F5D59] font-semibold">
                   List of items currently in warehouse
                 </h4>
+                <div className='text-2xl font-bold py-4'>
+                  12
+                </div>
             </div>
             <div className="w-full px-5">
             <DroneIcon/>
@@ -55,6 +60,9 @@ const Dashboard = () => {
               <h4 className="text-md text-[#5F5D59] font-semibold">
                   List of items currently in warehouse
                 </h4>
+                <div className='text-2xl font-bold py-4'>
+                  12
+                </div>
             </div>
             <div className="w-full px-5">
             <DroneIcon/>
@@ -64,42 +72,40 @@ const Dashboard = () => {
               <h4 className="text-md text-[#5F5D59] font-semibold">
                   List of items currently in warehouse
                 </h4>
+                <div className='text-2xl font-bold py-4'>
+                  12
+                </div>
             </div>
         </div>
         
       </div>
-      <div className="w-full px-10 py-4 border-b-4 bottom-0">
+      <div className="w-full px-10 py-10 border-b-4 bottom-0">
         
         <div className='text-3xl font-bold pb-5'>
           Stations
         </div>
         <div className='text flex font-bold py-5 m-3'>
           <div className="w-full px-5">
-          <DroneIcon/>
-              <div className='text-2xl font-bold'>
-                Dashboard
-              </div>
-              <h4 className="text-md text-[#5F5D59] font-semibold">
-                  List of items currently in warehouse
-                </h4>
+          <img src='./Left-Wrapper.png' alt="Image of map" />
             </div>
             <div className="w-full px-5">
-            <DroneIcon/>
-              <div className='text-2xl font-bold'>
-                Dashboard
+            <div className="w-full px-5 py-3 border-b-4">
+              <div className="text-2xl font-bold">
+                    26
+                </div>
+                <h4 className="text-md text-[#5F5D59] font-semibold">
+                    Riders Available
+                  </h4>
               </div>
-              <h4 className="text-md text-[#5F5D59] font-semibold">
-                  List of items currently in warehouse
-                </h4>
-            </div>
-            <div className="w-full px-5">
-            <DroneIcon/>
-              <div className='text-2xl font-bold'>
-                Dashboard
+            
+              <div className="w-full px-5 py-3 border-b-4">
+                <div className="text-2xl font-bold">
+                      26
+                  </div>
+                  <h4 className="text-md text-[#5F5D59] font-semibold">
+                      Riders Available
+                    </h4>
               </div>
-              <h4 className="text-md text-[#5F5D59] font-semibold">
-                  List of items currently in warehouse
-                </h4>
             </div>
         </div>
         
