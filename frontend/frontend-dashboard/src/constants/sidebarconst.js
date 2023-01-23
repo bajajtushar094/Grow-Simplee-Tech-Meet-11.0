@@ -1,8 +1,9 @@
 export const routePaths = {
     dashboard: '/dashboard',
     ridermanagement: '/ridermanagement',
-    inventory: '/inventory',
-    repository: '/repository',
+    warehouse: '/warehouse',
+    inventory: '/warehouse/inventory',
+    repository: '/warehouse/repository-inhouse',
     raiseissue: 'raiseissue',
     issuestatus: 'issuestatus',
     profile: `/student/profile/`,
@@ -20,8 +21,8 @@ export const TOP_TABS = [
         value: routePaths.ridermanagement,
     },
     {
-        id: 'gs_inventory',
-        label: 'Inventory',
+        id: 'gs_warehouse',
+        label: 'Warehouse',
         value: routePaths.inventory,
     },
 ]
@@ -35,6 +36,33 @@ export const LHS_TABS = [
         id: 'gs_repository',
         label: 'Repository',
         value: routePaths.repository,
+    },
+]
+export const LHS_TABS_VOL = [
+    {
+        id: 'gs_live_feed_1',
+        label: 'Live Feed 1',
+        value: routePaths.livefeed1,
+    },
+    {
+        id: 'gs_live_feed_2',
+        label: 'Live Feed 2',
+        value: routePaths.livefeed2,
+    },
+    {
+        id: 'gs_live_feed_3',
+        label: 'Live Feed 3',
+        value: routePaths.livefeed3,
+    },
+    {
+        id: 'gs_live_feed_4',
+        label: 'Live Feed 4',
+        value: routePaths.livefeed4,
+    },
+    {
+        id: 'gs_live_feed_5',
+        label: 'Live Feed 5',
+        value: routePaths.livefeed5,
     },
 ]
 export const LHS_BOTTOM_TABS = [

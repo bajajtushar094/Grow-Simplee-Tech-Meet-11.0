@@ -12,7 +12,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Inventory />} />
+        <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
         <Route path="/vol" element={<InventoryWebcam />} />
         <Route path="/about" element={<Dashboard />} />
         <Route path="/img" element={<InventoryImages />} />
