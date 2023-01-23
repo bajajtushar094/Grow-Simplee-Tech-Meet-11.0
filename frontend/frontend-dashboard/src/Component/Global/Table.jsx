@@ -5,9 +5,11 @@ import cx from 'classnames'
 
 import { Avatar} from '@mui/material'
 import CallMadeIcon from '../../Shared/Icons/CallMadeIcon';
+import { useState, useEffect } from 'react';
+import { INVENTORY_COLUMNS, REPOSITORY_HISTORY_COLUMNS, REPOSITORY_INHOUSE_COLUMNS } from '../../constants/tableconstants';
 
 
-export default function AntDesignGrid() {
+export default function AntDesignGrid({tab=''}) {
   const rows =[{
     id:'1232',
     volume:'30',
@@ -76,13 +78,23 @@ export default function AntDesignGrid() {
       },
     ],
   );
+  const [columnVisible, setColumnVisible] = useState(INVENTORY_COLUMNS);
+  useEffect(() => {
+     if(tab==='inventory')
+     setColumnVisible(INVENTORY_COLUMNS)
+     else if(tab==='repository-history')
+     setColumnVisible(REPOSITORY_HISTORY_COLUMNS)
+     else
+     setColumnVisible(REPOSITORY_INHOUSE_COLUMNS)
+  }, [tab]);
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
+        columnVisibilityModel={columnVisible}
         getRowId={(row) => row.id}
-        rowsPerPageOptions={[5]}
+        pagination
         checkboxSelection
       />
     </div>
