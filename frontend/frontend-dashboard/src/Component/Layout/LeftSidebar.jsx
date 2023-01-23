@@ -1,7 +1,7 @@
 import React from "react";
 import cx from 'classnames'
-import InventoryIcon from "../../Shared/Icons/InventoryIcon';
-import RepositoryIcon from '../../Shared/Icons/RepositoryIcon";
+import InventoryIcon from "../../Shared/Icons/InventoryIcon";
+import RepositoryIcon from "../../Shared/Icons/RepositoryIcon";
 import { useLocation } from "react-router-dom";
 import CameraIcon from "../../Shared/Icons/CameraIcon";
 
