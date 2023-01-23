@@ -1,6 +1,15 @@
-# from core.models import *
+from core.models import *
 import pandas as pd
+import os
 
-dispatch_addresses = pd.read_excel('./bangalore_dispatch_address_finals.xlsx')
+rootPath = os.getcwd()
+filespath = os.path.join(rootPath, 'files/')
 
-print(dispatch_addresses)
+fileName = 'bangalore_dispatch_address_finals.xlsx'
+
+df = pd.read_excel(filespath + fileName)
+
+for index, row in df.iterrows():
+    print(row)
+
+# print(dispatch_addresses)
