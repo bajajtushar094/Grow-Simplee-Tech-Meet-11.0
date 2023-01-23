@@ -37,6 +37,33 @@ export const LHS_TABS = [
         value: routePaths.repository,
     },
 ]
+export const LHS_TABS_VOL = [
+    {
+        id: 'gs_live_feed_1',
+        label: 'Live Feed 1',
+        value: routePaths.livefeed1,
+    },
+    {
+        id: 'gs_live_feed_2',
+        label: 'Live Feed 2',
+        value: routePaths.livefeed2,
+    },
+    {
+        id: 'gs_live_feed_3',
+        label: 'Live Feed 3',
+        value: routePaths.livefeed3,
+    },
+    {
+        id: 'gs_live_feed_4',
+        label: 'Live Feed 4',
+        value: routePaths.livefeed4,
+    },
+    {
+        id: 'gs_live_feed_5',
+        label: 'Live Feed 5',
+        value: routePaths.livefeed5,
+    },
+]
 export const LHS_BOTTOM_TABS = [
     {
         id: 'gs_raise_issue',
