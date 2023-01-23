@@ -1,8 +1,9 @@
 export const routePaths = {
     dashboard: '/dashboard',
     ridermanagement: '/ridermanagement',
-    inventory: '/inventory',
-    repository: '/repository',
+    warehouse: '/warehouse',
+    inventory: '/warehouse/inventory',
+    repository: '/warehouse/repository-inhouse',
     raiseissue: 'raiseissue',
     issuestatus: 'issuestatus',
     profile: `/student/profile/`,
@@ -20,8 +21,8 @@ export const TOP_TABS = [
         value: routePaths.ridermanagement,
     },
     {
-        id: 'gs_inventory',
-        label: 'Inventory',
+        id: 'gs_warehouse',
+        label: 'Warehouse',
         value: routePaths.inventory,
     },
 ]

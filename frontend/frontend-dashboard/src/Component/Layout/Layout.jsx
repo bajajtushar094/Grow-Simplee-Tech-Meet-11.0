@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";
@@ -14,12 +14,11 @@ import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
 import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
 
-const Layout = ({ children }) => {
+const Layout = ({children, isLeftSidebarPresent=true}) => {
   const navigate = useNavigate();
-  const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[0].value);
+  const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[2].value);
   const [activeTab, setActiveTab] = useState(LHS_TABS[0].value);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [leftSidebar, hideLeftSidebar] = useState(false);
   const [hideTopBar, setHideTopBar] = useState(false);
   const location = useLocation();
   console.log(location);
@@ -33,7 +32,6 @@ const Layout = ({ children }) => {
   const handleTabChange = (option) => {
     setActiveTab(option.value);
     navigate(option.value);
-    window.__RHS_CONTENT_BOX_NODE.scrollTop = 0;
   };
 
   return (
@@ -42,17 +40,21 @@ const Layout = ({ children }) => {
         topTabs={TOP_TABS}
         activeTab={activeTopTab}
         onTopTabClick={handleTopTabChange}
+        location={location}
       />
       <div className="flex">
-        <LeftSidebar
+          {
+            isLeftSidebarPresent && <LeftSidebar
           heading={location.pathname === "/vol" ? "Views" : "All drones"}
-          lhsOptions={location.pathname === "/vol" ? LHS_TABS_VOL : LHS_TABS}
-          bottomTabs={LHS_BOTTOM_TABS}
-          activeTab={activeTab}
-          onTabClick={handleTabChange}
-          isSideBarOpen={isSideBarOpen}
-          toggleSideBar={toggleSideBar}
-        />
+              lhsOptions={location.pathname === "/vol" ? LHS_TABS_VOL : LHS_TABS}
+              bottomTabs={LHS_BOTTOM_TABS}
+              activeTab={activeTab}
+              onTabClick={handleTabChange}
+              isSideBarOpen={isSideBarOpen}
+              toggleSideBar={toggleSideBar}
+            location={location}
+            />
+          }
         {children}
       </div>
       {/* <ProgressBar progress="2" /> */}
