@@ -56,6 +56,7 @@ const WebcamCapture = () => {
           Start webcam
         </button>
       )}
+      
     </div>
   );
 };

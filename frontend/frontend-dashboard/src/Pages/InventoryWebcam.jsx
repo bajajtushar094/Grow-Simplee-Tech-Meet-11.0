@@ -5,7 +5,7 @@ import RightSideBar from "../Component/Layout/RightSidebar";
 
 const App = () => {
   return (
-    <Layout>
+    <Layout isLeftSidebarPresent={false}>
       <Webcam />
       <RightSideBar />
     </Layout>

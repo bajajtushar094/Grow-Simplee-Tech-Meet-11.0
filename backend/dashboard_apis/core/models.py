@@ -79,6 +79,16 @@ class Rider(models.Model):
     arrival_time = models.DateField((_("arrival time")))
     departure_time = models.DateField((_("departure time")))
     etf = models.CharField(max_length=50)
+    successful_deliveries = models.IntegerField(default=0)
+    packages_delayed = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        self.successful_deliveries = self.last_delivered_pointer + 1
+        self.packages_delayed = 0
+        for order in self.delievery_orders:
+            if order.order_status == "delayed":
+                self.packages_delayed += 1
+        super(Rider, self).save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.name} + {self.rider_id}"
