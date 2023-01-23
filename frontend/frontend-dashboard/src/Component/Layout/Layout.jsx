@@ -21,7 +21,6 @@ const Layout = ({ children, isLeftSidebarPresent = true }) => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [hideTopBar, setHideTopBar] = useState(false);
   const location = useLocation();
-  console.log(location);
   const toggleSideBar = () => {
     setIsSideBarOpen(!isSideBarOpen);
   };
@@ -57,7 +56,6 @@ const Layout = ({ children, isLeftSidebarPresent = true }) => {
         )}
         {children}
       </div>
-      {/* <ProgressBar progress="2" /> */}
     </div>
   );
 };

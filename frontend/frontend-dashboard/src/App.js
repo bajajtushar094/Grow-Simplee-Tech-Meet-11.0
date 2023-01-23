@@ -7,6 +7,7 @@ import Layout, { InventoryLayout } from "./Component/Layout";
 import Dashboard from "./Pages/Dashboard";
 import ScanQR from "./Pages/Mobile/ScanQR"
 import UploadZip from "./Pages/UploadZip";
+import CreateBag from "./Pages/Mobile/CreateBag";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/img" element={<InventoryImages />} />
         <Route path="/scan" element={<ScanQR />} />
         <Route path="/uploadzip" element={<UploadZip />} />
+        <Route path="/createBag" element={<CreateBag />} />
       </Routes>
     </BrowserRouter>
   );
