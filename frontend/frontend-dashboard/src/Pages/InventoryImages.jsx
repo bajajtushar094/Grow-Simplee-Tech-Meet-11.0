@@ -7,14 +7,18 @@ import RightOrderDetails from "../Component/Layout/RightOrderDetails";
 const App = () => {
   return (
     <>
-      <div className="flex">
+      <div>
         <Layout isLeftSidebarPresent={false}>
-          <img width={"150px"} height={"100px"} src={dummy} />
-          <img width={"150px"} src={dummy} />
-          <img width={"150px"} src={dummy} />
-          <img width={"150px"} src={dummy} />
-          <img width={"150px"} src={dummy} />
-        <RightOrderDetails />
+          <div className="flex w-full justify-between">
+            <div className="flex">
+              <img width={"150px"} src={dummy} />
+              <img width={"150px"} src={dummy} />
+              <img width={"150px"} src={dummy} />
+              <img width={"150px"} src={dummy} />
+              <img width={"150px"} src={dummy} />
+            </div>
+            <RightOrderDetails />
+          </div>
         </Layout>
       </div>
     </>

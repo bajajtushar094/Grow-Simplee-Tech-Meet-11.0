@@ -3,12 +3,6 @@ import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";
-// import ListViewBar from "./ListViewBar";
-// import RightSideBar from "./RightSidebar";
-// import ProgressBar from "./ProgressBar";
-// import UploadZip from "./UploadZip";
-// import AddFilesBtn from "./AddFilesBtn";
-// import * as SIDEBARCONSTANT from '/constants/sidebarconst.js'
 import { LHS_TABS, LHS_TABS_VOL } from "../../constants/sidebarconst";
 import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
 import { TOP_TABS } from "../../constants/sidebarconst";
