@@ -2,14 +2,14 @@ import React from "react";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
-import Table from "../Component/Global/Table";
-import Layout from "../Component/Layout";
 import PlayListAddCheckIcon from "../Shared/Icons/PlayListAddCheckIcon";
-import { Link, useParams } from 'react-router-dom';
 import BoxesIcon from "../Shared/Icons/BoxesIcon";
+import Table from "../Component/Global/Table";
+import DeliveryIcon from "../Shared/Icons/DeliveryIcon";
+import Layout from "../Component/Layout";
+import { Link, useParams } from 'react-router-dom';
 import cx from 'classnames'
 import {  useLocation } from "react-router-dom";
-import DeliveryIcon from "../Shared/Icons/DeliveryIcon";
 
 const Inventory = () => {
   let { warehouseTab } = useParams();

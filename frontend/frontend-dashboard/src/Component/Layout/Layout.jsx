@@ -13,6 +13,7 @@ import { LHS_TABS, LHS_TABS_VOL } from "../../constants/sidebarconst";
 import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
 import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
+import ProgressBar from "./ProgressBar";
 
 const Layout = ({ children, isLeftSidebarPresent = true }) => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const Layout = ({ children, isLeftSidebarPresent = true }) => {
         )}
         {children}
       </div>
-      {/* <ProgressBar progress="2" /> */}
+      <ProgressBar progress="2" />
     </div>
   );
 };
