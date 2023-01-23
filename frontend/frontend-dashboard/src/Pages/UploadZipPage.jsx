@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../Component/Layout";
 import RightOrderDetails from "../Component/Layout/RightOrderDetails";
-import UploadZip from "../Component/Layout/UploadZip";
+import UploadZip from "../Component/Task1_web/UploadZip";
 const UploadZipPage = () => {
   return (
     <div>
