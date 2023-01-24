@@ -8,15 +8,9 @@ import TickedWindowIcon from "../Shared/Icons/TickedWindowIcon";
 import DroneIcon from "../Shared/Icons/DroneIcon";
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import ProgressBar from "../Component/Layout/ProgressBar";
+import MapBox from "../Component/Global/MapBox";
 
 const Dashboard = () => {
-var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
-
-mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
-var map = new mapboxgl.Map({
-  container: 'YOUR_CONTAINER_ELEMENT_ID',
-  style: 'mapbox://styles/mapbox/streets-v11'
-});
   return (
     <Layout isLeftSidebarPresent={false} flex_dir={"col"}>
       <div className="w-full px-10 py-4 border-b-4">
@@ -25,7 +19,7 @@ var map = new mapboxgl.Map({
           
         </div>
         <div className='text flex font-bold pb-5 px-4'>
-          <TickedWindowIcon  border-radius= "50%" border= "5px solid red" padding=" 5px" font-size= "30px"/>
+          <TickedWindowIcon  border-radius= "50%" border= "5px solid red" padding=" 5px" fontSize= "30px"/>
           <div className="w-full px-5">
             <div className='text-gs-blue font-bold'>
               Analyze
@@ -92,9 +86,9 @@ var map = new mapboxgl.Map({
           Stations
         </div>
         <div className='text flex font-bold py-5 m-3'>
-          <div className="w-full px-5">
-          <img src='./Left-Wrapper.png' alt="Image of map" />
-            </div>
+          <div className="w-full px-5" id="mapbox_div">
+          <MapBox />
+          </div>
             <div className="w-full px-5">
             <div className="w-full px-5 py-3 border-b-4">
               <div className="text-2xl font-bold">
