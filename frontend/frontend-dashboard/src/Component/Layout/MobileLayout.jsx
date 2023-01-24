@@ -12,7 +12,7 @@ const MobileLayout = ({children,photoURL='',subHeading=''}) => {
           <h4 className='text-sm text-gs-text-gray font-semibold'>{subHeading}</h4>
           <Avatar fontSize='small' src={photoURL} alt='Profile-Img'/>
         </div>
-        <div className='px-4 py-3'>
+        <div className='px-4 py-3 '>
         {children}
         </div>
      

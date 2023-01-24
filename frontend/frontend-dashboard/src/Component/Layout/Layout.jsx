@@ -8,7 +8,7 @@ import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
 import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
 
-const Layout = ({ children, isLeftSidebarPresent = true }) => {
+const Layout = ({ children, isLeftSidebarPresent = true, flex_dir="row" }) => {
   const navigate = useNavigate();
   const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[2].value);
   const [activeTab, setActiveTab] = useState(LHS_TABS[0].value);
@@ -35,7 +35,7 @@ const Layout = ({ children, isLeftSidebarPresent = true }) => {
         onTopTabClick={handleTopTabChange}
         location={location}
       />
-      <div className="flex">
+      <div className={flex_dir == "row"? "flex" : "flex-col"}>
         {isLeftSidebarPresent && (
           <LeftSidebar
             heading={location.pathname === "/vol" ? "Views" : "All drones"}

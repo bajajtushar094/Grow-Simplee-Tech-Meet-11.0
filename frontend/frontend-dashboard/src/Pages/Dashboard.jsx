@@ -18,7 +18,7 @@ var map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/streets-v11'
 });
   return (
-    <Layout isLeftSidebarPresent={false}>
+    <Layout isLeftSidebarPresent={false} flex_dir={"col"}>
       <div className="w-full px-10 py-4 border-b-4">
         <div className='text-3xl font-bold pb-5'>
           Welcome Captain Station Arun!
