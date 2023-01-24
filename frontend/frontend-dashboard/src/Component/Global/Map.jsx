@@ -12,8 +12,8 @@ function Map() {
     })
   return (
     <div>
-        <ReactMap {...viewport} mapboxApiAccessToke='pk.eyJ1Ijoic2NvdGhpcyIsImEiOiJjaWp1Y2ltYmUwMDBicmJrdDQ4ZDBkaGN4In0.sbihZCZJ56-fsFNKHXF8YQ'>
-
+        <ReactMap {...viewport} mapboxApiAccessToke='pk.eyJ1IjoidmlnaG5lc2gzODAyIiwiYSI6ImNsY2h3M3p5cDBoc28zcHM1MnBiMXVhMDkifQ.6YjcmePA1iBnTocSx-Cysw'>
+        
         </ReactMap>
     </div>
   )

@@ -10,8 +10,8 @@ import dot from './Dot.svg'
 
 function SideProfile(props) {
   return (
-    <div style={{backgroundColor:'white', height:'900px',width:'464px', padding:'15px'}}>
-        <div style={{display:'flex', flexDirection:' row' , alignItems:'center',justifyContent:'center', margin:'5px'}}>
+    <div style={{backgroundColor:'white', height:'900px',width:'464px', padding:'20px'}}>
+        <div style={{display:props.display?props.display:'flex', flexDirection:' row' , alignItems:'center',justifyContent:'center', margin:'5px'}}>
          {/* toplogo */}
             < CloseIcon sx={{fontSize:'medium'}}/>
             Close
@@ -107,7 +107,7 @@ function SideProfile(props) {
                 </div>
             </div>
          </div>
-         <div style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center',width:'432px', height:'44px', marginTop:'6px', backgroundColor:'#272520',}}>
+         <div style={{display:props.display?props.display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center',width:'432px', height:'44px', marginTop:'6px', backgroundColor:'#272520',}}>
             <p  style={{color:'white',margin:'8px'}}>Open Order List</p>
             <img style={{height:'14'}} src={arrow} alt="" />
          </div>
