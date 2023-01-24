@@ -10,6 +10,13 @@ import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import ProgressBar from "../Component/Layout/ProgressBar";
 
 const Dashboard = () => {
+var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+
+mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+var map = new mapboxgl.Map({
+  container: 'YOUR_CONTAINER_ELEMENT_ID',
+  style: 'mapbox://styles/mapbox/streets-v11'
+});
   return (
     <Layout isLeftSidebarPresent={false}>
       <div className="w-full px-10 py-4 border-b-4">
