@@ -9,6 +9,7 @@ import ScanQR from "./Pages/Mobile/ScanQR"
 import UploadZip from "./Pages/UploadZipPage";
 import CreateBag from "./Pages/Mobile/CreateBag";
 import UpcomingDelivery from "./Pages/Mobile/UpcomingDelivery";
+import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/uploadzip" element={<UploadZip />} />
         <Route path="/createBag" element={<CreateBag />} />
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
+        <Route path="/drone" element={<DroneManagement />} />
       </Routes>
     </BrowserRouter>
   );
