@@ -14,11 +14,12 @@ import sus from './sus.svg'
 import delivered from './Icon.svg'
 import distance from './Icon.png'
 import delay from './icon2.svg'
+import {TOP_TABS} from '../../../constants/sidebarconst'
 
 function DroneManagement() {
 
   const [isHover, setIsHover] = useState(false);
-  const [overview,setOverview] = useState(false);
+  const [overview,setOverview] = useState(true);
   const [delivery,setDelivery] = useState(false);
 
    const handleMouseEnter = () => {
@@ -48,10 +49,12 @@ function DroneManagement() {
 
   return (
     <div>
-        {/* <Layout/> */}
-
+         <Topbar
+            topTabs={TOP_TABS}
+            />
+        
          <div style={{backgroundColor:'white'}}>
-          <div style={{display:'flex', flexDirection:'row',padding:'16px', marginLeft:'16px'}}>
+          <div style={{display:'flex', flexDirection:'row',padding:'16px', marginLeft:'16px', alignItems:'center'}}>
              <img src={arrow} alt="" />
              <p style={{fontSize:'12px',fontWeight:'600',color:'gray',margin:'5px'}}>Rider Management</p>
              <p style={{fontSize:'12px',fontWeight:'600',color:'gray',margin:'5px'}}>/</p>
@@ -197,6 +200,7 @@ function DroneManagement() {
         </div>
 
         </div>
+      
         </div> 
   )
 }
