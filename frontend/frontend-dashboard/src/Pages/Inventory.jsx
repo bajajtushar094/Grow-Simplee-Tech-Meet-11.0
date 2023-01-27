@@ -1,4 +1,6 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios"
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
@@ -7,13 +9,23 @@ import BoxesIcon from "../Shared/Icons/BoxesIcon";
 import Table from "../Component/Global/Table";
 import DeliveryIcon from "../Shared/Icons/DeliveryIcon";
 import Layout from "../Component/Layout";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import cx from 'classnames'
-import {  useLocation } from "react-router-dom";
+import { LOCAL_SERVER_URL_IP } from "../constants/config";
+
 
 const Inventory = () => {
   let { warehouseTab } = useParams();
   const location = useLocation();
+  const [orders, setOrders] = useState([])
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/`);
+      setOrders(res.data);
+    };
+    fetchOrders();
+    console.log(orders.orders)
+  }, []);
   const statisticaldata =[{
     key: 'Packages in inventory',
     value: '1,24,445',

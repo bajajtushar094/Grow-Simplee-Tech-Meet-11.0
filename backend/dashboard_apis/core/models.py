@@ -20,7 +20,7 @@ class Address(models.Model):
     latitude = models.CharField(max_length=50)
     longitude = models.CharField(max_length=50)
     location = models.CharField(max_length=250)
-    name = models.CharField()
+    name = models.CharField(max_length=50)
     def __str__(self):
         return f"Address-{self.location}"
 
@@ -48,6 +48,7 @@ class Order(models.Model):
     delivery_action = models.CharField(
         _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
     )
+    in_warehouse = models.BooleanField(default=False, null=True)
     order_status = models.CharField(
         _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
     )
