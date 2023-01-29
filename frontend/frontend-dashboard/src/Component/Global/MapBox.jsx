@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 
 const MapBox = () => {
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX
+console.log( process.env.REACT_APP_MAPBOX)
 const mapContainer = useRef(null);
 const map = useRef(null);
 const [lng, setLng] = useState(-70.9);
@@ -19,7 +20,7 @@ useEffect(() => {
     });
     });
   return (
-    <div ref={mapContainer} className="h-[420px]" />
+    <div ref={mapContainer} className="h-[650px]" />
   )
 }
 

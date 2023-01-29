@@ -1,9 +1,8 @@
-import "./styles.css";
 import { useState } from "react";
 import QrReader from "react-qr-reader";
-import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import CallMadeIcon from "@mui/icons-material/ArrowOutward";
 import QRinstruction from "../../dummy_files/QRInstructions.png";
+import QRscannerIcon from "../../Shared/Icons/QRscanner";
 
 const App = () => {
   const [selected, setSelected] = useState("environment");
@@ -26,24 +25,12 @@ const App = () => {
     console.error(err);
   };
   return (
-    <div className="App">
-      <h1 className="text-2xl m-4">
-        Scan Bag QR to start <QrCodeScannerIcon />{" "}
+    <div className="text-center w-full flex flex-col justify-center items-center">
+      <h1 className="text-2xl m-4 flex items-center">
+        Scan Bag QR to start{" "}
+          <QRscannerIcon className="ml-2" />
       </h1>
 
-      {/* <button
-        onClick={() => {
-          setStartScan(!startScan);
-        }}
-      >
-        {startScan ? "Stop Scan" : "Start Scan"}
-      </button> */}
-      {/* {startScan && (
-        <> */}
-      {/* <select onChange={(e) => setSelected(e.target.value)}>
-        <option value={"environment"}>Back Camera</option>
-        <option value={"user"}>Front Camera</option>
-      </select> */}
       <div className="border-black rounded-xl border-2 p-4 ">
         <QrReader
           facingMode="environment"
@@ -51,7 +38,6 @@ const App = () => {
           onError={handleError}
           onScan={handleScan}
           onResult={() => {}}
-          // chooseDeviceId={()=>selected}
           style={{ width: "230px" }}
           videoContainerStyle={{ borderRadius: "20px" }}
         />
@@ -59,7 +45,7 @@ const App = () => {
       )} */}
         <p className="mt-4">
           <b>Bag ID:</b> 235GD57{" "}
-          <ArrowOutwardIcon
+          <CallMadeIcon
             className="text-stone-500"
             sx={{ fontSize: "15px" }}
           />

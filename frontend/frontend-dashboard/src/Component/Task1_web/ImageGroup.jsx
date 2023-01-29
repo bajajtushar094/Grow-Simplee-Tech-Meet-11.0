@@ -1,8 +1,6 @@
-import { formHelperTextClasses } from "@mui/material";
 import React from "react";
 
 const ImageGroup = () => {
-  const array = ["building", "design", "drone", "forest", "ocean"];
   const data = [
     {
       folderName: "order1",
@@ -16,15 +14,15 @@ const ImageGroup = () => {
 
   return data.map((folder, index) => {
     return (
-        <div>
-          <h1>{folder.folderName}</h1>
+        <div className="mb-8">
+          <h1 className="ml-4">{folder.folderName}</h1>
           <div className="flex">
             {folder.array.map((image) => {
               return (
                 <img
                   key={image}
                   width={"60px"}
-                  className="h-12"
+                  className="h-12 m-4"
                   src={require(`./images/${folder.folderName}/${image}.jpg`)}
                 />
               );
