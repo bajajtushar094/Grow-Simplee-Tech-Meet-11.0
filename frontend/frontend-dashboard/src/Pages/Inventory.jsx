@@ -20,7 +20,7 @@ const Inventory = () => {
   const [orders, setOrders] = useState([])
   useEffect(() => {
     const fetchOrders = async () => {
-      const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/`);
+      const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
       setOrders(res.data);
     };
     fetchOrders();
