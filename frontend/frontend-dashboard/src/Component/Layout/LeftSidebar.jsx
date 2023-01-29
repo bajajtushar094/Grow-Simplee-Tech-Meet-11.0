@@ -12,19 +12,19 @@ const LeftSidebar = (props) => {
     heading,
     activeTab,
     onTabClick,
-    location,
+    location={pathname:'/inventory'},
     toggleSideBar,
   } = props;
   return (
     <div className="max-w-[224px] w-full p-6">
       <div className="text-2xl font-bold pb-5">Inventory</div>
-      <div>
+      {/* <div>
       <div className='text-gs-text-gray font-semibold '>ALL DRONES</div>
       <div className=''>
       {lhsOptions.map((options,index)=> {
           return (
-          <div key={index} className={cx('w-full text-gs-text-gray font-semibold p-[14px] text-sm flex cursor-pointer',{'!text-gs-blue':(options.value.indexOf(location.pathname.split('/')[2].split('-')[0])> -1)})} onClick={()=>{onTabClick(options)}}>
-          <InventoryIcon  className={cx('mr-2',{'!stroke-gs-blue':(options.value.indexOf(location.pathname.split('/')[2].split('-')[0]) > -1)})}/>
+          <div key={index} className={cx('w-full text-gs-text-gray font-semibold p-[14px] text-sm flex cursor-pointer',{'!text-gs-blue':(options.value.indexOf(location?.pathname?.split('/')[2].split('-')[0])> -1)})} onClick={()=>{onTabClick(options)}}>
+          <InventoryIcon  className={cx('mr-2',{'!stroke-gs-blue':(options.value.indexOf(location?.pathname?.split('/')[2].split('-')[0]) > -1)})}/>
             {options.label}
           </div>)
         })}
@@ -42,7 +42,7 @@ const LeftSidebar = (props) => {
           })
         }
       </div>
-      </div>
+      </div> */}
     </div>
   );
 };
