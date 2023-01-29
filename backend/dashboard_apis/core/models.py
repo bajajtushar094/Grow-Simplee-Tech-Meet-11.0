@@ -20,7 +20,8 @@ class Address(models.Model):
     latitude = models.CharField(max_length=50)
     longitude = models.CharField(max_length=50)
     location = models.CharField(max_length=250)
-    name = models.CharField()
+    name = models.CharField(max_length=500)
+    address = models.CharField(max_length=500)
     def __str__(self):
         return f"Address-{self.location}"
 
@@ -61,13 +62,13 @@ class Order(models.Model):
 
 class Rider(models.Model):
     name = models.CharField(max_length=250)
-    rider_id = models.CharField(max_length=500)
+    rider_id = models.CharField(max_length=500, primary_key=True)
     contact_number = models.CharField(max_length=10)
     bag_volume = models.CharField(max_length=50)
     bag_volume_used = models.CharField(max_length=50)
-    current_address = models.ForeignKey(
-        Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
-    )
+    # current_address = models.ForeignKey(
+    #     Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
+    # )
     rider_status = models.CharField(
         _("filing form type"), max_length=50, choices=RIDER_STATUS
     )
@@ -81,13 +82,14 @@ class Rider(models.Model):
     etf = models.CharField(max_length=50)
     successful_deliveries = models.IntegerField(default=0)
     packages_delayed = models.IntegerField(default=0)
-
+    current_address_id = models.CharField(max_length=50)
     def save(self, *args, **kwargs):
-        self.successful_deliveries = self.last_delivered_pointer + 1
+        self.successful_deliveries = 0
+        self.last_delivered_pointer = 0
         self.packages_delayed = 0
-        for order in self.delievery_orders:
-            if order.order_status == "delayed":
-                self.packages_delayed += 1
+        # for order in self.delievery_orders:
+        #     if order.order_status == "delayed":
+        #         self.packages_delayed += 1
         super(Rider, self).save(*args, **kwargs)
     
     def __str__(self):

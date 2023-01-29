@@ -100,4 +100,12 @@ class getBags(APIView):
         data = {}
         data['bags'] = [RiderSerializer(bag).data for bag in all_bags]
         return Response(data)
+    
+class getManager(APIView):
+    def get(self, request, *args, **kwargs):
+        manager = Manager.objects.all()
+        data = {}
+        print(manager[0].__dict__)
+        data['manager'] = [ManagerSerializer(man).data for man in manager]
+        return Response(data)
 

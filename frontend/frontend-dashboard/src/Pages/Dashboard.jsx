@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
@@ -8,14 +8,24 @@ import TickedWindowIcon from "../Shared/Icons/TickedWindowIcon";
 import DroneIcon from "../Shared/Icons/DroneIcon";
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import ProgressBar from "../Component/Layout/ProgressBar";
+import { useState } from "react";
 
 const Dashboard = () => {
+  const [manager, setManager] = useState({})
+  useEffect(()=>{
+    const fetchData = async () => {
+      const res = await fetch("http://localhost:8000/core/manager")
+      const response = await res.json()
+      console.log(response)
+      setManager(response.manager[0])
+    }
+    fetchData()
+  }, [])
   return (
     <Layout isLeftSidebarPresent={false} flex_dir={"col"}>
       <div className="w-full px-10 py-4 border-b-4">
         <div className='text-3xl font-bold pb-5'>
-          Welcome Captain Station Arun!
-          
+          Welcome Captain Station {manager.name}
         </div>
         <div className='text flex font-bold pb-5 px-4'>
           <TickedWindowIcon  border-radius= "50%" border= "5px solid red" padding=" 5px" font-size= "30px"/>

@@ -19,4 +19,6 @@ urlpatterns = [
     path('orders/all', views.getOrder.as_view()),
     path('riders/all', views.getRider.as_view()),
     path('bags/all', views.getBags.as_view()),
+    path('manager', views.getManager.as_view())
 ]    
+
