@@ -93,6 +93,7 @@ class getOrder(APIView):
             if date_time_now > all_orders[i].edd:
                 if all_orders[i].order_status == 'undelivered':
                     all_orders[i].order_status = 'delayed'
+                    all_orders[i].save()
 
         data = {}
         data['orders'] = [OrderSerializer(order).data for order in all_orders]
@@ -107,6 +108,32 @@ class getRider(APIView):
         data = {}
         data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
         return Response(data)
+
+class cancelOrder(APIView):
+    def post(self, request, *args, **kwargs):
+        order_id = request.data['order_id']
+        order = Order.objects.get(id=order_id)
+        order.order_status = 'failed'
+        rider_orders = order.rider.delievery_orders.split(",")
+        rider_orders.remove(str(order_id))
+        order_rider = Rider.objects.get(rider_id=order.rider.rider_id)
+        print(rider_orders)
+        print(order_rider)
+        order_rider.delievery_orders = ",".join(rider_orders)
+        order.rider.delievery_orders = ",".join(rider_orders)
+        print(order_rider.delievery_orders)
+        print(order.rider.delievery_orders)
+        order.save()
+        order_rider.save()
+        return Response(OrderSerializer(order).data)
+
+class addDynamicPickup(APIView):
+    def post(self, request, *args, **kwargs):
+        rider_id = request.data['rider_id']
+        rider = Rider.objects.get(id=rider_id)
+        delivery_orders = request.data['route']
+        rider.delievery_orders = delivery_orders
+        rider.save()
 
 class getBags(APIView):
     def get(self, request, *args, **kwargs):
