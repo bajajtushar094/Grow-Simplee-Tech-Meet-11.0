@@ -11,6 +11,9 @@ import UploadZip from "./Pages/UploadZipPage";
 import CreateBag from "./Pages/Mobile/CreateBag";
 import UpcomingDelivery from "./Pages/Mobile/UpcomingDelivery";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
+import Ridermanagement from "./Pages/Ridermanagement";
+import MapBox from "./Component/Global/MapBox";
+
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +28,7 @@ function App() {
         <Route path="/createBag" element={<CreateBag />} />
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
         <Route path="/drone" element={<DroneManagement />} />
+        <Route path="/rider" element={<Ridermanagement/>}/>
       </Routes>
     </BrowserRouter>
   );

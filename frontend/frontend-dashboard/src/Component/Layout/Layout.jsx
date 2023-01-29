@@ -4,7 +4,7 @@ import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";
 import { LHS_TABS, LHS_TABS_VOL } from "../../constants/sidebarconst";
-import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
+import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst"; 
 import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
 

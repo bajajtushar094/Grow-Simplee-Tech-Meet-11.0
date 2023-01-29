@@ -10,7 +10,7 @@ import dot from './Dot.svg'
 
 function SideProfile(props) {
   return (
-    <div style={{backgroundColor:'white', height:'900px',width:'464px', padding:'20px'}}>
+    <div style={{backgroundColor:'white', height:'900px',width:'464px', padding:'20px', borderRadius:props.borderRadius? props.borderRadius:'0px'}}>
         <div style={{display:props.display?props.display:'flex', flexDirection:' row' , alignItems:'center',justifyContent:'center', margin:'5px'}}>
          {/* toplogo */}
             < CloseIcon sx={{fontSize:'medium'}}/>
