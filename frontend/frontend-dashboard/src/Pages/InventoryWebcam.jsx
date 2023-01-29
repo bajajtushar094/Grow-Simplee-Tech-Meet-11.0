@@ -7,9 +7,8 @@ import ProgressBar from "../Component/Layout/ProgressBar";
 const App = () => {
   return (
     <Layout isLeftSidebarPresent={false}>
-      <Webcam />
       <RightSideBar />
-      <ProgressBar progress="2" />
+      <ProgressBar progress="1"/>
     </Layout>
   );
 };
