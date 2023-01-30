@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../Component/Layout";
-import ImageGroup from "../Component/Task1_web/ImageGroup";
-import UploadZip from "../Component/Task1_web/UploadZip";
+import ImageGroup from "../Component/VolumeEstimation/ImageGroup";
+import UploadZip from "../Component/VolumeEstimation/UploadZip";
 const UploadZipPage = () => {
   return (
     <div className="h-screen">

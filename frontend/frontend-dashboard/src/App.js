@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Switch } from "react-router-dom";
 import Inventory from "./Pages/Inventory";
 import InventoryWebcam from "./Pages/InventoryWebcam";
-import InventoryImages from "./Pages/InventoryImages";
+// import InventoryImages from "./Pages/InventoryImages";
+import Riders from "./Pages/Riders"
 import Layout, { InventoryLayout } from "./Component/Layout";
 import Dashboard from "./Pages/Dashboard";
 import ScanQR from "./Pages/Mobile/ScanQR"
@@ -18,9 +19,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
+        <Route path="/riders" element={<Riders />} />
         <Route path="/volumeestimation" element={<InventoryWebcam />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/listview" element={<InventoryImages />} />
+        {/* <Route path="/listview" element={<InventoryImages />} /> */}
         <Route path="/scanQR" element={<ScanQR />} />
         <Route path="/uploadzip" element={<UploadZip />} />
         <Route path="/createBag" element={<CreateBag />} />

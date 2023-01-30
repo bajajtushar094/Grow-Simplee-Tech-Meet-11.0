@@ -19,6 +19,9 @@ urlpatterns = [
     path('orders/all', views.getOrder.as_view()),
     path('riders/all', views.getRider.as_view()),
     path('bags/all', views.getBags.as_view()),
-    path('manager', views.getManager.as_view())
+    path('manager', views.getManager.as_view()),
+    path('orders/cancel', views.cancelOrder.as_view()),
+    path('orders/add', views.addDynamicPickup.as_view()),
+    path('count/riders', views.countRiders.as_view()),
 ]    
 
