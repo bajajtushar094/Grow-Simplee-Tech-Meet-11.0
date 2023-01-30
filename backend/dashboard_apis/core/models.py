@@ -17,69 +17,33 @@ class Manager(models.Model):
 
 class Address(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
-    latitude = models.CharField(max_length=50)
-    longitude = models.CharField(max_length=50)
-    location = models.CharField(max_length=250)
-    name = models.CharField(max_length=50)
+    latitude = models.CharField(max_length=50, default='')
+    longitude = models.CharField(max_length=50, default='')
+    location = models.CharField(max_length=250, default='')
+    name = models.CharField(max_length=50, default='')
     def __str__(self):
         return f"Address-{self.location}"
 
-
-class Owner(models.Model):
-    owner_id = models.CharField(max_length=500)
-    name = models.CharField(max_length=500, null=True)
-    contact_number = models.CharField(max_length=500, null=True)
-    address_id = models.CharField(max_length=500)
-
-    def __str__(self):
-        return self.name + self.address_id
-
-
-class Order(models.Model):
-    rider_id = models.CharField(max_length=500)
-    order_name = models.CharField(max_length=500, null=True, blank=True)
-    shape = models.CharField(max_length=50, null=True, blank=True)
-    volume = models.CharField(max_length=50, blank=True)
-    length = models.CharField(max_length=50, blank=True)
-    width = models.CharField(max_length=50, blank=True)
-    height = models.CharField(max_length=50, blank=True)
-    sku = models.CharField(max_length=50, null=True, blank=True)
-    address_id = models.CharField(max_length=500, blank=True)
-    delivery_action = models.CharField(
-        _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
-    )
-    in_warehouse = models.BooleanField(default=False, null=True)
-    order_status = models.CharField(
-        _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
-    )
-    edd = models.DateField(_("EDD date"), blank=True, null=True)
-    eta = models.CharField(max_length=50)
-    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, blank=True, null=True)
-    image = models.FileField(blank=True)
-
-    def __str__(self):
-        return self.order_name
-
 class Rider(models.Model):
-    name = models.CharField(max_length=250)
-    rider_id = models.CharField(max_length=500)
-    contact_number = models.CharField(max_length=10)
-    bag_volume = models.CharField(max_length=50)
-    bag_volume_used = models.CharField(max_length=50)
+    name = models.CharField(max_length=250, default='')
+    rider_id = models.CharField(max_length=500, default='')
+    contact_number = models.CharField(max_length=10, default='')
+    bag_volume = models.CharField(max_length=50, default='')
+    bag_volume_used = models.CharField(max_length=50, default='')
     current_address = models.ForeignKey(
         Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
     )
     rider_status = models.CharField(
         _("filing form type"), max_length=50, choices=RIDER_STATUS
     )
-    delievery_orders = models.ManyToManyField(
-        Order, related_name="Orders_Assigned", blank=True
-    )
-    last_delivered_pointer = models.IntegerField()
+    # delievery_orders = models.ManyToManyField(
+    #     Order, related_name="Orders_Assigned", blank=True
+    # )
+    last_delivered_pointer = models.IntegerField(default=0)
     manager_id = models.CharField(max_length=500)
     arrival_time = models.DateField((_("arrival time")))
     departure_time = models.DateField((_("departure time")))
-    etf = models.CharField(max_length=50)
+    etf = models.CharField(max_length=50, default='')
     successful_deliveries = models.IntegerField(default=0)
     packages_delayed = models.IntegerField(default=0)
 
@@ -93,6 +57,43 @@ class Rider(models.Model):
     
     def __str__(self):
         return f"{self.name} + {self.rider_id}"
+
+class Owner(models.Model):
+    owner_id = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, null=True)
+    contact_number = models.CharField(max_length=500, null=True)
+    address_id = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name + self.address_id
+
+
+class Order(models.Model):
+    # rider_id = models.CharField(max_length=500)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE, blank=True, null=True)
+    order_name = models.CharField(max_length=500, null=True, blank=True)
+    shape = models.CharField(max_length=50, null=True, blank=True)
+    volume = models.CharField(max_length=50, blank=True)
+    length = models.CharField(max_length=50, blank=True)
+    width = models.CharField(max_length=50, blank=True)
+    height = models.CharField(max_length=50, blank=True)
+    sku = models.CharField(max_length=50, null=True, blank=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True)
+    # address_id = models.CharField(max_length=500, blank=True)
+    delivery_action = models.CharField(
+        _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
+    )
+    in_warehouse = models.BooleanField(default=False, null=True)
+    order_status = models.CharField(
+        _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
+    )
+    edd = models.DateField(_("EDD date"), blank=True, null=True)
+    eta = models.CharField(max_length=50, null=True)
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, blank=True, null=True)
+    image = models.FileField(blank=True)
+
+    def __str__(self):
+        return self.order_name
     
 class Bags(models.Model):
     rider_id = models.CharField(max_length=500)
