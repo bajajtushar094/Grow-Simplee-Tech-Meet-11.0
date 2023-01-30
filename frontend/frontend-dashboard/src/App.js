@@ -13,6 +13,8 @@ import UpcomingDelivery from "./Pages/Mobile/UpcomingDelivery";
 import TripRoute from "./Pages/Mobile/TripRoute";
 import SingleRoute from "./Pages/Mobile/SingleRoute";
 import Verification from "./Pages/Mobile/Verification";
+import Login from "./Pages/Mobile/Login";
+import Checklist from "./Pages/Mobile/Checklist";
 import DestinationReached from "./Pages/Mobile/DestinationReached";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
@@ -33,6 +35,8 @@ function App() {
         <Route path="/tripRoute" element={<TripRoute />} />
         <Route path="/singleRoute" element={<SingleRoute />} />
         <Route path="/verification" element={<Verification />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
         <Route path="/drone" element={<DroneManagement />} />

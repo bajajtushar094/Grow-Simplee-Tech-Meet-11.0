@@ -1,12 +1,8 @@
 import {React, useState} from "react";
-import QRinstruction from "../../dummy_files/QRInstructions.png";
-import QRscannerIcon from "../../Shared/Icons/QRscanner";
-import CallMadeIcon from "@mui/icons-material/ArrowOutward";
 import QrReader from "react-qr-reader";
 import MobileLayout from "../../Component/Layout/MobileLayout";
 import qr_scan from "../../Component/Global/qr_scan.png";
-import qr_reader_outline from "../../Component/Global/qr_reader_outline.svg";
-import ViewFinder from "react-qr-reader"
+//import qr_reader_outline from "../../Component/Global/qr_reader_outline.svg";
 import { Link } from "react-router-dom";
 
 

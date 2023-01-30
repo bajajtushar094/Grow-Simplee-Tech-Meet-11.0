@@ -34,7 +34,7 @@ const Verification = (props) => {
                     <Link to='/verification'>Resend verification code</Link>
                 </div>
                 <div className="flex-grow"></div>
-                <div to='/tripRoute' className="text-[20px] text-black border border-[#777777] rounded-xl text-center py-2 font-medium mx-4 my-8 absolute bottom-0 left-0 right-0 px-10">Skip</div>
+                <div className="text-[20px] text-black border border-[#777777] rounded-xl text-center py-2 font-medium mx-4 my-8 absolute bottom-0 left-0 right-0 px-10"><Link to='/tripRoute' >Skip</Link></div>
             </div>
             </>
         </MobileLayout>
