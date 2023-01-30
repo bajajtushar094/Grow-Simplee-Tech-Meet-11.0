@@ -4,7 +4,7 @@ import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";
 import { LHS_TABS, LHS_TABS_VOL } from "../../constants/sidebarconst";
-import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst";
+import { LHS_BOTTOM_TABS } from "../../constants/sidebarconst"; 
 import { TOP_TABS } from "../../constants/sidebarconst";
 import { routePaths } from "../../constants/sidebarconst";
 
@@ -38,8 +38,8 @@ const Layout = ({ children, isLeftSidebarPresent = true, flex_dir="row" }) => {
       <div className={flex_dir == "row"? "flex" : "flex-col"}>
         {isLeftSidebarPresent && (
           <LeftSidebar
-            heading={location.pathname === "/vol" ? "Views" : "All drones"}
-            lhsOptions={location.pathname === "/vol" ? LHS_TABS_VOL : LHS_TABS}
+            heading={location.pathname === "/volumeestimation" ? "Views" : "All drones"}
+            lhsOptions={location.pathname === "/volumeestimation" ? LHS_TABS_VOL : LHS_TABS}
             bottomTabs={LHS_BOTTOM_TABS}
             activeTab={activeTab}
             onTabClick={handleTabChange}

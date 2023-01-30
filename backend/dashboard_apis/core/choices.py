@@ -6,7 +6,8 @@ RIDER_STATUS =[
 ORDER_STATUS = [
     ('delivered', 'Delivered'),
     ('undelivered', 'Undelivered'),
-    ('delayed', 'Delayed')
+    ('delayed', 'Delayed'),
+    ('failed', 'Failed')
 ]
 DELIVERY_ACTION = [
     ('drop', 'Drop'),
