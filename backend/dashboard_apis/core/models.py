@@ -36,30 +36,6 @@ class Owner(models.Model):
         return self.name + self.address_id
 
 
-class Order(models.Model):
-    rider_id = models.CharField(max_length=500)
-    order_name = models.CharField(max_length=500, null=True, blank=True)
-    shape = models.CharField(max_length=50, null=True, blank=True)
-    volume = models.CharField(max_length=50, blank=True)
-    length = models.CharField(max_length=50, blank=True)
-    width = models.CharField(max_length=50, blank=True)
-    height = models.CharField(max_length=50, blank=True)
-    sku = models.CharField(max_length=50, null=True, blank=True)
-    address_id = models.CharField(max_length=500, blank=True)
-    delivery_action = models.CharField(
-        _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
-    )
-    order_status = models.CharField(
-        _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
-    )
-    edd = models.DateField(_("EDD date"), blank=True, null=True)
-    eta = models.CharField(max_length=50)
-    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, blank=True, null=True)
-    image = models.FileField(blank=True)
-
-    def __str__(self):
-        return self.order_name
-
 class Rider(models.Model):
     name = models.CharField(max_length=250)
     rider_id = models.CharField(max_length=500, primary_key=True)
@@ -72,9 +48,7 @@ class Rider(models.Model):
     rider_status = models.CharField(
         _("filing form type"), max_length=50, choices=RIDER_STATUS
     )
-    delievery_orders = models.ManyToManyField(
-        Order, related_name="Orders_Assigned", blank=True
-    )
+    delievery_orders = models.CharField(max_length=500)
     last_delivered_pointer = models.IntegerField()
     manager_id = models.CharField(max_length=500)
     arrival_time = models.DateField((_("arrival time")))
@@ -84,16 +58,39 @@ class Rider(models.Model):
     packages_delayed = models.IntegerField(default=0)
     current_address_id = models.CharField(max_length=50)
     def save(self, *args, **kwargs):
-        self.successful_deliveries = 0
-        self.last_delivered_pointer = 0
-        self.packages_delayed = 0
-        # for order in self.delievery_orders:
-        #     if order.order_status == "delayed":
+        # self.successful_deliveries = self.last_delivered_pointer + 1
+        # self.packages_delayed = 0
+        # for order_id in self.delievery_orders.split(","):
+        #     if Order.objects.get(id=order_id).order_status == "delayed":
         #         self.packages_delayed += 1
         super(Rider, self).save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.name} + {self.rider_id}"
+
+class Order(models.Model):
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    order_name = models.CharField(max_length=500, null=True, blank=True)
+    shape = models.CharField(max_length=50, null=True, blank=True)
+    volume = models.CharField(max_length=50, blank=True)
+    length = models.CharField(max_length=50, blank=True)
+    width = models.CharField(max_length=50, blank=True)
+    height = models.CharField(max_length=50, blank=True)
+    sku = models.CharField(max_length=50, null=True, blank=True)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    delivery_action = models.CharField(
+        _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
+    )
+    order_status = models.CharField(
+        _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
+    )
+    edd = models.DateTimeField(_("EDD date"), blank=True, null=True)
+    eta = models.CharField(max_length=50)
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, blank=True, null=True)
+    image = models.FileField(blank=True)
+
+    def __str__(self):
+        return self.order_name
     
 class Bags(models.Model):
     rider_id = models.CharField(max_length=500)

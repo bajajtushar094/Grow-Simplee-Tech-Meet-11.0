@@ -10,6 +10,8 @@ from rest_framework.decorators import api_view
 from .forms import RiderRewardsForm, OrderForm
 from .models import Rider
 from .serializers import *
+from datetime import datetime
+import pytz
 
 
 class getData(APIView):
@@ -82,9 +84,21 @@ class order(APIView):
 #dashboard APIS
 class getOrder(APIView):
     def get(self, request, *args, **kwargs):
+        utc=pytz.UTC
+
         all_orders = Order.objects.all()
+
+        for i in range(len(all_orders)):
+            date_time_now = datetime.now().replace(tzinfo=utc)
+            if date_time_now > all_orders[i].edd:
+                if all_orders[i].order_status == 'undelivered':
+                    all_orders[i].order_status = 'delayed'
+
         data = {}
         data['orders'] = [OrderSerializer(order).data for order in all_orders]
+        for i in range(len(data['orders'])):
+            data['orders'][i]['rider'] = RiderSerializer(all_orders[i].rider).data
+            data['orders'][i]['address'] = AddressSerializer(all_orders[i].address).data
         return Response(data)
 
 class getRider(APIView):

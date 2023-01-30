@@ -1,7 +1,7 @@
 import React from "react";
 import dummy from "./img1.jpg";
 import Layout from "../Component/Layout";
-import "./InventoryImages.css";
+// import "./InventoryImages.css";
 import RightOrderDetails from "../Component/Layout/RightOrderDetails";
 
 const App = () => {

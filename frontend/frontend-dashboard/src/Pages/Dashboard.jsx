@@ -9,6 +9,7 @@ import DroneIcon from "../Shared/Icons/DroneIcon";
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import ProgressBar from "../Component/Layout/ProgressBar";
 import { useState } from "react";
+import MapBox from "../Component/Global/MapBox";
 
 const Dashboard = () => {
   const [manager, setManager] = useState({})
@@ -28,7 +29,7 @@ const Dashboard = () => {
           Welcome Captain Station {manager.name}
         </div>
         <div className='text flex font-bold pb-5 px-4'>
-          <TickedWindowIcon  border-radius= "50%" border= "5px solid red" padding=" 5px" font-size= "30px"/>
+          <TickedWindowIcon  border-radius= "50%" border= "5px solid red" padding=" 5px" fontSize= "30px"/>
           <div className="w-full px-5">
             <div className='text-gs-blue font-bold'>
               Analyze
@@ -95,9 +96,9 @@ const Dashboard = () => {
           Stations
         </div>
         <div className='text flex font-bold py-5 m-3'>
-          <div className="w-full px-5">
-          <img src='./Left-Wrapper.png' alt="Image of map" />
-            </div>
+          <div className="w-full px-5" id="mapbox_div">
+          <MapBox />
+          </div>
             <div className="w-full px-5">
             <div className="w-full px-5 py-3 border-b-4">
               <div className="text-2xl font-bold">

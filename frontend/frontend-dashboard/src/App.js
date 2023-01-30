@@ -9,6 +9,9 @@ import ScanQR from "./Pages/Mobile/ScanQR"
 import UploadZip from "./Pages/UploadZipPage";
 import CreateBag from "./Pages/Mobile/CreateBag";
 import UpcomingDelivery from "./Pages/Mobile/UpcomingDelivery";
+import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
+import Ridermanagement from "./Pages/Ridermanagement";
+import MapBox from "./Component/Global/MapBox";
 
 function App() {
   return (
@@ -16,12 +19,14 @@ function App() {
       <Routes>
         <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
         <Route path="/volumeestimation" element={<InventoryWebcam />} />
-        <Route path="/about" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/listview" element={<InventoryImages />} />
         <Route path="/scanQR" element={<ScanQR />} />
         <Route path="/uploadzip" element={<UploadZip />} />
         <Route path="/createBag" element={<CreateBag />} />
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
+        <Route path="/drone" element={<DroneManagement />} />
+        <Route path="/rider" element={<Ridermanagement/>}/>
       </Routes>
     </BrowserRouter>
   );
