@@ -10,6 +10,10 @@ import ScanQR from "./Pages/Mobile/ScanQR"
 import UploadZip from "./Pages/UploadZipPage";
 import CreateBag from "./Pages/Mobile/CreateBag";
 import UpcomingDelivery from "./Pages/Mobile/UpcomingDelivery";
+import TripRoute from "./Pages/Mobile/TripRoute";
+import SingleRoute from "./Pages/Mobile/SingleRoute";
+import Verification from "./Pages/Mobile/Verification";
+import DestinationReached from "./Pages/Mobile/DestinationReached";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
 import MapBox from "./Component/Global/MapBox";
@@ -26,6 +30,10 @@ function App() {
         <Route path="/scanQR" element={<ScanQR />} />
         <Route path="/uploadzip" element={<UploadZip />} />
         <Route path="/createBag" element={<CreateBag />} />
+        <Route path="/tripRoute" element={<TripRoute />} />
+        <Route path="/singleRoute" element={<SingleRoute />} />
+        <Route path="/verification" element={<Verification />} />
+        <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
         <Route path="/drone" element={<DroneManagement />} />
         <Route path="/rider" element={<Ridermanagement/>}/>
@@ -35,3 +43,8 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
