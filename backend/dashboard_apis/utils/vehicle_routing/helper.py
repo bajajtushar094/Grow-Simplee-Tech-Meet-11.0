@@ -1,8 +1,8 @@
 import math
 import random 
 import numpy as np
-from vehicle_routing.customers import Node, Order
-from vehicle_routing.vehicle import Vehicle
+from utils.vehicle_routing.customers import Node, Order
+from utils.vehicle_routing.vehicle import Vehicle
 from ortools.constraint_solver import routing_enums_pb2
 
 def generate_locs(num_rows):
@@ -32,11 +32,11 @@ def generate_coordinates(center_lat, center_long, radius=27000):
     new_lat = y + center_lat
     return [new_lat, new_long]
 
-def generate_random_order(type=None):
+def generate_random_order(type=None, start_time=None, end_time=None):
     if type is None:
         type = np.random.choice([1, 2], size=1, p=[0.7, 0.3])
 
-    return Order(1, generate_coordinates(12.9716, 77.5946), type)
+    return Order(1, generate_coordinates(12.9716, 77.5946), type=type, start_time=start_time, end_time=end_time)
 
 def generate_random_problem(num_orders=50):
     depot = Node([12.9716, 77.5946], 0)

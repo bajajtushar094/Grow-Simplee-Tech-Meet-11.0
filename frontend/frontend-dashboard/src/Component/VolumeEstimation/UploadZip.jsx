@@ -1,13 +1,34 @@
 import React, { useState } from "react";
 import UploadFileSharpIcon from "@mui/icons-material/UploadFileSharp";
 import ListIcon from "../../Shared/Icons/ListIcon";
+import axios from "axios";
 
 const UploadZip = () => {
   const [zip, setZip] = useState("");
   const [images, setImages] = useState([]);
   const handleZipUpload = (e) => {
     if (e.target.files) {
-      setZip(e.target.files[0])
+      console.log(e.target.files[0]);
+      setZip(e.target.files[0]);
+      
+      const formData = new FormData();
+      formData.append("myfile", zip);
+      formData.append("order_name", zip.name);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+          "Access-Control-Allow-Origin" : "*"
+        },
+      };
+      const url = "http://localhost:8000/core/upload";
+      axios
+        .post(url, formData, config)
+        .then((req, res) => {
+          console.log(req);
+          const data = res.data;
+          console.log(data);
+        })
+        .catch((err) => console.log(err));
     }
   };
   const handleImagesUpload = (e) => {
