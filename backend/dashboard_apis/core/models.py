@@ -2,9 +2,27 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .choices import *
 import os
+from django.contrib.auth import (AbstractBaseUser, BaseUserManager)
 
 
 # Create your models here.
+
+# class UserManager(BaseUserManager):
+#     def create_user(self, email, password = None):
+#         if not email:
+#             raise ValueError('Users must have an email address')
+        
+
+
+# class User(AbstractBaseUser):
+#     Email_Address = models.EmailField(verbose_name='email', max_length=60, unique=True, blank=True, default=None)
+#     is_manager = models.BooleanField(default = False)
+#     USERNAME_FIELD = 'Email_Address'
+#     objects = UserManager()
+
+#     def __str__(self):
+#         return str(self.email)
+
 
 class Manager(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
@@ -38,7 +56,7 @@ class Owner(models.Model):
 
 class Rider(models.Model):
     name = models.CharField(max_length=250)
-    rider_id = models.CharField(max_length=500, primary_key=True)
+    rider_id = models.CharField(max_length=500)
     contact_number = models.CharField(max_length=10)
     bag_volume = models.CharField(max_length=50)
     bag_volume_used = models.CharField(max_length=50)
@@ -69,7 +87,7 @@ class Rider(models.Model):
         return f"{self.name} + {self.rider_id}"
 
 class Order(models.Model):
-    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True)
     order_name = models.CharField(max_length=500, null=True, blank=True)
     shape = models.CharField(max_length=50, null=True, blank=True)
     volume = models.CharField(max_length=50, blank=True)
@@ -77,7 +95,7 @@ class Order(models.Model):
     width = models.CharField(max_length=50, blank=True)
     height = models.CharField(max_length=50, blank=True)
     sku = models.CharField(max_length=50, null=True, blank=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     delivery_action = models.CharField(
         _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
     )

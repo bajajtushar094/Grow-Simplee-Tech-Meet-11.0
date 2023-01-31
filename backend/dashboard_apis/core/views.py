@@ -7,11 +7,13 @@ from django.http import HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from .forms import RiderRewardsForm, OrderForm
 from .models import Rider
 from .serializers import *
 from datetime import datetime
 import pytz
+
 
 
 class getData(APIView):
@@ -143,6 +145,7 @@ class getBags(APIView):
         return Response(data)
     
 class getManager(APIView):
+    permission_classes = (IsAuthenticated, )
     def get(self, request, *args, **kwargs):
         manager = Manager.objects.all()
         data = {}
