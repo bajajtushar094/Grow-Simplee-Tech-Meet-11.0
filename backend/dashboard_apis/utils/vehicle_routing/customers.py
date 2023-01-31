@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.metrics import pairwise
 
 class Node:
-    def __init__(self, coordinates, type, volume=0, status=0):
+    def __init__(self, coordinates, type, volume=0, status=0, start_time=None, end_time=None):
         """        
         The Node class represents a location in a Vehicle Routing Problem (VRP) with attributes for coordinates, type, volume, and status.
 
@@ -44,6 +44,8 @@ class Node:
         self.coordinates = coordinates
         self.current_vrp_index = None
         # self.next_vrp_index = None
+        self.start_time = start_time
+        self.end_time = end_time
         
         
 class Order(Node):
@@ -72,15 +74,15 @@ class Order(Node):
     update_order_status(self, new_status): Update the status of the order and also updates the vehicle's capacity accordingly.
     """
 
-    def __init__(self, volume, coordinates, type, AWB=None, SKU=None, carryforward_penalty=1000000, status=0, vehicle=None, orientation=None, position=None):
-        super().__init__(coordinates, type, volume, status)
+    def __init__(self, volume, coordinates, type, AWB=None, SKU=None, carryforward_penalty=1000000000000, status=0, vehicle=None, orientation=None, position=None, start_time=None, end_time=None):
+        super().__init__(coordinates, type, volume, status, start_time, end_time)
         self.AWB = AWB
         self.SKU = SKU
         self.carryforward_penalty = carryforward_penalty
         self.vehicle = vehicle
         self.orientation = orientation
         self.position = position
-        
+
     def update_order_status(self, new_status):
         """
         Note:
@@ -144,7 +146,7 @@ class Customers():
         
         self.number = len(customer_list)
         return customer_list
-            
+           
     def set_manager(self, manager):
         self.manager = manager
 
