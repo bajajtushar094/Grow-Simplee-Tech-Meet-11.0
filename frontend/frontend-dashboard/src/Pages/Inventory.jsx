@@ -18,6 +18,7 @@ const Inventory = () => {
   let { warehouseTab } = useParams();
   const location = useLocation();
   const [orders, setOrders] = useState([])
+  const data = {}
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
@@ -121,33 +122,6 @@ const Inventory = () => {
           <Table tab={warehouseTab} />
         </div>
       </div>
-      {/* <div className="bg-white rounded-tl-3xl">
-          <div className="flex pb-4 pt-6 px-8">
-            <div>
-              <PlayListAddCheckIcon />
-            </div>
-            <div className="pl-4 w-full">
-              <div className="flex justify-between w-full">
-                <h4 className="text-gs-blue text-sm font-semibold">Packages</h4>
-                <div className="flex space-x-6">
-                  <button className="text-gs-text-gray text-sm font-semibold">
-                    <MopedOutlinedIcon fontSize="small" className="mr-1" />
-                    History
-                  </button>
-                  <button className="text-gs-text-gray text-sm font-semibold">
-                    <MopedOutlinedIcon fontSize="small" className="mr-1" />
-                    Inhouse
-                  </button>
-                </div>
-              </div>
-              <h2 className="text-xl font-semibold">Repository</h2>
-              <h4 className="text-md text-[#5F5D59] font-semibold">
-                List of items currently in warehouse
-              </h4>
-            </div>
-          </div>
-          <Table />
-        </div> */}
     </Layout>
   );
 };
