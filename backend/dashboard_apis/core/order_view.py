@@ -24,6 +24,12 @@ class order_image_update(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+class get_all_orders(APIView):
+    def get(self, request, *args, **kwargs):  
+        orders = Order.objects.all()  
+        serializers = OrderSerializer(orders, many=True)  
+        return Response({'status': 'success', "orders":serializers.data}, status=status.HTTP_200_OK)
+
 class order_detail(APIView):
     def get(self, request, *args, **kwargs):
         id = kwargs['id']
