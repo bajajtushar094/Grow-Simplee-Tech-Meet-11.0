@@ -27,7 +27,10 @@ class Address(models.Model):
     longitude = models.CharField(max_length=50)
     location = models.CharField(max_length=250)
     name = models.CharField(max_length=250)
+<<<<<<< HEAD
 >>>>>>> f2debc68cd74c014357b7358f0b611b2d194d036
+=======
+>>>>>>> 3e3d68a7838231ef1fe9581eb3ec7131ec588df2
     def __str__(self):
         return f"Address-{self.location}"
 
@@ -76,10 +79,13 @@ class Owner(models.Model):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 class Order(models.Model):
     # rider_id = models.CharField(max_length=500)
     rider = models.ForeignKey(Rider, on_delete=models.CASCADE, blank=True, null=True)
 =======
+=======
+>>>>>>> 3e3d68a7838231ef1fe9581eb3ec7131ec588df2
 class Rider(models.Model):
     name = models.CharField(max_length=250)
     rider_id = models.CharField(max_length=500)
