@@ -19,3 +19,10 @@ body{
     box-sizing: border-box;
 }
 
+.leaflet-control-container .leaflet-routing-container-hide{
+    display: none;
+}
+
+.leaflet-control-zoom {
+    display: none;
+}
