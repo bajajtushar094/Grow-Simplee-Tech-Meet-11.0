@@ -15,9 +15,7 @@ const App = () => {
 
   const handleScan = async (scanData) => {
     setLoadingScan(true);
-    console.log(`loaded data data`, scanData);
     if (scanData && scanData !== "") {
-      console.log(`loaded >>>`, scanData);
       setData(scanData);
       //   setStartScan(false);
       setLoadingScan(false);

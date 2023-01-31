@@ -3,7 +3,8 @@ export const routePaths = {
     ridermanagement: '/ridermanagement',
     warehouse: '/warehouse',
     inventory: '/warehouse/inventory',
-    repository: '/warehouse/repository-inhouse',
+    history:  '/warehouse/history',
+    inhouse:  '/warehouse/inhouse',
     raiseissue: 'raiseissue',
     issuestatus: 'issuestatus',
     profile: `/student/profile/`,
@@ -33,9 +34,14 @@ export const LHS_TABS = [
         value: routePaths.inventory,
     },
     {
-        id: 'gs_repository',
-        label: 'Repository',
-        value: routePaths.repository,
+        id: 'gs_history',
+        label: 'History',
+        value: routePaths.history,
+    },
+    {
+        id: 'gs_inhouse',
+        label: 'Inhouse',
+        value: routePaths.inhouse,
     },
 ]
 export const LHS_TABS_VOL = [

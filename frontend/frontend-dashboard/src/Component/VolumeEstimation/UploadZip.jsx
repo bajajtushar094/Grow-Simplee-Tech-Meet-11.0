@@ -7,13 +7,11 @@ const UploadZip = () => {
   const [images, setImages] = useState([]);
   const handleZipUpload = (e) => {
     if (e.target.files) {
-      console.log(e.target.files[0]);
       setZip(e.target.files[0])
     }
   };
   const handleImagesUpload = (e) => {
     if (e.target.files) {
-      console.log(e.target.files);
       setImages(e.target.files);
     }
   };
