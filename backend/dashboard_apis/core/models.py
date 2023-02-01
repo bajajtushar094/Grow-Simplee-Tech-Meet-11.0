@@ -101,7 +101,7 @@ class Rider(models.Model):
         return f"{self.name} + {self.rider_id}"
 
 class Order(models.Model):
-    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True)
     order_name = models.CharField(max_length=500, null=True, blank=True)
     shape = models.CharField(max_length=50, null=True, blank=True)
     volume = models.CharField(max_length=50, blank=True)
@@ -109,7 +109,7 @@ class Order(models.Model):
     width = models.CharField(max_length=50, blank=True)
     height = models.CharField(max_length=50, blank=True)
     sku = models.CharField(max_length=50, null=True, blank=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     delivery_action = models.CharField(
         _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
     )

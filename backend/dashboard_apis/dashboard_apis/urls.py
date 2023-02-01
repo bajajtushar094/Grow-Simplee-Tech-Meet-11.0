@@ -10,6 +10,7 @@ urlpatterns = [
     path('core/', include('core.urls'))
 ]
 
+
 #urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
