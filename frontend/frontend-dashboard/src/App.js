@@ -7,7 +7,6 @@ import Riders from "./Pages/Riders"
 import Layout, { InventoryLayout } from "./Component/Layout";
 import Dashboard from "./Pages/Dashboard";
 import ScanQR from "./Pages/Mobile/ScanQR"
-import UploadZip from "./Pages/UploadZipPage";
 import CreateBag from "./Pages/Mobile/CreateBag";
 import UpcomingDelivery from "./Pages/Mobile/UpcomingDelivery";
 import TripRoute from "./Pages/Mobile/TripRoute";
@@ -19,6 +18,7 @@ import DestinationReached from "./Pages/Mobile/DestinationReached";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
 import MapBox from "./Component/Global/MapBox";
+import UploadZip from "./Component/VolumeEstimation/UploadZip";
 
 function App() {
   return (
