@@ -2,8 +2,9 @@ import math
 import random 
 import numpy as np
 
-from vehicle_routing.vrp import VRP 
-import vehicle_routing.helper as helper
+from utils.vehicle_routing.vrp import VRP 
+import utils.vehicle_routing.helper as helper
+
 from datetime import timedelta
 
 def vehicle_output_string(manager, routing, plan):
@@ -68,30 +69,35 @@ if __name__ == '__main__':
     depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
 
     vrp_instance = VRP(depot, orders, vehicles)
+
+    # Check time window solution
+    # new_order = helper.generate_random_order(type=1, start_time=14, end_time=25)
+    # vrp_instance.add_dynamic_order(new_order)
+
     manager, routing, solution = vrp_instance.process_VRP()
 
     plan_output, dropped = vehicle_output_string(manager, routing, solution)
     print(plan_output)
     print('dropped nodes: ' + ', '.join(dropped))
-    # vrp_instance.vehicle_output_plot()
-
-    vrp_instance.vehicle_output_plot(block=False)
-    routes_list = vrp_instance.get_routes()
-    
-    for vehicle_idx, route in routes_list.items():
-        if route == []:
-            continue
-        for i in range(3):
-            route.next_node(3)
-
-    for i in range(5):
-        vrp_instance.add_dynamic_order(helper.generate_random_order())
-    
-    manager, routing, solution = vrp_instance.process_VRP(isReroute=True, rerouting_metaheuristic="GUIDED_LOCAL_SEARCH", time_limit=20)
     vrp_instance.vehicle_output_plot()
-    plan_output, dropped = vehicle_output_string(manager, routing, solution)
-    print(plan_output)
-    print('dropped nodes: ' + ', '.join(dropped))
+
+    # vrp_instance.vehicle_output_plot(block=False)
+    # routes_list = vrp_instance.get_routes()
+    
+    # for vehicle_idx, route in routes_list.items():
+    #     if route == []:
+    #         continue
+    #     for i in range(3):
+    #         route.next_node(3)
+
+    # for i in range(5):
+    #     vrp_instance.add_dynamic_order(helper.generate_random_order())
+    
+    # manager, routing, solution = vrp_instance.process_VRP(isReroute=True, rerouting_metaheuristic="GUIDED_LOCAL_SEARCH", time_limit=20)
+    # vrp_instance.vehicle_output_plot()
+    # plan_output, dropped = vehicle_output_string(manager, routing, solution)
+    # print(plan_output)
+    # print('dropped nodes: ' + ', '.join(dropped))
 
 
 

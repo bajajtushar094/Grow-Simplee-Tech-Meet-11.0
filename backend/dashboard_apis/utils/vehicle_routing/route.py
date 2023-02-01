@@ -1,4 +1,4 @@
-from vehicle_routing.customers import Order, Node
+from utils.vehicle_routing.customers import Order, Node
 
 class Route:
     """

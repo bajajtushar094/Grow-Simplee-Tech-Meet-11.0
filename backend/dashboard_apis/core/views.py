@@ -17,6 +17,7 @@ from .models import Rider
 from .serializers import *
 from datetime import datetime
 import pytz
+from rest_framework import status
 
 
 class getData(APIView):
@@ -30,20 +31,35 @@ class getRiderManagementMap(APIView):
         data = {}
         data['riders'] = [RiderSerializer(rider).data for rider in all_riders]
         return Response(data)
+    
+    def post(self, request, *args, **kwargs):
+        serializer = RiderSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class rider_rewards(APIView):
     def get(self, request, *args, **kwargs):
         rider_rewards_list = RiderRewards.objects.all()
         data = {}
         data['riders'] = [RiderRewardsSerializer(rider).data for rider in rider_rewards_list]
-        # serializer = RiderRewardsSerializer(rider_rewards_list, many=True)
         return Response(data)
+    
+    def post(self, request, *args, **kwargs):
+        serializer = RiderRewardsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class upload(APIView):
     def get(self, request, *args, **kwargs):
         return render(request, 'core/upload.html')
 
     def post(self, request, *args, **kwargs):
+        print(request.FILES)
         if request.FILES['myfile']:
             my_file = request.FILES['myfile']
             zf = zipfile.ZipFile(my_file)
