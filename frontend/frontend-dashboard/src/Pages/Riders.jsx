@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
 import Table from "../Component/Global/TableRiders";
 import Layout from "../Component/Layout";
@@ -6,6 +6,19 @@ import PlayListAddCheckIcon from "../Shared/Icons/CameraIcon";
 
 const Riders = () => {
   let { riderTab } = useParams();
+
+  const [riders, setRiders] = useState([]);
+
+  const fetchData = async () => {
+    const response = await fetch("http://127.0.0.1:8000/core/riders/all");
+    const data = await response.json();
+    //console.log(data);
+    return setRiders(data.riders);
+  }
+
+  useEffect(() => {
+    fetchData();
+  },[])
 
   return (
     <Layout isLeftSidebarPresent={false}>
@@ -25,7 +38,7 @@ const Riders = () => {
             </h4>
           </div>
         </div>
-        <Table tab={riderTab} />
+        <Table tab={riderTab} riders={riders}/>
       </div>
     </Layout>
   );
