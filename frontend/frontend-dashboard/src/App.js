@@ -27,7 +27,7 @@ function App() {
         <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
         <Route path="/ridersList" element={<Riders />} />
         <Route path="/volumeestimation" element={<InventoryWebcam />} />
-        <Route path="/about" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
         {/* <Route path="/listview" element={<InventoryImages />} /> */}
         <Route path="/uploadzip" element={<UploadZip />} />
         <Route path="/scanQR" element={<ScanQR />} />
