@@ -1,5 +1,6 @@
 from django.conf import settings
 import os
+from utils.bin_packing.packing import Packer
 from utils.routing_util import vehicle_output_string
 from utils.vehicle_routing.customers import Node
 from utils.vehicle_routing.vehicle import Vehicle
@@ -205,3 +206,18 @@ class generateSolution(APIView):
 
             all_riders[route_number].save()
         return Response(plan_output)
+
+class binPacking(APIView):
+    def get(self, request, *args, **kwargs):
+        rider_id = kwargs['id']
+        rider = Rider.objects.get(rider_id=rider_id)
+        url="http://localhost:4550"
+        
+        box = Packer(url, rider.bag_length, rider.bag_width, rider.bag_height)
+        order_ids = rider.delievery_orders.split(",")[1:-1]
+        for (i, order_id) in enumerate(order_ids):
+            order = Order.objects.get(id=order_id)
+            box.add_item(order_id, order.length, order.width, order.height, i+1)
+        
+        data = box.pack()
+        return Response(data)
