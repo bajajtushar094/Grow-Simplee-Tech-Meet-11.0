@@ -13,6 +13,7 @@ import Box from '../Component/Global/Box.svg'
 function Ridermanagement() {
   return (
       <Layout>
+        <>
           <div className="w-full  px-5" id='mapbox_div' >
              <MapBox/>
             </div> 
@@ -60,6 +61,7 @@ function Ridermanagement() {
                   <img src={minus} alt="" />
                </div>
            </div>
+           </>
       </Layout>
   )
 }
