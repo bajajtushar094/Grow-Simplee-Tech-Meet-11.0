@@ -5,8 +5,10 @@ import { Avatar } from "@mui/material";
 import CallMadeIcon from "../../Shared/Icons/CallMadeIcon";
 import { useMemo } from "react";
 
-export default function RiderList() {
-  const rows = [
+export default function RiderList(props) {
+
+  const riders = props.riders;
+  /* const rows = [
     {
       id: "1232",
       rider: {
@@ -43,7 +45,8 @@ export default function RiderList() {
       progress: "34%",
       status: "Delayed",
     },
-  ];
+  ]; */
+  console.log(riders);
   const columns = useMemo(() => [
     {
       field: "id",
@@ -61,34 +64,35 @@ export default function RiderList() {
       width: 200,
       renderCell: (params) => (
         <div className="flex items-center justify-between">
-          <Avatar
+          {/* <Avatar
             sx={{ width: 21, height: 21 }}
             src={params.row.rider.photoURL}
-          />
-          <h4 className="mx-2">{params.row.rider.name}</h4>
+          /> */}
+          <h4 className="mx-2">{params.row.name}</h4>
           <CallMadeIcon />
         </div>
       ),
     },
-    { field: "range", headerName: "Range", width: 130 },
+    { field: "bag_volume", headerName: "Range", width: 130 },
     {
-      field: "latestLocation",
+      field: "current_address",
       headerName: "Latest Location",
       sortable: false,
       width: 400,
     },
-    { field: "progress", headerName: "Progress", width: 130 },
+    { field: "bag_volume_used", headerName: "Progress", width: 130 },
     {
-      field: "status",
+      field: "rider_status",
       headerName: "Status",
       renderCell: (params) => (
         <div
           className={cx("bg-[#0F5223] text-white py-1 px-2 rounded-md", {
-            "bg-[#B3261E]": params.row.status === "Delayed",
-            "bg-[#309134]": params.row.status === "On Route",
+            "bg-[#B3261E]": params.row.rider_status === "Return",
+            "bg-[#309134]": params.row.rider_status === "Trip",
+            "bg-[#309130]": params.row.rider_status === "At Warehouse",
           })}
         >
-          <h4>{params.row.status}</h4>
+          <h4>{params.row.rider_status}</h4>
         </div>
       ),
     },
@@ -98,7 +102,7 @@ export default function RiderList() {
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
         rowHeight={35}
-        rows={rows}
+        rows={riders}
         columns={columns}
         getRowId={(row) => row.id}
         pagination
