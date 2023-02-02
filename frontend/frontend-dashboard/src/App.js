@@ -26,7 +26,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
-        <Route path="/ridersList" element={<Riders />} />
+        <Route path="/riderManagement/:riderManagementTab" element={<Riders />} />
         <Route path="/volumeestimation" element={<InventoryWebcam />} />
         <Route path="/" element={<Dashboard />} />
         {/* <Route path="/listview" element={<InventoryImages />} /> */}
@@ -40,7 +40,6 @@ function App() {
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/drone" element={<DroneManagement />} />
-        <Route path="/rider" element={<Ridermanagement/>}/>
         <Route path="/demo" element={<Demo/>}/>
         {/* <Route path="/riderDetails" element={<RiderDetails/>}/> */}
       </Routes>
