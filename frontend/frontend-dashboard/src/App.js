@@ -18,7 +18,8 @@ import DestinationReached from "./Pages/Mobile/DestinationReached";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
 import MapBox from "./Component/Global/MapBox";
-import RiderDetails from "./Pages/RiderDetails";
+import Demo from "./Pages/Demo";
+// import RiderDetails from "./Pages/RiderDetails";
 
 function App() {
   return (
@@ -40,7 +41,8 @@ function App() {
         <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/drone" element={<DroneManagement />} />
         <Route path="/rider" element={<Ridermanagement/>}/>
-        <Route path="/riderDetails" element={<RiderDetails/>}/>
+        <Route path="/demo" element={<Demo/>}/>
+        {/* <Route path="/riderDetails" element={<RiderDetails/>}/> */}
       </Routes>
     </BrowserRouter>
   );

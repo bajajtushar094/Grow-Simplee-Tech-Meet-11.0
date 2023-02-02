@@ -8,7 +8,10 @@ import line from './line.svg'
 import arrow from './arrow.svg'
 import dot from './Dot.svg'
 
+
 function SideProfile(props) {
+
+   console.log()
   return (
     <div style={{backgroundColor:'white', height:'900px',width:'464px', padding:'20px', borderRadius:props.borderRadius? props.borderRadius:'0px'}}>
         <div style={{display:props.display?props.display:'flex', flexDirection:' row' , alignItems:'center',justifyContent:'center', margin:'5px'}}>
@@ -27,9 +30,9 @@ function SideProfile(props) {
            
          </div>
 
-         <div style={{display:'flex',flexDirection:'row', justifyContent:'center',alignItems:'center', width:'93px',height:'28px',backgroundColor:props.backgroundColor?props.backgroundColor:'#12B76A',borderRadius:'16px',marginTop:'18px'}}>
+         <div style={{display:'flex',flexDirection:'row', justifyContent:'center',alignItems:'center', width:'93px',height:'28px',backgroundColor:props.status=='ontime'?'#12B76A':'red',borderRadius:'16px',marginTop:'18px'}}>
             <img style={{height:'8px',margin:'5px'}} src={dot} alt="" />
-            <p style={{fontSize:'14px'}}>{props.ontime?'ontime':'delay'}</p>
+            <p style={{fontSize:'14px'}}>{props.status}</p>
          </div>
          <div style={{marginTop:'20px', fontSize:'17px', fontWeight:"600", color:'gray'}}>
             {/* status  ontime and status*/}
@@ -84,26 +87,26 @@ function SideProfile(props) {
             </div>
             <div style={{display:'flex', flexDirection:'Column',justifyContent:'center',marginTop:'20px'}}>
                <p style={{fontSize:'14px'}}>Name</p>
-               <p style={{fontWeight:'bold',fontSize:'16px'}}>Aman Bucha</p>
+               <p style={{fontWeight:'bold',fontSize:'16px'}}>{props.customer}</p>
             </div>
 
             <div style={{display:'flex', flexDirection:'Column',justifyContent:'center',marginTop:'12px'}}>
                <p style={{fontSize:'14px'}}>Adress</p>
-               <p style={{fontWeight:'bold',fontSize:'16px'}}>IIT Guwahati</p>
+               <p style={{fontWeight:'bold',fontSize:'16px'}}>{props.adress}</p>
             </div>
 
             <div style={{display:'flex',flexDirection:'row',marginTop:'12px',justifyContent:'space-between'}}>
                 <div style={{display:'flex',flexDirection:'Column'}}>
                      <p style={{fontSize:'14px',fontFamily:'Inter',fontWeight:'500'}}>City</p>
-                     <p style={{fontWeight:'bold',fontSize:'16px'}}>Kolkata</p>
+                     <p style={{fontWeight:'bold',fontSize:'16px'}}>{props.adress}</p>
                 </div>
                 <div style={{display:'flex',flexDirection:'Column'}}>
                      <p style={{fontSize:'14px'}}>Postal Code</p>
-                     <p style={{fontWeight:'bold',fontSize:'16px'}}>726206</p>
+                     <p style={{fontWeight:'bold',fontSize:'16px'}}>{props.postol}</p>
                 </div>
                 <div style={{display:'flex',flexDirection:'Column'}}>
                     <p style={{fontSize:'14px'}}>Time</p>
-                    <p style={{fontWeight:'bold',fontSize:'16px'}}>4:30 PM</p>
+                    <p style={{fontWeight:'bold',fontSize:'16px'}}>{props.time}</p>
                 </div>
             </div>
          </div>
