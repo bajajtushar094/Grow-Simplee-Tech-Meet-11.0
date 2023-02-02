@@ -19,6 +19,7 @@ import DestinationReached from "./Pages/Mobile/DestinationReached";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
 import MapBox from "./Component/Global/MapBox";
+import Demo from "./Pages/Demo";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
         <Route path="/drone" element={<DroneManagement />} />
         <Route path="/rider" element={<Ridermanagement/>}/>
+        <Route path="/demo" element={<Demo/>}/>
       </Routes>
     </BrowserRouter>
   );

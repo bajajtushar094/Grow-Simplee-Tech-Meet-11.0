@@ -73,39 +73,39 @@ const Rider =[
 
 const data = [
     {
-      name: "Oslo",
+      name: "Guwahati",
       fillColor: "#7FC9FF",
       id: 1,
       position: {
-        lat: 59.923043,
-        lng: 10.752839,
+        lat:26.148043,
+        lng: 91.731377,
       },
     },
     {
-      name: "Stockholm",
+      name: "Amingaon",
       fillColor: "#7FC9FF",
       id: 2,
       position: {
-        lat: 59.339025,
-        lng: 18.065818,
+        lat: 26.1847,
+        lng: 91.6672,
       },
     },
     {
-      name: "Copenhagen",
+      name: "Silchar",
       fillColor: "#7FC9FF",
       id: 3,
       position: {
-        lat: 55.675507,
-        lng: 12.574227,
+        lat: 24.8333,
+        lng: 92.7789,
       },
     },
     {
-      name: "Berlin",
+      name: "Khokhrajhar",
       fillColor: "#7FC9FF",
       id: 4,
       position: {
-        lat: 52.521248,
-        lng: 13.399038,
+        lat: 26.4014,
+        lng: 90.2667,
       },
     },
     {
@@ -113,8 +113,8 @@ const data = [
       fillColor: "#7FC9FF",
       id: 5,
       position: {
-        lat: 48.856127,
-        lng: 2.346525,
+        lat: 27.4705,
+        lng: 94.9125,
       },
     },
   ];
@@ -131,7 +131,7 @@ function Ridermanagement() {
         "adress":'',
         "customer":'',
                   });
-                  const [routeDetails, setRouteDetails] = React.useState({
+                const [routeDetails, setRouteDetails] = React.useState({
                     distance: 0,
                     time_required: '',
                     time_to_reach: ''
@@ -154,8 +154,8 @@ function Ridermanagement() {
 
    
    const coordinates = [
-    {latitude: 26.189605193409417, longitude: 91.69294796870521, status:'delivery'},
-    {latitude: 26.166979228463582, longitude: 91.75049812487305, status:'pickup'},
+    {latitude: '', longitude: '', status:'delivery'},
+    {latitude: '', longitude: '', status:'pickup'},
     //{latitude: 25.5119243264636, longitude: 92.73516653680502}
 ];
   const s = (routeSummary) => {}
@@ -165,21 +165,21 @@ function Ridermanagement() {
   return (
       <Layout>
         <>
-          <div className="w-full flex-col px-5" id='mapbox_div' >
+          <div className="w-full flex-col px-5" id='mapbox_div'  style={{height:'700px'}}>
              {/* <MapBox/> */}
-                   <Map coordinates = {coordinates} setRouteDetails={setRouteDetails} data={data} className='flex-grow z-0 h-[400px]' ></Map>
-                  <div style={{display:'flex', flexDirection:'row', position:'absolute' , height:'44px', width:'174px', backgroundColor:'black', justifyContent:'center', alignItems:"center", borderRadius:'8px', top:'200px'}}>
+                   <Map coordinates = {coordinates} setRouteDetails={setRouteDetails} data={data} className='flex-grow z-0 h-full]' ></Map>
+                  <div style={{display:'flex', flexDirection:'row', position:'absolute' , height:'44px', width:'174px', backgroundColor:'black', justifyContent:'center', alignItems:"center", borderRadius:'8px', top:'200px', marginLeft:"20px"}}>
                     <p style={{color:'white',fontSize:'14px', margin:"10px"}}>Cancel Orders</p>
                     <img  style={{height:'15px', margin:"10px"}} src={arrow} alt="" />
                   </div>
 
-                  <div style={{display:'flex', flexDirection:'row', position:'absolute' , height:'44px', width:'230px', backgroundColor:'black', justifyContent:'center', alignItems:"center", borderRadius:'8px', top:'150px'}}>
+                  <div style={{display:'flex', flexDirection:'row', position:'absolute' , height:'44px', width:'230px', backgroundColor:'black', justifyContent:'center', alignItems:"center", borderRadius:'8px', top:'150px', marginLeft:"20px"}}>
                      <p style={{color:'white',fontSize:'14px', margin:"10px"}}>Add Dynamic Pickups</p>
                      <img  style={{height:'15px', margin:"10px"}} src={arrow} alt="" />
                   </div>
             </div> 
           <div style={{position :'absolute', marginLeft:'1050px', zIndex:'99',right:'0'}}>
-             <SideProfile borderRadius='10px' {...rider}/> 
+             {/* <SideProfile borderRadius='10px' {...rider}/>  */}
           </div>
 
           <div style={{display:'flex',flexDirection:'row', position:'absolute',marginLeft:"400px"}}>

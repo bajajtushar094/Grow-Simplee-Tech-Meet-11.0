@@ -8,7 +8,8 @@ function createIcon(url) {
     iconUrl: url,
   });
 }
-
+var latCenter = 26.148043
+var lonCenter = 91.731377
 const Map = ({setRouteDetails, ...props}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -60,6 +61,8 @@ const Map = ({setRouteDetails, ...props}) => {
     zoom = 20;
   }
 
+  console.log(props.coordinates)
+
   
 
   return (
@@ -67,15 +70,15 @@ const Map = ({setRouteDetails, ...props}) => {
       doubleClickZoom={false}
       className="flex-grow z-0 w-full h-full"
       zoom={zoom}
-      center={[latCenter, lonCenter]}
+      center={[latCenter, lonCenter]} 
     >
       <TileLayer
         //url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         url="https://api.mapbox.com/styles/v1/triangulum66/cldh9spaw00a201r00lpktwhy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJpYW5ndWx1bTY2IiwiYSI6ImNsZGV6ZGxncjBpcDgzbnBmemYzOWVrOXQifQ.BpyXvqLPQHOBy_-qJJr2Vw"
       />
-      {route}
+      {props.coordinates && route}
 
-        {props.data.map((item, index) => (
+         { props.data && props.data.map((item, index) => (
         <Marker
           key={index}
           index={index}
