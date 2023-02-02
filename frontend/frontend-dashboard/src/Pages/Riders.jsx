@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
 import Table from "../Component/Global/Table";
 import Layout from "../Component/Layout";

@@ -26,11 +26,11 @@ export default function RiderList() {
       headerClassName: 'bg-gs-gray',
       renderCell: (params) => (
         <div className="flex items-center justify-between">
-          <Avatar
+          {/* <Avatar
             sx={{ width: 21, height: 21 }}
             src={params.row.rider.photoURL}
-          />
-          <h4 className="mx-2">{params.row.rider.name}</h4>
+          /> */}
+          <h4 className="mx-2">{params.row.name}</h4>
           <CallMadeIcon />
         </div>
       ),
@@ -46,17 +46,18 @@ export default function RiderList() {
     },
     { field: "progress", headerName: "Progress",headerClassName: 'bg-gs-gray', width: 130 },
     {
-      field: "status",
+      field: "rider_status",
       headerName: "Status",
       headerClassName: 'bg-gs-gray',
       renderCell: (params) => (
         <div
           className={cx("bg-[#0F5223] text-white py-1 px-2 rounded-md", {
-            "bg-[#B3261E]": params.row.status === "Delayed",
-            "bg-[#309134]": params.row.status === "On Route",
+            "bg-[#B3261E]": params.row.rider_status === "Return",
+            "bg-[#309134]": params.row.rider_status === "Trip",
+            "bg-[#309130]": params.row.rider_status === "At Warehouse",
           })}
         >
-          <h4>{params.row.status}</h4>
+          <h4>{params.row.rider_status}</h4>
         </div>
       ),
     },
