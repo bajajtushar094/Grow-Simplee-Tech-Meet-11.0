@@ -40,7 +40,6 @@ function App() {
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/drone" element={<DroneManagement />} />
-        <Route path="/rider" element={<Ridermanagement/>}/>
         <Route path="/demo" element={<Demo/>}/>
         {/* <Route path="/riderDetails" element={<RiderDetails/>}/> */}
       </Routes>

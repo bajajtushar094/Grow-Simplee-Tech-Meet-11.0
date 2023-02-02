@@ -1,20 +1,23 @@
-import {React, useState, useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Table from "../Component/Global/Table";
 import Layout from "../Component/Layout";
 import PlayListAddCheckIcon from "../Shared/Icons/PlayListAddCheckIcon";
-
-import scooter from './scooter.svg'
-import Icon from './Icon.svg'
-import Icon2 from './Icon2.svg'
-import plus from './plus.svg'
-import minus from './minus.svg'
-import MapBox from '../Component/Global/MapBox'
-import SideProfile from '../Component/Global/SideProfile'
-import Box from '../Component/Global/Box.svg'
+import RiderMapContainer from "../Component/RiderManagement/RiderMapContainer";
+import { LOCAL_SERVER_URL_IP } from "../constants/config";
+import axios from "axios"
 
 const Riders = () => {
   let { riderManagementTab } = useParams();
+  const [riders, setRiders] = useState([]);
+  useEffect(() => {
+    const fetchRiders = async () => {
+      const res = await axios.get(`${LOCAL_SERVER_URL_IP}/riders/all`);
+      console.log(res.data.riders)
+      setRiders(res.data.riders);
+    };
+    fetchRiders();
+  }, []);
   const displayedList = [
     {
       id: "1232",
@@ -72,57 +75,8 @@ const Riders = () => {
             </h4>
           </div>
         </div>
-        <Table tab={riderManagementTab} displayedList={displayedList} checkboxSelection={false} className='px-6'/>
-      </div>:
-      <>
-      <div className="w-full  px-5" id='mapbox_div' >
-         <MapBox/>
-        </div> 
-      <div style={{position :'absolute', marginLeft:'1050px'}}>
-         {/* <SideProfile borderRadius='10px'/> */}
-      </div>
-
-      <div style={{position:'absolute',display:'flex', flexDirection:'row', backgroundColor:'white', width:'893px', height:'86px', justifyContent:'space-between',padding:'10px', borderRadius:"12px",marginTop:'500px', marginLeft:'370px'}}>
-         <div style={{display:'flex', flexDirection:'row', alignItems:"center"}}>
-             <img src={scooter} alt="" />
-             <div style={{display:'flex', flexDirection:'column'}}>
-                 <p style={{fontWeight:'600'}}>16</p>
-                 <p style={{fontSize:'12px'}}>Riders Dispatched</p>
-             </div>
-         </div>
-
-         <div  style={{display:'flex', flexDirection:'row', alignItems:"center"}}>
-              <img src={Box} alt="" />
-              <div  style={{display:'flex', flexDirection:'column'}}>
-                 <p style={{fontWeight:'600'}}>52%</p>
-                 <p style={{fontSize:'12px'}}>Delivered</p>
-             </div>
-         </div>
-
-         <div  style={{display:'flex', flexDirection:'row',alignItems:"center",}}>
-             <img src={Icon} alt="" />
-             <div  style={{display:'flex', flexDirection:'column'}}>
-                 <p style={{fontWeight:'600'}}>14</p>
-                 <p style={{fontSize:'12px'}}>On Route</p>
-             </div>
-         </div>
-         <div  style={{display:'flex', flexDirection:'row',alignItems:"center"}}>
-             <img src={Icon2} alt="" />
-             <div  style={{display:'flex', flexDirection:'column'}}>
-                 <p style={{fontWeight:'600', color:'red'}}>2</p>
-                 <p style={{fontSize:'12px'}}>Not on route</p>
-             </div>
-         </div>
-      </div>
-       <div style={{display:'flex', flexDirection:'column',marginTop:'474px', position:'absolute', marginLeft:'1300px'}}>
-           <div style={{backgroundColor:'white', width:'40px', height:'40px', display:'flex', alignItems:"center", justifyContent:'center', margin:"10px", borderRadius:'10px'}}>
-              <img src={plus} alt="" />
-           </div>
-           <div style={{backgroundColor:'white', width:'40px', height:'40px', display:'flex', alignItems:"center", justifyContent:'center', margin:"10px", borderRadius:"10px"}}>
-              <img src={minus} alt="" />
-           </div>
-       </div>
-       </>
+        <Table tab={riderManagementTab} displayedList={riders} checkboxSelection={false} className='px-6'/>
+      </div>: <RiderMapContainer />
       }
     </Layout>
   );

@@ -27,17 +27,17 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
       ),
     },
     {
-      field: "rider",
+      field: "name",
       headerName: "Rider",
       width: 200,
       headerClassName: 'bg-[#F8F8F7]',
       renderCell: (params) => (
         <div className="flex items-center justify-between">
-          <Avatar
+          {/* <Avatar
             sx={{ width: 21, height: 21 }}
             src={params.row.rider.photoURL}
-          />
-          <h4 className="mx-2">{params.row.rider.name}</h4>
+          /> */}
+          <h4 className="mx-2">{params.row.name}</h4>
           <CallMadeIcon />
         </div>
       ),
