@@ -18,6 +18,26 @@ import {TOP_TABS} from '../../../constants/sidebarconst'
 
 function DroneManagement() {
 
+
+   const navigate = useNavigate();
+    const location = useLocation();
+    //const riderId = location.state.id;
+
+    const [orders, setOrders] = useState([]);
+
+    const riderId = '65';
+
+    const fetchData = async () => {
+        const response = await fetch("http://127.0.0.1:8000/core/orders/rider/"+riderId);
+        const data = await response.json();
+        console.log(data);
+        return setOrders(data.riders);
+    }
+
+    useEffect(() => {
+        fetchData();
+      },[])
+
   const [isHover, setIsHover] = useState(false);
   const [overview,setOverview] = useState(true);
   const [delivery,setDelivery] = useState(false);

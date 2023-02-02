@@ -164,6 +164,17 @@ class getBags(APIView):
         data['bags'] = [RiderSerializer(bag).data for bag in all_bags]
         return Response(data)
 
+class getRiderOrders(APIView):
+    def get(self, request, *args, **kwargs):
+        rider_id = kwargs['id']
+        rider = Rider.objects.get(id=rider_id)
+        orders = rider.order_set.all()
+        orders_serialized = [OrderSerializer(o).data for o in orders]
+        return Response(orders_serialized)
+        
+
+        
+
 class generateSolution(APIView):
     def get(self, request, *args, **kwargs):
         # TODO: Get the coordinates of the depot
