@@ -17,10 +17,10 @@ class Manager(models.Model):
 
 class Address(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
-    latitude = models.CharField(max_length=50)
-    longitude = models.CharField(max_length=50)
-    location = models.CharField(max_length=250)
-    name = models.CharField(max_length=250)
+    latitude = models.CharField(max_length=50, null=True)
+    longitude = models.CharField(max_length=50, null=True)
+    location = models.CharField(max_length=250, null=True)
+    name = models.CharField(max_length=250, null=True)
     def __str__(self):
         return f"Address-{self.location}"
 
@@ -40,19 +40,19 @@ class Rider(models.Model):
     rider_id = models.CharField(max_length=500)
     contact_number = models.CharField(max_length=10)
     bag_volume = models.CharField(max_length=50)
-    bag_volume_used = models.CharField(max_length=50)
+    bag_volume_used = models.CharField(max_length=50, null=True)
     current_address = models.ForeignKey(
         Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
     )
     rider_status = models.CharField(
         _("filing form type"), max_length=50, choices=RIDER_STATUS
     )
-    delievery_orders = models.CharField(max_length=500)
-    last_delivered_pointer = models.IntegerField()
-    manager_id = models.CharField(max_length=500)
+    delievery_orders = models.CharField(max_length=500, null=True)
+    last_delivered_pointer = models.IntegerField(null=True)
+    manager_id = models.CharField(max_length=500, null=True)
     arrival_time = models.DateField((_("arrival time")))
     departure_time = models.DateField((_("departure time")))
-    etf = models.CharField(max_length=50)
+    etf = models.CharField(max_length=50, null=True)
     successful_deliveries = models.IntegerField(default=0)
     packages_delayed = models.IntegerField(default=0)
 
@@ -84,7 +84,7 @@ class Order(models.Model):
         _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
     )
     edd = models.DateTimeField(_("EDD date"), blank=True, null=True)
-    eta = models.CharField(max_length=50)
+    eta = models.CharField(max_length=50, null=True)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE, blank=True, null=True)
     image = models.FileField(blank=True)
 
