@@ -13,10 +13,16 @@ var lonCenter = 91.731377
 const Map = ({setRouteDetails, ...props}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [coordinates, setCoordinates] = useState(props.coordinates);
 
   function handleClick(e) {
     setSelectedIndex(e.target.options.index)
   }
+
+  
+  const changeCoordinates = (coordinates) => {
+    setCoordinates(coordinates);
+ }
 
   function getMarkerIcon(index) {
     if(index === selectedIndex)
@@ -43,8 +49,8 @@ const Map = ({setRouteDetails, ...props}) => {
     });
 }
 
-  let latCenter = 0;
-  let lonCenter = 0;
+  let latCenter = 26.148043;
+  let lonCenter = 91.731377;
   for(let i = 0; i < props.coordinates.length; i++) {
     latCenter += props.coordinates[i].latitude;
     lonCenter += props.coordinates[i].longitude;
@@ -55,13 +61,14 @@ const Map = ({setRouteDetails, ...props}) => {
   let route = null;
   let zoom = 9;
   if(props.coordinates.length > 1) {
-    route = <RoutineMachine coordinates={props.coordinates} setRouteSummary = {setRouteSummary}/>
+    route = <RoutineMachine coordinates={props.coordinates} setRouteSummary = {setRouteSummary} />
   }else{
     route = <Marker position={[latCenter,lonCenter]}></Marker>;
-    zoom = 20;
+    zoom = 9;
   }
 
-  console.log(props.coordinates)
+
+  console.log(coordinates)
 
   
 
