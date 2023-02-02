@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
-import vehicle_routing.helper as helper
-from vehicle_routing.customers import Customers
-from vehicle_routing.vehicle import Fleet
-from vehicle_routing.route import Route, RoutesList
+import utils.vehicle_routing.helper as helper
+from utils.vehicle_routing.customers import Customers
+from utils.vehicle_routing.vehicle import Fleet
+from utils.vehicle_routing.route import Route, RoutesList
 from ortools.constraint_solver import pywrapcp
 from ortools.constraint_solver import routing_enums_pb2
 
@@ -130,7 +130,7 @@ class VRP:
         plt.legend()
         plt.show(block=block)
 
-    def process_VRP(self, isReroute=False, time_limit=300, total_transit_time = 10000000, first_sol_strategy="AUTOMATIC", initial_metaheuristic="AUTOMATIC", rerouting_metaheuristic="AUTOMATIC"):
+    def process_VRP(self, isReroute=False, time_limit=300, total_transit_time = 10000000, max_wait_time=10000, first_sol_strategy="AUTOMATIC", initial_metaheuristic="AUTOMATIC", rerouting_metaheuristic="AUTOMATIC"):
         self.fleet = Fleet(self.vehicles)
         self.customers = Customers(self.depot, self.orders)
         self.fleet.set_starts_ends()
@@ -179,10 +179,24 @@ class VRP:
         tot_time_fn_index = routing.RegisterTransitCallback(tot_time_fn)
         routing.AddDimension(
             tot_time_fn_index,  # total time function callback
-            0, 
+            max_wait_time, 
             total_transit_time,
             True,
             'Time')
+
+        time_dimension = routing.GetDimensionOrDie('Time')
+
+        # Add time window constraints for each location except depot.
+        for order in self.customers.orders:
+            if order.type == 1 and order.start_time and order.end_time:
+                index = manager.NodeToIndex(order.current_vrp_index)
+                time_dimension.CumulVar(index).SetRange(order.start_time, order.end_time)
+
+        # Instantiate route start and end times to produce feasible times.
+
+        for vehicle_idx in range(self.fleet.num_vehicles):
+            routing.AddVariableMinimizedByFinalizer(time_dimension.CumulVar(routing.Start(vehicle_idx)))
+            routing.AddVariableMinimizedByFinalizer(time_dimension.CumulVar(routing.End(vehicle_idx)))
 
         delivery_fn = self.customers.return_delivery_callback()
         delivery_fn_index = routing.RegisterUnaryTransitCallback(delivery_fn)

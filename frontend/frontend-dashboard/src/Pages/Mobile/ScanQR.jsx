@@ -54,9 +54,7 @@ const App = (props) => {
 
   const handleScan = (scanData) => {
     setLoadingScan(true);
-    console.log(`loaded data data`, scanData);
     if (scanData && scanData !== "") {
-      console.log(`loaded >>>`, scanData);
       setData(scanData);
       checkScan();
       //   setStartScan(false);
