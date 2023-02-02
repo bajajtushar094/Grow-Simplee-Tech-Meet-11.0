@@ -18,8 +18,8 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
-
-
+from core.tasks import solveVRP
+import pickle
 class getData(APIView):
     def get(self, request, *args, **kwargs):
         person = {'name': 'siddhartha'}
@@ -179,7 +179,11 @@ class generateSolution(APIView):
             orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
-        manager, routing, solution = vrp_instance.process_VRP()
+        # manager, routing, solution = vrp_instance.process_VRP()
+        dct={"vrp_instance":vrp_instance}
+        sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
+        print("\n \n \n ",sol)
+        manager, routing, solution = 1,1,1
 
         plan_output, dropped = vehicle_output_string(manager, routing, solution)
         for route_number in range(routing.vehicles()):

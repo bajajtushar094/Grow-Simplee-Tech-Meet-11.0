@@ -48,7 +48,7 @@ const App = () => {
               Order ID: <div className="inline font-medium"> RO10-445-A65E2 </div>
             </p>
             <p className="mt-2 font-medium text-[#F14336]">
-              Unable to scan? <Link to='/verification' className="inline underline">Skip this -></Link>
+              Unable to scan? <Link to='/verification' className="inline underline">Skip this -> </Link>
             </p>
           </div>
           {/* <p className="mt-2">Lorem ipsum dolor sit amet.</p> */}
