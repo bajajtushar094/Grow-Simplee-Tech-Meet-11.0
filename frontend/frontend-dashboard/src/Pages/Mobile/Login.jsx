@@ -1,19 +1,45 @@
 import {React, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import GSLogo from '../../Shared/Icons/GSLogo';
+import { useSelector, useDispatch } from 'react-redux';
+import{
+    getLoggedIn,
+    getIsBagScanned,
+    setLoggedIn, setUserId, setBagId, setIsBagScanned
+} from '../../features/rider/riderSlice';
 
 const Login = (props) => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const loggedIn = useSelector(getLoggedIn);
+    const isBagScanned = useSelector(getIsBagScanned);
 
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const navigate = useNavigate();
+    const login = () => {
+        dispatch(setLoggedIn(true));
+        dispatch(setUserId(id));
+        dispatch(setBagId('RO10-445'));
+        dispatch(setIsBagScanned(false));
+        navigate('/scanQR',
+        {
+            state: {
+                //id: id,
+                //bagId: 'RO10-445',
+                type: 'scanBag'
+            }
+        }
+        );
+    }
 
     const handleSubmit= (e) => {
         e.preventDefault();
         if(id === '123' && password === '123'){
-            navigate('/createBag');
+            login();
         }else{
             setError('Wrong Credentials!');
         }
@@ -21,6 +47,15 @@ const Login = (props) => {
         
     }
 
+
+
+    if(loggedIn){
+        if(isBagScanned){
+            navigate('/createBag');
+        }else{
+            login();
+        }
+    }
     
     return (
         <div className='flex flex-col h-screen items-center bg-[#F8F8F7]'>

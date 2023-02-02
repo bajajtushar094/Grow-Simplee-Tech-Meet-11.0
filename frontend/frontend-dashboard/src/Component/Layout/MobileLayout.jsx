@@ -1,11 +1,11 @@
 //import { Avatar } from '@mui/material'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import BackArrowIcon from '../../Shared/Icons/BackArrow'
 import HomeIcon from '../../Shared/Icons/HomeIcon'
 
 const MobileLayout = ({children,photoURL='',subHeading=''}) => {
-  
+
   return (
     <div className='flex flex-col h-screen'>
         <div className='flex justify-between bg-white px-4 py-3 items-center border-b border-[#D2D1CC]'>
@@ -17,7 +17,6 @@ const MobileLayout = ({children,photoURL='',subHeading=''}) => {
         <div className='flex flex-col flex-grow relative bg-[#F8F8F7]'>
         {children}
         </div>
-     
     </div>
   )
 }
