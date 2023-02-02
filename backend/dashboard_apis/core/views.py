@@ -182,7 +182,7 @@ class generateSolution(APIView):
         # manager, routing, solution = vrp_instance.process_VRP()
         dct={"vrp_instance":vrp_instance}
         sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
-        print("\n \n \n ",sol)
+        print("\n \n \n ",sol.get(timeout=1))
         manager, routing, solution = 1,1,1
 
         plan_output, dropped = vehicle_output_string(manager, routing, solution)
