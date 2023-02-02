@@ -5,15 +5,19 @@ import CreateBagBoxIcon from '../../Shared/Icons/CreateBagBoxIcon';
 
 const PackageDetails = (props) => {
 
+    let name = props.coordinates.name;
+    let orderId = props.coordinates.orderId;
+
     let statusCard = null;
     if(props.coordinates.type === 'delivery'){
         statusCard = <DeliveryStatus/>
-    }else{
+    }else if(props.coordinates.type === 'pickup'){
         statusCard = <PickupStatus/>
+    }else{
+        name = 'Warehouse';
+        orderId = 'Return to the Warehouse';
     }
 
-    const name = props.coordinates.name;
-    const orderId = props.coordinates.orderId;
 
     return(
         <div className='flex flex-row items-center px-4 py-4 border border-[#D2D1CC] bg-white'>

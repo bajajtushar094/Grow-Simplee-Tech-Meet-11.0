@@ -34,9 +34,18 @@ const DestinationReached = () => {
 
     const destination = location.state.package;
 
-    if(destination.status === 'warehouse'){
-        dispatch(setIsAtWarehouse(true));
-    }
+    console.log(destination);
+
+    React.useEffect(() => {
+        if(destination.status === 'warehouse'){
+            //console.log('warehouse reached');
+            dispatch(setIsAtWarehouse(true));
+            navigate('/checklist');
+        }
+    }, [destination, dispatch, navigate]);
+
+
+    
 
     if(!isBagScanned){
         //window.location.href = '/login';

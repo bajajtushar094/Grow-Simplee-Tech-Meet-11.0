@@ -58,9 +58,9 @@ const SingleRoute = () => {
             currentPackage
         ];
     
-    }else if(totalDelivered === packages.length && isAtWarehouse===false){
+    }else if(totalDelivered === packages.length /* && isAtWarehouse===false */){
         coordinates = [
-            packages[currentPackageIndex-1],
+            packages[packages.length-1],
             warehouse
         ];
     }else{

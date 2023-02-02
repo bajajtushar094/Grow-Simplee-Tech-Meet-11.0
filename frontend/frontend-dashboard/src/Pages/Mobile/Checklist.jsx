@@ -118,7 +118,7 @@ const Checklist = (props) => {
         <MobileLayout subHeading='Item Checklist'>
             <>
                 <div className='px-4 py-6 bg-[#F8F8F7] flex-col justify-start mb-16 scroll-m-0'>
-                    <h2 className='text-2xl mb-6 font-semibold px-1'>Delivery ordering</h2>
+                    <h2 className='text-2xl mb-6 font-semibold px-1'>Packages Checklist</h2>
                     {
                         packages.map((item, index) => {
                             return(
