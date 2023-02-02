@@ -13,23 +13,7 @@ const SingleRoute = () => {
         time_to_reach: ''
     });
         
-    const setRouteSummary = (summary) => {
-        let distance = Math.round(summary.totalDistance / 100)/10;
-        let time_required = '';
-        if(Math.round(summary.totalTime / (60*60)) !== 0){
-            time_required = Math.round(summary.totalTime / (60*60)) + ' h ' + Math.round(summary.totalTime % 3600 / 60) + ' min'; 
-        }else{
-            time_required = Math.round(summary.totalTime % 3600 / 60) + ' min';
-        }
-        let date = new Date();
-        date = new Date(date.getTime() + (summary.totalTime * 1000));
-
-        setRouteDetails({
-            distance: distance,
-            time_required: time_required,
-            time_to_reach: date.toLocaleString('en-IN', { hour: 'numeric', minute: 'numeric', hour12: true })
-        });
-    }
+    
 
     const coordinates = [
         {latitude: 26.189605193409417, longitude: 91.69294796870521, status:'delivery'},
@@ -48,7 +32,7 @@ const SingleRoute = () => {
         <MobileLayout subHeading='Current Route'>
             <>
                 <PackageDetails coordinates={coordinates[1]}/>
-                <Map coordinates = {coordinates} setRouteSummary = {setRouteSummary} className='flex-grow z-0'></Map>
+                <Map coordinates = {coordinates} setRouteDetails={setRouteDetails} className='flex-grow z-0'></Map>
                 <div className='bottom_bar absolute inset-x-0 bottom-0 rounded-t-[12px] bg-white px-4 py-6 border border-[#D2D1CC] z-10'>
                     {/* <div className='w-full flex place-content-center pb-4'><div className='top_pill w-6 rounded-full h-[3px] bg-[#B4B4B4] '></div></div> */}
                     <div>
