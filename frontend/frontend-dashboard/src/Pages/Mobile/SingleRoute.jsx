@@ -81,8 +81,9 @@ const SingleRoute = () => {
         <MobileLayout subHeading='Current Route'>
             <>
                 <PackageDetails coordinates={coordinates[1]}/>
+
                 <Map coordinates = {coordinates} setRouteDetails={setRouteDetails} className='flex-grow z-0'></Map>
-                <div className='bottom_bar rounded-t-[12px] bg-white px-4 py-6 border border-[#D2D1CC] z-10'>
+                <div className='bottom_bar absolute inset-x-0 bottom-0 rounded-t-[12px] bg-white px-4 py-6 border border-[#D2D1CC] z-10'>
                     {/* <div className='w-full flex place-content-center pb-4'><div className='top_pill w-6 rounded-full h-[3px] bg-[#B4B4B4] '></div></div> */}
                     <div>
                         <div className='time_distance text-xl pb-1'>
