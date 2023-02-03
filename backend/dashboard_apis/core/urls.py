@@ -32,5 +32,6 @@ urlpatterns = [
     path('orders/cancel', views.cancelOrder.as_view()),
     path('orders/add', views.addDynamicPickup.as_view()),
     # To solve the first instance of VRP
-    path('solve/', views.generateSolution.as_view())
+    path('solve/', views.generateSolution.as_view()),
+    path('bin-packing/<str:id>', views.binPacking.as_view())
 ]    

@@ -41,6 +41,9 @@ class Rider(models.Model):
     rider_id = models.CharField(max_length=500)
     contact_number = models.CharField(max_length=10)
     bag_volume = models.CharField(max_length=50)
+    bag_length = models.CharField(max_length=10)
+    bag_width = models.CharField(max_length=10)
+    bag_height = models.CharField(max_length=10)
     bag_volume_used = models.CharField(max_length=50, null=True)
     current_address = models.ForeignKey(
         Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
