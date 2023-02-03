@@ -12,50 +12,52 @@ import Layout from "../Component/Layout";
 import { Link, useParams, useLocation } from 'react-router-dom';
 import cx from 'classnames'
 import { LOCAL_SERVER_URL_IP } from "../constants/config";
+import { inventoryConstant } from "../constants/inventoryConst";
 
 
 const Inventory = () => {
   let { warehouseTab } = useParams();
   const location = useLocation();
   const [orders, setOrders] = useState([])
-  const data = {}
+  const [inventoryHeading, setInventoryHeading] = useState(inventoryConstant[0])
+
+  useEffect(() => {
+    if(warehouseTab==='inhouse')
+    setInventoryHeading(inventoryConstant[1])
+    else if(warehouseTab==='history')
+    setInventoryHeading(inventoryConstant[2])
+    else
+    setInventoryHeading(inventoryConstant[1])
+  }, [warehouseTab]);
+
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
-      setOrders(res.data);
+      setOrders(res.data.orders);
     };
     fetchOrders();
   }, []);
-  const statisticaldata = [{
-    key: 'Packages in inventory',
-    value: '1,24,445',
-    flag: false,
-  },
-  {
-    key: 'Packages in inventory',
-    value: '1,24,445',
-    flag: false,
-  },
-  {
-    key: 'Packages in inventory',
-    value: '1,24,445',
-    flag: false,
-  },
-  {
-    key: 'Packages in inventory',
-    value: '1,24,445',
-    flag: true,
-  },]
+  const checkRoute = (order)=>{
+    const {delivery_action,order_status} = order
+    const currentLocation = location.pathname.split('/')[2]
+    if(currentLocation==="inhouse")
+       return ((delivery_action === "pickup" && order_status==="delivered") || (delivery_action === "drop" && order_status==="failed"))
+    else if(currentLocation==="history")
+       return ( (order_status==="delivered"|| order_status==="fail" ) ) 
+    else
+      return delivery_action === "drop" && (order_status==="delayed" || order_status==="undelivered")
+  }
+  const displayedList = orders.filter(checkRoute);
   return (
     <Layout>
       <div className='w-full flex-col'>
-        <div className="flex justify-between my-6 px-2">
+        {
+          warehouseTab==="inventory" && <div className="flex justify-between my-6 px-12">
           <div className="flex items-center pl-4 border-l-2">
             <div><BoxesIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
-                { 'text-[#F04438]': data?.flag, }
-              )}>{data.value}</h2>
+              )}>{orders.length}</h2>
               <h4 className="text-sm text-gs-text-gray font-semibold">Packages in inventory</h4>
             </div>
           </div>
@@ -63,7 +65,6 @@ const Inventory = () => {
             <div><BoxesIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
-                { 'text-[#F04438]': data?.flag, }
               )}>15/01/23</h2>
               <h4 className="text-sm text-gs-text-gray font-semibold">Upcoming Shipments</h4>
             </div>
@@ -72,12 +73,11 @@ const Inventory = () => {
             <div><BoxesIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
-                { 'text-[#F04438]': data?.flag, }
-              )}>{data.value}</h2>
+              )}>{displayedList.length}</h2>
               <h4 className="text-sm text-gs-text-gray font-semibold">Pickups in inventory</h4>
             </div>
           </div>
-          <div className="flex items-center pl-4 border-l-2">
+          {/* <div className="flex items-center pl-4 border-l-2">
             <div><BoxesIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
@@ -85,8 +85,10 @@ const Inventory = () => {
               )}>{data.value}</h2>
               <h4 className="text-sm text-gs-text-gray font-semibold">Damaged in inventory</h4>
             </div>
-          </div>
+          </div> */}
         </div>
+        }
+        
         <div className='flex justify-end w-full space-x-8 rounded-tl-3xl'>
           <div className='flex py-3 space-x-8 border-solid border-l-2 border-t-2  px-8 rounded-tl-sm '>
             <KeyboardDoubleArrowRightOutlinedIcon className='cursor-pointer' />
@@ -106,20 +108,20 @@ const Inventory = () => {
                 <h4 className='text-gs-blue text-sm font-semibold'>
                   Packages
                 </h4>
-                <div className='flex space-x-6'>
+                {/* <div className='flex space-x-6'>
                   <Link to='/warehouse/repository-history' className={cx('py-2 px-3 rounded text-gs-text-gray text-sm font-semibold flex items-center', { '!text-gs-blue bg-[#F8F8F7]': location.pathname.split('/')[2].split('-')[1] == 'history' })}><DeliveryIcon className={cx('mr-2', { '!stroke-gs-blue stroke-[0.4]': location.pathname.split('/')[2].split('-')[1] == 'history' })} />History</Link>
                   <Link to='/warehouse/repository-inhouse' className={cx('py-2 px-3 rounded text-gs-text-gray text-sm font-semibold flex items-center', { '!text-gs-blue bg-[#F8F8F7]': location.pathname.split('/')[2].split('-')[1] == 'inhouse' })}><DeliveryIcon className={cx('mr-2', { '!stroke-gs-blue stroke-[0.4]': location.pathname.split('/')[2].split('-')[1] == 'inhouse' })} />Inhouse</Link>
-                </div>
+                </div> */}
               </div>
-              <h2 className='text-xl font-semibold'>
-                Repository
+              <h2 className='text-xl font-semibold mt-2'>
+                {inventoryHeading.InventoryHeading}
               </h2>
-              <h4 className='text-md text-[#5F5D59] font-semibold'>
-                List of items currently in warehouse
+              <h4 className='text-md text-[#5F5D59] font-semibold mt-1'>
+                {inventoryHeading.InventorySubHeading}
               </h4>
             </div>
           </div>
-          <Table tab={warehouseTab} />
+          <Table tab={warehouseTab} displayedList={displayedList}/>
         </div>
       </div>
     </Layout>

@@ -51,7 +51,6 @@ const UploadZip = () => {
 
   const handleImagesUpload = (e) => {
     if (e.target.files) {
-      console.log(e.target.files);
       setImages(e.target.files);
     }
   };

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import cx from "classnames";
-
+import dayjs from 'dayjs'
 import { Avatar } from "@mui/material";
 import CallMadeIcon from "../../Shared/Icons/CallMadeIcon";
 import { useState, useEffect } from "react";
@@ -12,53 +12,86 @@ import {
   REPOSITORY_INHOUSE_COLUMNS,
 } from "../../constants/tableconstants";
 
-export default function AntDesignGrid({ tab = "" }) {
-  const rows = [
+export default function AntDesignGrid({ tab = "", displayedList , checkboxSelection=true, className='' }) {
+  const rows = displayedList
+  const riderColumn = [
     {
-      id: "1232",
-      volume: "30",
-      quality: "Good",
-      date: "20/2/2022",
-      address: "Binod nagar dhanbad",
-      category: "Drop",
-      rider: {
-        name: "sunny",
-        photoURL:
-          "https://images.unsplash.com/photo-1674238924120-a9d9a0425d28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
-      },
-      status: "Delievered",
+      field: "id",
+      headerName: "View",
+      width: 50,
+      headerClassName: 'bg-[#F8F8F7]',
+      renderCell: () => (
+        <div className="flex items-center justify-between">
+          <CallMadeIcon />
+        </div>
+      ),
     },
     {
-      id: "1237672",
-      volume: "30",
-      quality: "Good",
-      date: "20/2/2022",
-      address: "Binod nagar dhanbad",
-      category: "Drop",
-      rider: {
-        name: "sunny",
-        photoURL:
-          "https://images.unsplash.com/photo-1674238924120-a9d9a0425d28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
-      },
-      status: "Delayed",
+      field: "name",
+      headerName: "Rider",
+      width: 200,
+      headerClassName: 'bg-[#F8F8F7]',
+      renderCell: (params) => (
+        <div className="flex items-center justify-between">
+          {/* <Avatar
+            sx={{ width: 21, height: 21 }}
+            src={params.row.rider.photoURL}
+          /> */}
+          <h4 className="mx-2">{params.row.name}</h4>
+          <CallMadeIcon />
+        </div>
+      ),
     },
-  ];
-  const columns = useMemo(() => [
-    { field: "id", headerName: "Order ID", width: 70 },
-    { field: "volume", headerName: "Volume (ml)", width: 90 },
-    { field: "quality", headerName: "Quality", width: 130 },
-    { field: "date", headerName: "Delivery Date", width: 130 },
+    { field: "range", headerName: "Range", headerClassName: 'bg-[#F8F8F7]', width: 130 },
+    {
+      field: "latestLocation",
+      headerClassName: 'bg-[#F8F8F7]',
+      headerName: "Latest Location",
+      flex: 0.8,
+      sortable: false,
+      width: 400,
+    },
+    { field: "progress", headerName: "Progress",headerClassName: 'bg-[#F8F8F7]', width: 130 },
+    {
+      field: "status",
+      headerName: "Status",
+      headerClassName: 'bg-[#F8F8F7]',
+      renderCell: (params) => (
+        <div
+          className={cx("bg-[#0F5223] text-white py-1 px-2 rounded-md", {
+            "bg-[#B3261E]": params.row.status === "Delayed",
+            "bg-[#309134]": params.row.status === "On Route",
+          })}
+        >
+          <h4>{params.row.status}</h4>
+        </div>
+      ),
+    },
+  ]
+
+  const inventoryColumn = [
+    { field: "id", headerName: "Order ID", width: 130 },
+    { field: "volume", headerName: "Volume (ml)", width: 130 },
+    { field: "edd", headerName: "Delivery Date", width: 150, renderCell: (params) => (
+      <div>
+        {tab==="inventory"? dayjs().format("MMMM D, YYYY"): dayjs(params.row.edd).format("dddd, Dd MMM'YY")}
+      </div>
+    ), },
     {
       field: "address",
       headerName: "Delivery Address",
       sortable: false,
-      width: 260,
-      //   valueGetter: (params) =>
-      //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+      width: 320,
+      renderCell: (params) => (
+        <div>
+          {params.row.address.name}
+        </div>
+      ),
     },
     {
       field: "category",
       headerName: "Category",
+      width: 180,
       renderCell: (params) => (
         <div className="text-gs-blue text-sm font-semibold">
           {params.row.category}
@@ -68,12 +101,12 @@ export default function AntDesignGrid({ tab = "" }) {
     {
       field: "rider",
       headerName: "Rider",
-      width: 140,
+      width: 180,
       renderCell: (params) => (
         <div className="flex items-center justify-between">
           <Avatar
             sx={{ width: 21, height: 21 }}
-            src={params.row.rider.photoURL}
+            src={params.row.rider.img_URL}
           />
           <h4 className="mx-2">{params.row.rider.name}</h4>
           <CallMadeIcon />
@@ -85,32 +118,37 @@ export default function AntDesignGrid({ tab = "" }) {
       headerName: "Status",
       renderCell: (params) => (
         <div
-          className={cx("bg-[#0F5223] text-white py-1 px-2 rounded-md", {
-            "bg-[#B3261E]": params.row.status === "Delayed",
-            "bg-[#706D64]": params.row.status === "Out for delivery",
+          className={cx("bg-[#0F5223] text-white py-1 px-2 rounded-2xl", {
+            "bg-[#B3261E]": params.row.order_status === "delayed",
+            "bg-[#706D64]": params.row.order_status === "out for delivery",
           })}
         >
-          <h4>{params.row.status}</h4>
+          <h4>{params.row.order_status}</h4>
         </div>
       ),
     },
-  ]);
+  ]
+  const columns = useMemo(() => tab==="listView"? riderColumn:inventoryColumn);
   const [columnVisible, setColumnVisible] = useState(INVENTORY_COLUMNS);
+
   useEffect(() => {
-    if (tab === "inventory") setColumnVisible(INVENTORY_COLUMNS);
-    else if (tab === "repository-history")
+    if (tab === "inventory")
+     setColumnVisible(INVENTORY_COLUMNS);
+    else if (tab === "history")
       setColumnVisible(REPOSITORY_HISTORY_COLUMNS);
-    else setColumnVisible(REPOSITORY_INHOUSE_COLUMNS);
+    else if(tab==="inhouse")
+     setColumnVisible(REPOSITORY_INHOUSE_COLUMNS);
   }, [tab]);
+
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: "80vh", width: "100%" }} className={className}>
       <DataGrid
         rows={rows}
         columns={columns}
         columnVisibilityModel={columnVisible}
         getRowId={(row) => row.id}
         pagination
-        checkboxSelection
+        checkboxSelection = {checkboxSelection}
       />
     </div>
   );
