@@ -4,6 +4,7 @@ import ListIcon from "../../Shared/Icons/ListIcon";
 import axios from "axios";
 import Layout from "../Layout";
 import ImageGroup from "./ImageGroup";
+import OrderList from "../Global/TableOrders";
 
 const UploadZip = () => {
   const [zip, setZip] = useState("");
@@ -31,7 +32,7 @@ const UploadZip = () => {
         .then((res) => {
           // console.log(res);
           const responseDataObj = JSON.parse(res.data);
-          setFetchedDataObj(responseDataObj)
+          setFetchedDataObj(responseDataObj);
           console.log(responseDataObj);
         })
         .catch((err) => console.log(err));
@@ -55,23 +56,24 @@ const UploadZip = () => {
     }
   };
   return (
-    <div className="h-screen">
+    <div className="flex flex-col items-center">
       <Layout isLeftSidebarPresent={false}>
         <div className="w-full flex justify-around h-full mt-10">
-          <div className="ml-5">
+          <div>
             <h1 className="font-bold w-full text-center my-10 text-lg">
               Image Volume Estimation
             </h1>
             <div className="bg-white h-fit rounded-xl py-4 px-40 w-full flex flex-col items-center align-center">
               <div class="file">
                 <label
-                  for="input-file"
+                  for="myfile"
                   className="cursor-pointer rounded-full bg-[#C2E7FF] flex justify-center items-center p-4"
                 >
                   <UploadFileSharpIcon style={{ color: "#3544B6" }} />
                 </label>
                 <input
-                  id="input-file"
+                  id="myfile"
+                  name="myfile"
                   type="file"
                   onChange={handleZipUpload}
                   accept=".zip, .rar, .7zip"
@@ -117,6 +119,7 @@ const UploadZip = () => {
           )}
         </div>
       </Layout>
+      <OrderList />
     </div>
   );
 };

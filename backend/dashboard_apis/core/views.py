@@ -95,10 +95,6 @@ class upload(APIView):
                 data["folders"].append(_folder)
 
             return Response(json.dumps(data))
-            # render(request, 'core/upload.html', {
-            #     'parent_folder_path': my_file.name,
-            #     'uploaded_folders': top_folders
-            # })
         else:
             return render(request, "core/upload.html")
 
@@ -113,8 +109,6 @@ def modify_input_for_multiple_files(image, order_record):
 
 class uploadImages(APIView):
     def get(self, request, *args, **kwargs):
-        print("------------")
-        print(OrderImage.objects.all()[0].images)
         return render(request, "core/uploadimg.html")
 
     def post(self, request, *args, **kwargs):

@@ -11,7 +11,7 @@ urlpatterns = [
     path('product/<str:id>', order_view.order_detail.as_view()),
     path('product/<str:id>', order_view.order_image_update.as_view()),
     path('upload/', views.upload.as_view()),
-    path('images/', views.imageView.as_view()),
+    # path('images/', views.imageView.as_view()),
     path('uploadimages/', views.uploadImages.as_view()),
 
     path('orders/', order_view.get_all_orders.as_view()),
