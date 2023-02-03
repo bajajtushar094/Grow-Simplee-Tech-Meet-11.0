@@ -266,8 +266,12 @@ class generateSolution(APIView):
 
 class startButton(APIView):
     def get(self, request, *args, **kwargs):
-        vol = VolumeCalc()        
+        vol = VolumeCalc()   
+        vol.startProcess()     
         return Response("camera feed started", status=status.HTTP_200_OK)
+
+
+
 class binPacking(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
