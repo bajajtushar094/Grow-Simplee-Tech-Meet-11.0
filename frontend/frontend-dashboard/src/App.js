@@ -19,6 +19,7 @@ import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
 import MapBox from "./Component/Global/MapBox";
 import UploadZip from "./Component/VolumeEstimation/UploadZip";
+import ManagerLogin from "./Pages/ManagerLogin";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/singleRoute" element={<SingleRoute />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/managerlogin" element={<ManagerLogin />} />
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/upcomingDelivery" element={<UpcomingDelivery />} />
