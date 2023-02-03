@@ -182,30 +182,13 @@ class generateSolution(APIView):
         # manager, routing, solution = vrp_instance.process_VRP()
         dct={"vrp_instance":vrp_instance}
         sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
-        print("\n \n \n ",sol)
-        manager, routing, solution = 1,1,1
-
-        plan_output, dropped = vehicle_output_string(manager, routing, solution)
-        for route_number in range(routing.vehicles()):
-            all_riders[route_number].delievery_orders = ''
-            order = routing.Start(route_number)
-            if routing.IsEnd(solution.Value(routing.NextVar(order))):
-                all_riders[route_number].delievery_orders = ''
-            else:
-                while True:
-                    node = manager.IndexToNode(order)
-                    all_riders[route_number].delievery_orders += "," + str(node)
-                    if (node != 0):
-                        curr_order = Order.objects.get(id=int(node))
-                        curr_order.rider = all_riders[route_number]
-                        curr_order.save()
-
-                    if routing.IsEnd(order):
-                        break
-                    order = solution.Value(routing.NextVar(order))
-
-            if all_riders[route_number].delievery_orders != '':
-                all_riders[route_number].delievery_orders = all_riders[route_number].delievery_orders[1:]
-
-            all_riders[route_number].save()
-        return Response(plan_output)
+        paths = sol.get()
+        for (i, path) in enumerate(paths):
+            all_riders[i].delievery_orders = path
+            for node in path.split(","):
+                if (node != "0"):
+                    curr_order = Order.objects.get(id=int(node))
+                    curr_order.rider = all_riders[i]
+                    curr_order.save()
+            all_riders[i].save()
+        return Response(paths)
