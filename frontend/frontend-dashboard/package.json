@@ -20,13 +20,10 @@
     "axios": "^1.2.5",
     "classnames": "^2.3.2",
     "dotenv": "^16.0.3",
-<<<<<<< HEAD
     "env-cmd": "^10.1.0",
-=======
     "leaflet": "^1.9.3",
     "leaflet-routing-machine": "^3.2.12",
     "mapbox": "^1.0.0-beta10",
->>>>>>> e389bdaaf258374fcef67113659f6139dde0e414
     "mapbox-gl": "^2.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

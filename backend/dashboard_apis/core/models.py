@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .choices import *
 import os
-from django.contrib.auth import (AbstractBaseUser, BaseUserManager)
+# from django.contrib.auth import (AbstractBaseUser, BaseUserManager)
 
 
 # Create your models here.
