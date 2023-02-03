@@ -170,6 +170,13 @@ class getRider(APIView):
         all_riders = Rider.objects.all()
         data = {}
         data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
+        for i in range(len(data['riders'])):
+            data['riders'][i]['current_address'] = AddressSerializer(all_riders[i].current_address).data
+            orders = data['riders'][i]['delievery_orders'].split(',')
+            if (len(orders) == 1):
+                data['riders'][i]['progress'] = "100"
+            else:
+                data['riders'][i]['progress'] = all_riders[i].last_delivered_pointer / (len(orders) - 2) * 100
         return Response(data)
 
 
