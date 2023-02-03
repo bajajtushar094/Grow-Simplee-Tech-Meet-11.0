@@ -7,7 +7,6 @@ import Riders from "./Pages/Riders"
 import Layout, { InventoryLayout } from "./Component/Layout";
 import Dashboard from "./Pages/Dashboard";
 import ScanQR from "./Pages/Mobile/ScanQR"
-import UploadZip from "./Pages/UploadZipPage";
 import CreateBag from "./Pages/Mobile/CreateBag";
 import TripRoute from "./Pages/Mobile/TripRoute";
 import SingleRoute from "./Pages/Mobile/SingleRoute";
@@ -18,6 +17,8 @@ import DestinationReached from "./Pages/Mobile/DestinationReached";
 import DroneManagement from "./Component/Layout/Droneview/DroneManagement";
 import Ridermanagement from "./Pages/Ridermanagement";
 import MapBox from "./Component/Global/MapBox";
+import UploadZip from "./Component/VolumeEstimation/UploadZip";
+import ManagerLogin from "./Pages/ManagerLogin";
 import Demo from "./Pages/Demo";
 // import RiderDetails from "./Pages/RiderDetails";
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="/singleRoute" element={<SingleRoute />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/managerlogin" element={<ManagerLogin />} />
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
         <Route path="/drone" element={<DroneManagement />} />
