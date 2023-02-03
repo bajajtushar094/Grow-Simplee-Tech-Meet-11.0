@@ -18,6 +18,7 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
+from volume_estimation.cuboid import VolumeCalc
 
 
 class getData(APIView):
@@ -217,3 +218,8 @@ class generateSolution(APIView):
             all_riders[route_number].save()
         return Response(plan_output)
 
+
+class startButton(APIView):
+    def get(self, request, *args, **kwargs):
+        vol = VolumeCalc()        
+        return Response("camera feed started", status=status.HTTP_200_OK)
