@@ -31,6 +31,12 @@ class ImageSerializer(serializers.ModelSerializer):
         model = OrderImage
         fields = '__all__'
 
+class MultipleImageSerializer(serializers.Serializer):
+
+    images = serializers.ListField(
+        child=serializers.ImageField()
+    )
+
 class RiderRewardsSerializer(serializers.ModelSerializer):
 
     class Meta:

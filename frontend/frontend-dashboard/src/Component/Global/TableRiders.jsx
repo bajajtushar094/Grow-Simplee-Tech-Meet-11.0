@@ -5,53 +5,14 @@ import { Avatar } from "@mui/material";
 import CallMadeIcon from "../../Shared/Icons/CallMadeIcon";
 import { useMemo } from "react";
 
-export default function RiderList(props) {
-
-  const riders = props.riders;
-  /* const rows = [
-    {
-      id: "1232",
-      rider: {
-        name: "Kathryn Murphy",
-        photoURL:
-          "https://images.unsplash.com/photo-1674238924120-a9d9a0425d28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
-      },
-      range: "6 KM",
-      latestLocation: "4140 Parker Rd. Allentown, New Mexico 31134",
-      progress: "25%",
-      status: "On Route",
-    },
-    {
-      id: "12522",
-      rider: {
-        name: "Wade Warren",
-        photoURL:
-          "https://images.unsplash.com/photo-1674238924120-a9d9a0425d28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
-      },
-      range: "9 KM",
-      latestLocation: "2464 Royal Ln. Mesa, New Jersey 45463",
-      progress: "65%",
-      status: "On Route",
-    },
-    {
-      id: "123322",
-      rider: {
-        name: "Courtney Henry",
-        photoURL:
-          "https://images.unsplash.com/photo-1674238924120-a9d9a0425d28?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
-      },
-      range: "17 KM",
-      latestLocation: "3517 W. Gray St. Utica, Pennsylvania 57867",
-      progress: "34%",
-      status: "Delayed",
-    },
-  ]; */
-  console.log(riders);
+export default function RiderList() {
+  
   const columns = useMemo(() => [
     {
       field: "id",
       headerName: "View",
       width: 50,
+      headerClassName: 'bg-gs-gray',
       renderCell: () => (
         <div className="flex items-center justify-between">
           <CallMadeIcon />
@@ -62,6 +23,7 @@ export default function RiderList(props) {
       field: "rider",
       headerName: "Rider",
       width: 200,
+      headerClassName: 'bg-gs-gray',
       renderCell: (params) => (
         <div className="flex items-center justify-between">
           {/* <Avatar
@@ -73,17 +35,20 @@ export default function RiderList(props) {
         </div>
       ),
     },
-    { field: "bag_volume", headerName: "Range", width: 130 },
+    { field: "range", headerName: "Range", headerClassName: 'bg-gs-gray', width: 130 },
     {
-      field: "current_address",
+      field: "latestLocation",
+      headerClassName: 'bg-gs-gray',
       headerName: "Latest Location",
+      flex: 1,
       sortable: false,
       width: 400,
     },
-    { field: "bag_volume_used", headerName: "Progress", width: 130 },
+    { field: "progress", headerName: "Progress",headerClassName: 'bg-gs-gray', width: 130 },
     {
       field: "rider_status",
       headerName: "Status",
+      headerClassName: 'bg-gs-gray',
       renderCell: (params) => (
         <div
           className={cx("bg-[#0F5223] text-white py-1 px-2 rounded-md", {
@@ -101,8 +66,8 @@ export default function RiderList(props) {
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
-        rowHeight={35}
-        rows={riders}
+        density="compact"
+        rows={rows}
         columns={columns}
         getRowId={(row) => row.id}
         pagination

@@ -1,16 +1,25 @@
 from django.urls import path
 from . import views
 from . import order_view
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 urlpatterns = [
     # test api
     path('', views.getData.as_view()),
 
+    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     # product api
     path('product/<str:id>', order_view.order_detail.as_view()),
     path('product/<str:id>', order_view.order_image_update.as_view()),
     path('upload/', views.upload.as_view()),
+    # path('images/', views.imageView.as_view()),
+    path('uploadimages/', views.uploadImages.as_view()),
 
     path('orders/', order_view.get_all_orders.as_view()),
     # rider api
@@ -22,6 +31,7 @@ urlpatterns = [
     path('bags/all', views.getBags.as_view()),
     path('orders/cancel', views.cancelOrder.as_view()),
     path('orders/add', views.addDynamicPickup.as_view()),
+    # To solve the first instance of VRP
     path('solve/', views.generateSolution.as_view()),
     path('bin-packing/<str:id>', views.binPacking.as_view())
 ]    

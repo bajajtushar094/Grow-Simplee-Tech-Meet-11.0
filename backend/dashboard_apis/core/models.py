@@ -6,6 +6,7 @@ import os
 
 # Create your models here.
 
+
 class Manager(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
     name = models.CharField(max_length=250)
@@ -15,6 +16,7 @@ class Manager(models.Model):
     def __str__(self):
         return self.name + self.id
 
+
 class Address(models.Model):
     id = models.CharField(max_length=500, primary_key=True)
     latitude = models.CharField(max_length=50, null=True)
@@ -23,7 +25,6 @@ class Address(models.Model):
     name = models.CharField(max_length=250, null=True)
     def __str__(self):
         return f"Address-{self.location}"
-
 
 class Owner(models.Model):
     owner_id = models.CharField(max_length=500)
@@ -66,9 +67,10 @@ class Rider(models.Model):
         #     if Order.objects.get(id=order_id).order_status == "delayed":
         #         self.packages_delayed += 1
         super(Rider, self).save(*args, **kwargs)
-    
+
     def __str__(self):
         return f"{self.name} + {self.rider_id}"
+
 
 class Order(models.Model):
     rider = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True)
@@ -93,7 +95,8 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_name
-    
+
+
 class Bags(models.Model):
     rider_id = models.CharField(max_length=500)
     order_name = models.CharField(max_length=500, null=True, blank=True)
@@ -103,9 +106,9 @@ class Bags(models.Model):
     width = models.CharField(max_length=50, blank=True)
     height = models.CharField(max_length=50, blank=True)
 
-
     def __str__(self):
         return self.order_name
+
 
 class Repository(models.Model):
     cancelled = models.IntegerField(default=0)
@@ -116,12 +119,15 @@ class Repository(models.Model):
     def __str__(self):
         return f"Repository"
 
+
 def get_upload_to(instance, filename):
     return os.path.join("media/", str(instance.order.order_name), filename)
 
+
 class OrderImage(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    images = models.FileField(upload_to=get_upload_to, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
+    images = models.ImageField(upload_to="media/", blank=True)
+
 
 class RiderRewards(models.Model):
     rider_id = models.CharField(max_length=100, blank=True, null=True)
