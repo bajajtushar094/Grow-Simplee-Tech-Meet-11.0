@@ -163,7 +163,7 @@ class getBags(APIView):
         data['bags'] = [RiderSerializer(bag).data for bag in all_bags]
         return Response(data)
 
-class generateSolution(APIView):
+class generateInitialSolution(APIView):
     def get(self, request, *args, **kwargs):
         # TODO: Get the coordinates of the depot
         depot = Node([12.944013565497546, 77.69623411806606], 0)
@@ -191,4 +191,18 @@ class generateSolution(APIView):
                     curr_order.rider = all_riders[i]
                     curr_order.save()
             all_riders[i].save()
-        return Response(paths)
+        routes = []
+
+
+        for path in paths:
+            list_path = path.split(',')
+            temp=[]
+            for loc in list_path:
+                if int(loc)==0:
+                    continue
+                else:
+                    temp.append([float(all_orders[int(loc)-1].address.latitude), float(all_orders[int(loc)-1].address.longitude)])
+            routes.append(temp)
+        return Response(routes)
+
+class generateInitialSolution(APIView)
