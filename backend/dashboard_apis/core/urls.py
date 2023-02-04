@@ -33,6 +33,7 @@ urlpatterns = [
     path('orders/add', views.addDynamicPickup.as_view()),
     # To solve the first instance of VRP
     path('solve/', views.generateSolution.as_view()),
+    path('populate/', views.populateData.as_view()),
 
 
     #task1 APIs
