@@ -76,6 +76,7 @@ const data = [
       name: "Guwahati",
       fillColor: "#7FC9FF",
       id: 1,
+      type:'rider',
       position: {
         lat:26.148043,
         lng: 91.731377,
@@ -85,6 +86,7 @@ const data = [
       name: "Amingaon",
       fillColor: "#7FC9FF",
       id: 2,
+      type:'pickup',
       position: {
         lat: 26.1847,
         lng: 91.6672,
@@ -93,6 +95,7 @@ const data = [
     {
       name: "Silchar",
       fillColor: "#7FC9FF",
+      type:'rider',
       id: 3,
       position: {
         lat: 24.8333,
@@ -102,6 +105,7 @@ const data = [
     {
       name: "Khokhrajhar",
       fillColor: "#7FC9FF",
+      type:'pickup',
       id: 4,
       position: {
         lat: 26.4014,
@@ -111,6 +115,7 @@ const data = [
     {
       name: "Paris",
       fillColor: "#7FC9FF",
+      type:'rider',
       id: 5,
       position: {
         lat: 27.4705,

@@ -2,11 +2,23 @@ import React from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import RoutineMachine from "./RoutineMachine";
 import { useState } from "react";
+import * as L from "leaflet";
+import delivery from './delivery.svg'
+import Pins from './Pins.svg'
+import Mapmarker from "../Global/Marker/Mapmarker";
+import ReactDOMServer from 'react-dom/server';
+import R from './R.svg'
 
 function createIcon(url) {
   return new L.Icon({
     iconUrl: url,
   });
+}
+
+// const rider=L.divIcon({ className: "custom icon", html: ReactDOMServer.renderToString( <Mapmarker image = {}/> ) })
+
+function rider(img){
+      return L.divIcon({ className: "custom icon", html: ReactDOMServer.renderToString( <Mapmarker image={img}/> ) })
 }
 var latCenter = 26.148043
 var lonCenter = 91.731377
@@ -24,10 +36,8 @@ const Map = ({setRouteDetails, ...props}) => {
     setCoordinates(coordinates);
  }
 
-  function getMarkerIcon(index) {
-    if(index === selectedIndex)
-          return createIcon("https://user-images.githubusercontent.com/1596072/85960867-3baf9700-b9af-11ea-854e-7ef6e656d447.png");
-    return createIcon("https://user-images.githubusercontent.com/1596072/85960806-0145fa00-b9af-11ea-91ab-a107d0a64b66.png");
+  function getMarkerIcon() {
+       return Mapmarker;
   }
 
 
@@ -61,7 +71,7 @@ const Map = ({setRouteDetails, ...props}) => {
   let route = null;
   let zoom = 9;
   if(props.coordinates.length > 1) {
-    route = <RoutineMachine coordinates={props.coordinates} setRouteSummary = {setRouteSummary} />
+    route = <RoutineMachine coordinates={props.coordinates} onChange={changeCoordinates} setRouteSummary = {setRouteSummary}/>
   }else{
     route = <Marker position={[latCenter,lonCenter]}></Marker>;
     zoom = 9;
@@ -90,7 +100,8 @@ const Map = ({setRouteDetails, ...props}) => {
           key={index}
           index={index}
           position={item.position}
-          icon={getMarkerIcon(index)}
+          icon={item.type==='pickup'?createIcon(delivery):rider(R)}
+          // icon = {sus}
           onclick={handleClick}
         />
       ))}
