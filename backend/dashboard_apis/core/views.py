@@ -205,4 +205,5 @@ class generateInitialSolution(APIView):
             routes.append(temp)
         return Response(routes)
 
-class generateInitialSolution(APIView)
+class generateSolution(APIView):
+    

@@ -22,5 +22,5 @@ urlpatterns = [
     path('orders/cancel', views.cancelOrder.as_view()),
     path('orders/add', views.addDynamicPickup.as_view()),
     path('solve_initial/', views.generateInitialSolution.as_view())
-    path('solve',views.generateSolution.as_view())
+    path('solve/',views.generateSolution.as_view())
 ]    
