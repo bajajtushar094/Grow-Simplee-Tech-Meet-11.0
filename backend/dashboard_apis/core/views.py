@@ -19,7 +19,7 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
-from task1_interiit.cuboid import VolumeCalc
+from volume_estimation.cuboid import VolumeCalc
 
 
 class getData(APIView):
