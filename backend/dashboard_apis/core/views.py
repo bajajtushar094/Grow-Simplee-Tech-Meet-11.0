@@ -231,6 +231,13 @@ class getRiderOrders(APIView):
         orders = rider.order_set.all()
         orders_serialized = [OrderSerializer(o).data for o in orders]
         return Response(orders_serialized)
+
+class getRiderById(APIView):
+    def get(self, request, *args, **kwargs):
+        rider_id = kwargs['id']
+        rider = Rider.objects.get(id=rider_id)
+        rider_serialized = RiderSerializer(rider).data
+        return Response(rider_serialized)
         
 
         
