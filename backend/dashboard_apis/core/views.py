@@ -151,6 +151,8 @@ class getOrder(APIView):
         all_orders = Order.objects.all()
 
         for i in range(len(all_orders)):
+            if all_orders[i].delivery_action == "pickup":
+                continue
             date_time_now = datetime.now().replace(tzinfo=utc)
             if date_time_now > all_orders[i].edd:
                 if all_orders[i].order_status == "undelivered":
@@ -201,11 +203,17 @@ class cancelOrder(APIView):
 
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
-        rider_id = request.data["rider_id"]
-        rider = Rider.objects.get(id=rider_id)
-        delivery_orders = request.data["route"]
-        rider.delievery_orders = delivery_orders
-        rider.save()
+        volume = request.data["volume"]
+        latitude = request.data["latitude"]
+        longitude = request.data["longitude"]
+        location = request.data["location"]
+        name = request.data["name"]
+        address = Address(latitude=latitude, longitude=longitude, location=location, name=name)
+        address.save()
+        order = Order(order_name=name, volume=volume, address=address, delivery_action='pickup')
+        order.save()
+        return Response(OrderSerializer(order).data)
+
 
 
 class getBags(APIView):
