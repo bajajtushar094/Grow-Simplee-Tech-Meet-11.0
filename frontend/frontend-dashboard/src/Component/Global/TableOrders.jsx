@@ -3,44 +3,74 @@ import { DataGrid } from "@mui/x-data-grid";
 import cx from "classnames";
 import { useMemo } from "react";
 
-export default function OrderList() {
-  const rows = [
-    {
-      id: "1232",
-      fileName: "Folder 1",
-      number: "4",
-      status: "Previewing",
-    },
-    {
-      id: "12522",
-      fileName: "Folder 2",
-      number: "2",
-      status: "Uploading",
-    },
-    {
-      id: "123322",
-      fileName: "Folder 3",
-      number: "3",
-      status: "Failed",
-    },
-  ];
+export default function OrderList(props) {
+  // const data = [
+  //   {
+  //     folderName: "order1",
+  //     files: ["building", "design", "drone", "forest", "ocean"],
+  //   },
+  //   {
+  //     folderName: "order2",
+  //     files: ["building", "design", "drone", "forest", "ocean"],
+  //   },
+  // ];
+  const data = props.data;
+  const rows = data.map((folder, index) => ({
+    id: index,
+    folderName: folder.folderName,
+    number: folder.files.length,
+    status: "Previewing",
+  }));
+  console.log(rows);
+  // const rows = [
+  //   {
+  //     id: "1232",
+  //     folderName: "Folder 1",
+  //     number: "4",
+  //     status: "Previewing",
+  //   },
+  //   {
+  //     id: "12522",
+  //     folderName: "Folder 2",
+  //     number: "2",
+  //     status: "Uploading",
+  //   },
+  //   {
+  //     id: "123322",
+  //     folderName: "Folder 3",
+  //     number: "3",
+  //     status: "Failed",
+  //   },
+  //   {
+  //     id: "1233342",
+  //     folderName: "Folder 3",
+  //     number: "3",
+  //     status: "Failed",
+  //   },
+  //   {
+  //     id: "123354222",
+  //     folderName: "Folder 3",
+  //     number: "3",
+  //     status: "Failed",
+  //   },
+  // ];
   const columns = useMemo(() => [
     {
-      field: "fileName",
-      headerName: "File Name",
+      field: "folderName",
       headerClassName: "bg-white",
-      width: 180,
+      renderHeader: () => <p className="font-semibold">{"Folder Name"}</p>,
+      width: 260,
     },
     {
       field: "number",
-      headerName: "No. of items",
       headerClassName: "bg-white",
+      renderHeader: () => <p className="font-semibold">{"No. of Items"}</p>,
       width: 130,
     },
     {
       field: "status",
-      headerName: "Status",
       headerClassName: "bg-white",
+      renderHeader: () => <p className="font-semibold">{"Status"}</p>,
       width: 180,
       renderCell: (params) => (
         <div
@@ -57,11 +87,12 @@ export default function OrderList() {
   ]);
 
   return (
-    <div style={{ height: 88 * rows.length, width: 545, overflowX:"hidden" }}>
+    <div className="my-8">
       <DataGrid
         rows={rows}
         columns={columns}
         getRowId={(row) => row.id}
+        autoHeight={true}
         checkboxSelection
       />
     </div>

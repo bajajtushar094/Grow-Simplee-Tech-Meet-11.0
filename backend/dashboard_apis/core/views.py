@@ -63,7 +63,9 @@ class upload(APIView):
         return render(request, "core/upload.html")
 
     def post(self, request, *args, **kwargs):
+        print('-------------------------')
         print(request)
+        print('-------------------------')
         print(request.FILES)
         if request.FILES["myfile"]:
             my_file = request.FILES["myfile"]

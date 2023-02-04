@@ -1,11 +1,31 @@
 import React from "react";
 import GSLogo from "../Shared/Icons/GSLogo";
 import RightArrow from "../Shared/Icons/RightArrow";
-import BgMap from "../Shared/Images/BgMap.png"
+import BgMap from "../Shared/Images/BgMap.png";
+import axios from "axios";
+import { LOCAL_SERVER_URL_IP } from "../constants/config";
 
 const ManagerLogin = () => {
+  const handleSubmit = () => {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    axios
+      .post(`${LOCAL_SERVER_URL_IP}/auth/token/`, {
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
-    <div className={`flex justify-center items-center h-screen bg-no-repeat bg-cover`} style={{backgroundImage:`url(${BgMap})`}}>
+    <div
+      className={`flex justify-center items-center h-screen bg-no-repeat bg-cover`}
+      style={{ backgroundImage: `url(${BgMap})` }}
+    >
       <div className="w-1/3 h-3/4 p-20 bg-[#FFFFFF] flex flex-col justify-between">
         <div>
           <GSLogo />
@@ -43,8 +63,8 @@ const ManagerLogin = () => {
           </div>
         </div>
         <div>
-          <button className="w-full bg-black rounded-lg text-white text-center p-3">
-            Let’s get started <RightArrow className="inline"/>
+          <button onClick={handleSubmit} className="w-full bg-black rounded-lg text-white text-center p-3">
+            Let’s get started <RightArrow className="inline" />
           </button>
         </div>
       </div>
