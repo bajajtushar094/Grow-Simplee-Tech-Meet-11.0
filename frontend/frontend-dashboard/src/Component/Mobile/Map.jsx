@@ -1,8 +1,8 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import * as L from "leaflet"
 import RoutineMachine from "./RoutineMachine";
 import { useState } from "react";
-import * as L from "leaflet";
 import delivery from './delivery.svg'
 import Pins from './Pins.svg'
 import Mapmarker from "../Global/Marker/Mapmarker";
