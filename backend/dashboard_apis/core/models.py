@@ -23,8 +23,10 @@ class Address(models.Model):
     longitude = models.CharField(max_length=50, null=True)
     location = models.CharField(max_length=250, null=True)
     name = models.CharField(max_length=250, null=True)
+
     def __str__(self):
         return f"Address-{self.location}"
+
 
 class Owner(models.Model):
     owner_id = models.CharField(max_length=500)
