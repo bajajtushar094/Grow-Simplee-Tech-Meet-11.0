@@ -1,5 +1,5 @@
 export const routePaths = {
-    dashboard: '/dashboard',
+    dashboard: '/',
     ridermanagement: '/ridermanagement/listView',
     warehouse: '/warehouse',
     inventory: '/warehouse/inventory',

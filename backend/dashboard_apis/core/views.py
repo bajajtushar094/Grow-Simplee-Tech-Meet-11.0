@@ -1,4 +1,5 @@
 from django.conf import settings
+from utils.bin_packing.packing import Packer
 import os, json
 from utils.routing_util import vehicle_output_string
 from utils.vehicle_routing.customers import Node
@@ -18,6 +19,8 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
+from volume_estimation.cuboid import VolumeCalc
+from utils.populate_data import *
 
 
 class getData(APIView):
@@ -145,6 +148,14 @@ class uploadImages(APIView):
 
 
 # dashboard APIS
+class populateData(APIView):
+    def get(self, request, *args, **kwargs):
+        populate_address()
+        populate_owners()
+        populate_riders()
+        populate_order()
+        return Response(True)
+
 class getOrder(APIView):
     def get(self, request, *args, **kwargs):
         utc = pytz.UTC
@@ -152,6 +163,8 @@ class getOrder(APIView):
         all_orders = Order.objects.all()
 
         for i in range(len(all_orders)):
+            if all_orders[i].delivery_action == "pickup":
+                continue
             date_time_now = datetime.now().replace(tzinfo=utc)
             if date_time_now > all_orders[i].edd:
                 if all_orders[i].order_status == "undelivered":
@@ -171,6 +184,13 @@ class getRider(APIView):
         all_riders = Rider.objects.all()
         data = {}
         data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
+        for i in range(len(data['riders'])):
+            data['riders'][i]['current_address'] = AddressSerializer(all_riders[i].current_address).data
+            orders = data['riders'][i]['delievery_orders'].split(',')
+            if (len(orders) == 1):
+                data['riders'][i]['progress'] = "100"
+            else:
+                data['riders'][i]['progress'] = all_riders[i].last_delivered_pointer / (len(orders) - 2) * 100
         return Response(data)
 
 
@@ -195,11 +215,17 @@ class cancelOrder(APIView):
 
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
-        rider_id = request.data["rider_id"]
-        rider = Rider.objects.get(id=rider_id)
-        delivery_orders = request.data["route"]
-        rider.delievery_orders = delivery_orders
-        rider.save()
+        volume = request.data["volume"]
+        latitude = request.data["latitude"]
+        longitude = request.data["longitude"]
+        location = request.data["location"]
+        name = request.data["name"]
+        address = Address(latitude=latitude, longitude=longitude, location=location, name=name)
+        address.save()
+        order = Order(order_name=name, volume=volume, address=address, delivery_action='pickup')
+        order.save()
+        return Response(OrderSerializer(order).data)
+
 
 
 class getBags(APIView):
@@ -216,6 +242,13 @@ class getRiderOrders(APIView):
         orders = rider.order_set.all()
         orders_serialized = [OrderSerializer(o).data for o in orders]
         return Response(orders_serialized)
+
+class getRiderById(APIView):
+    def get(self, request, *args, **kwargs):
+        rider_id = kwargs['id']
+        rider = Rider.objects.get(id=rider_id)
+        rider_serialized = RiderSerializer(rider).data
+        return Response(rider_serialized)
         
 
         
@@ -263,3 +296,26 @@ class generateSolution(APIView):
             all_riders[route_number].save()
         return Response(plan_output)
 
+
+class startButton(APIView):
+    def get(self, request, *args, **kwargs):
+        vol = VolumeCalc()   
+        vol.startProcess()     
+        return Response("camera feed started", status=status.HTTP_200_OK)
+
+
+
+class binPacking(APIView):
+    def get(self, request, *args, **kwargs):
+        rider_id = kwargs['id']
+        rider = Rider.objects.get(rider_id=rider_id)
+        url="http://localhost:4550"
+        
+        box = Packer(url, rider.bag_length, rider.bag_width, rider.bag_height)
+        order_ids = rider.delievery_orders.split(",")[1:-1]
+        for (i, order_id) in enumerate(order_ids):
+            order = Order.objects.get(id=order_id)
+            box.add_item(order_id, order.length, order.width, order.height, i+1)
+        
+        data = box.pack()
+        return Response(data)
