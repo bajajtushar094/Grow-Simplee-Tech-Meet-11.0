@@ -19,6 +19,7 @@ import UploadZip from "./Component/VolumeEstimation/UploadZip";
 import ManagerLogin from "./Pages/ManagerLogin";
 import Demo from "./Pages/Demo";
 import Mapmarker from "./Component/Global/Marker/Mapmarker.jsx";
+// import RiderDetails from "./Pages/RiderDetails";
 
 function App() {
   return (
