@@ -8,17 +8,15 @@ import os
 
 
 class Manager(models.Model):
-    id = models.CharField(max_length=500, primary_key=True)
     name = models.CharField(max_length=250)
     contact_number = models.CharField(max_length=500, null=True)
-    address_id = models.CharField(max_length=500)
+    address_id = models.IntegerField()
 
     def __str__(self):
-        return self.name + self.id
+        return self.name + str(self.id)
 
 
 class Address(models.Model):
-    id = models.CharField(max_length=500, primary_key=True)
     latitude = models.CharField(max_length=50, null=True)
     longitude = models.CharField(max_length=50, null=True)
     location = models.CharField(max_length=250, null=True)
@@ -29,24 +27,22 @@ class Address(models.Model):
 
 
 class Owner(models.Model):
-    owner_id = models.CharField(max_length=500)
     name = models.CharField(max_length=500, null=True)
     contact_number = models.CharField(max_length=500, null=True)
-    address_id = models.CharField(max_length=500)
+    address_id = models.IntegerField()
 
     def __str__(self):
-        return self.name + self.address_id
+        return self.name + str(self.address_id)
 
 
 class Rider(models.Model):
     name = models.CharField(max_length=250)
-    rider_id = models.CharField(max_length=500)
     contact_number = models.CharField(max_length=10)
     bag_volume = models.CharField(max_length=50)
     bag_length = models.CharField(max_length=10)
     bag_width = models.CharField(max_length=10)
     bag_height = models.CharField(max_length=10)
-    bag_volume_used = models.CharField(max_length=50, null=True)
+    bag_volume_used = models.CharField(max_length=50, blank=True)
     current_address = models.ForeignKey(
         Address, related_name="Current_Delievery_Address", on_delete=models.CASCADE
     )
@@ -55,27 +51,19 @@ class Rider(models.Model):
     )
     delievery_orders = models.CharField(max_length=500, null=True)
     last_delivered_pointer = models.IntegerField(null=True)
-    manager_id = models.CharField(max_length=500, null=True)
+    manager_id = models.IntegerField(null=True)
     arrival_time = models.DateField((_("arrival time")))
     departure_time = models.DateField((_("departure time")))
     etf = models.CharField(max_length=50, null=True)
     successful_deliveries = models.IntegerField(default=0)
     packages_delayed = models.IntegerField(default=0)
 
-    def save(self, *args, **kwargs):
-        # self.successful_deliveries = self.last_delivered_pointer + 1
-        # self.packages_delayed = 0
-        # for order_id in self.delievery_orders.split(","):
-        #     if Order.objects.get(id=order_id).order_status == "delayed":
-        #         self.packages_delayed += 1
-        super(Rider, self).save(*args, **kwargs)
-
     def __str__(self):
-        return f"{self.name} + {self.rider_id}"
+        return f"{self.name} + {self.id}"
 
 
 class Order(models.Model):
-    rider = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True)
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE, null=True, blank=True)
     order_name = models.CharField(max_length=500, null=True, blank=True)
     shape = models.CharField(max_length=50, null=True, blank=True)
     volume = models.CharField(max_length=50, blank=True)
@@ -100,7 +88,7 @@ class Order(models.Model):
 
 
 class Bags(models.Model):
-    rider_id = models.CharField(max_length=500)
+    rider_id = models.IntegerField()
     order_name = models.CharField(max_length=500, null=True, blank=True)
     shape = models.CharField(max_length=50, null=True, blank=True)
     volume = models.CharField(max_length=50, blank=True)
@@ -132,7 +120,7 @@ class OrderImage(models.Model):
 
 
 class RiderRewards(models.Model):
-    rider_id = models.CharField(max_length=100, blank=True, null=True)
+    rider_id = models.IntegerField(blank=True, null=True)
     rider_name = models.CharField(max_length=100, blank=True, null=True)
     successful_deliveries = models.IntegerField(blank=True, null=True)
     earnings = models.IntegerField(blank=True, null=True)

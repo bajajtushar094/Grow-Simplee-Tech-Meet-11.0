@@ -20,6 +20,7 @@ from datetime import datetime
 import pytz
 from rest_framework import status
 from volume_estimation.cuboid import VolumeCalc
+from utils.populate_data import *
 
 
 class getData(APIView):
@@ -145,6 +146,14 @@ class uploadImages(APIView):
 
 
 # dashboard APIS
+class populateData(APIView):
+    def get(self, request, *args, **kwargs):
+        populate_address()
+        populate_owners()
+        populate_riders()
+        populate_order()
+        return Response(True)
+
 class getOrder(APIView):
     def get(self, request, *args, **kwargs):
         utc = pytz.UTC
