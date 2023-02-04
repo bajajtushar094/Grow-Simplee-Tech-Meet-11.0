@@ -152,6 +152,8 @@ class getOrder(APIView):
         all_orders = Order.objects.all()
 
         for i in range(len(all_orders)):
+            if all_orders[i].delivery_action == "pickup":
+                continue
             date_time_now = datetime.now().replace(tzinfo=utc)
             if date_time_now > all_orders[i].edd:
                 if all_orders[i].order_status == "undelivered":
@@ -171,6 +173,13 @@ class getRider(APIView):
         all_riders = Rider.objects.all()
         data = {}
         data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
+        for i in range(len(data['riders'])):
+            data['riders'][i]['current_address'] = AddressSerializer(all_riders[i].current_address).data
+            orders = data['riders'][i]['delievery_orders'].split(',')
+            if (len(orders) == 1):
+                data['riders'][i]['progress'] = "100"
+            else:
+                data['riders'][i]['progress'] = all_riders[i].last_delivered_pointer / (len(orders) - 2) * 100
         return Response(data)
 
 
@@ -195,11 +204,17 @@ class cancelOrder(APIView):
 
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
-        rider_id = request.data["rider_id"]
-        rider = Rider.objects.get(id=rider_id)
-        delivery_orders = request.data["route"]
-        rider.delievery_orders = delivery_orders
-        rider.save()
+        volume = request.data["volume"]
+        latitude = request.data["latitude"]
+        longitude = request.data["longitude"]
+        location = request.data["location"]
+        name = request.data["name"]
+        address = Address(latitude=latitude, longitude=longitude, location=location, name=name)
+        address.save()
+        order = Order(order_name=name, volume=volume, address=address, delivery_action='pickup')
+        order.save()
+        return Response(OrderSerializer(order).data)
+
 
 
 class getBags(APIView):
