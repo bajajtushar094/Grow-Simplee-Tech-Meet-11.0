@@ -10,3 +10,4 @@ export const INVENTORY_COLUMNS = {
      status:false,
      rider:false
   };
+  

@@ -113,17 +113,12 @@ const Inventory = () => {
                   <Link to='/warehouse/repository-inhouse' className={cx('py-2 px-3 rounded text-gs-text-gray text-sm font-semibold flex items-center', { '!text-gs-blue bg-[#F8F8F7]': location.pathname.split('/')[2].split('-')[1] == 'inhouse' })}><DeliveryIcon className={cx('mr-2', { '!stroke-gs-blue stroke-[0.4]': location.pathname.split('/')[2].split('-')[1] == 'inhouse' })} />Inhouse</Link>
                 </div> */}
               </div>
-              {
-                <>
               <h2 className='text-xl font-semibold mt-2'>
                 {inventoryHeading.InventoryHeading}
               </h2>
               <h4 className='text-md text-[#5F5D59] font-semibold mt-1'>
                 {inventoryHeading.InventorySubHeading}
               </h4>
-                </> 
-               }
-              
             </div>
           </div>
           <Table tab={warehouseTab} displayedList={displayedList}/>
