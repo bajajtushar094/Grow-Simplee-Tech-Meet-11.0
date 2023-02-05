@@ -10,11 +10,6 @@ export const defaultState = {
     layoutClassName: '',
 }
 
-export const accessTokenState = {
-    user : null,
-    accressToken: null,
-}
-
 function reducer(state = defaultState, { type, payload = {} }) {
     switch (type) {
         case actionTypes.SHOW_BACK_BUTTON: {
@@ -44,12 +39,6 @@ function reducer(state = defaultState, { type, payload = {} }) {
 
         default:
             return state
-    }
-}
-
-function accessTokenReducer(state = accessTokenState, { type, payload = {} }){
-    switch(type){
-        
     }
 }
 

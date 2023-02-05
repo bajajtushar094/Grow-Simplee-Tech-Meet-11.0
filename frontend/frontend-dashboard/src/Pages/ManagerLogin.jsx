@@ -4,9 +4,13 @@ import RightArrow from "../Shared/Icons/RightArrow";
 import BgMap from "../Shared/Images/BgMap.png";
 import axios from "axios";
 import { LOCAL_SERVER_URL_IP } from "../constants/config";
+import setAuthorizationToken, { parseJwt } from "../Component/Auth/setAuthorizationToken";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../redux/actions/auth";
 
 const ManagerLogin = () => {
-  const handleSubmit = () => {
+  const dispatch = useDispatch();
+  const login = () => {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     axios
@@ -16,6 +20,12 @@ const ManagerLogin = () => {
       })
       .then((res) => {
         console.log(res);
+        const token = res.data.access;
+        localStorage.setItem("jwtToken", token);
+        setAuthorizationToken(token);
+        console.log(token);
+        console.log(parseJwt(token))
+        dispatch(setCurrentUser(parseJwt(token)))
       })
       .catch((error) => {
         console.log(error);
@@ -63,7 +73,10 @@ const ManagerLogin = () => {
           </div>
         </div>
         <div>
-          <button onClick={handleSubmit} className="w-full bg-black rounded-lg text-white text-center p-3">
+          <button
+            onClick={login}
+            className="w-full bg-black rounded-lg text-white text-center p-3"
+          >
             Let’s get started <RightArrow className="inline" />
           </button>
         </div>

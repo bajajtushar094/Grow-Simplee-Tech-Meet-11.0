@@ -60,9 +60,10 @@ const UploadZip = () => {
   };
 
   const startEstimation = () => {
-    axios.post();
+    // axios.post();
+    window.location = '/volumeestimation'
   };
-  
+
   return (
     <Layout isLeftSidebarPresent={false}>
       <div className={`flex flex-row w-full px-20 justify-between`}>

@@ -4,7 +4,3 @@ export default {
     HIDE_LEFT_SIDEBAR: 'HIDE_LEFT_SIDEBAR',
     HIDE_TOP_BAR: 'HIDE_TOP_BAR',
 }
-
-export const accessTokenState = {
-     
-}
