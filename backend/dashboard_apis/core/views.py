@@ -181,8 +181,10 @@ class generateInitialSolution(APIView):
             orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
+        CurrentVRPInstance = PickledVRPInstance(current_instance=vrp_instance)
+        CurrentVRPInstance.save()
         # manager, routing, solution = vrp_instance.process_VRP()
-        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
         sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
@@ -201,12 +203,12 @@ class getResultCelery(APIView):
         return Response(routes)
 
 
-class generateSolution(APIView):
+class generateRerouteSolution(APIView):
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()        
         all_orders = Order.objects.all()
         vrp_instance = PickledVRPInstance.objects.all()[0].current_instance
-        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order}
         sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)

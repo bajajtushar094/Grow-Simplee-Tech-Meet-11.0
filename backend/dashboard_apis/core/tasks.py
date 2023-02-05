@@ -1,10 +1,16 @@
 from celery import shared_task
 import copy
+import pickle
 @shared_task()
-def solveVRP(vrp_instance,all_riders,all_orders,Order,PickledVRPInstance):
+def solveVRP(all_riders,all_orders,Order,PickledVRPInstance):
+    PickledModelObject = PickledVRPInstance.objects.get()[0]
+    vrp_instance= PickledModelObject.current_instance
     manager, routing, solution = vrp_instance.process_VRP()
     data = []
-    PickledVRPInstance.current_instance=vrp_instance
+    PickledModelObject.current_instance = vrp_instance
+    PickledModelObject.save()
+    CurrentVRPInstance.current_instance=vrp_instance
+    CurrentVRPInstance.save()
     for route_number in range(routing.vehicles()):
         path = ''
         order = routing.Start(route_number)
@@ -46,10 +52,12 @@ def solveVRP(vrp_instance,all_riders,all_orders,Order,PickledVRPInstance):
 
 
 @shared_task()
-def solveVRP(vrp_instance,all_riders,all_orders,Order):
+def solveVRPReroute(vrp_instance,all_riders,all_orders,Order):
     manager, routing, solution = vrp_instance.process_VRP(isReroute=True)
     data = []
-    PickledVRPInstance.current_instance=vrp_instance
+    CurrentVRPInstance.current_instance=vrp_instance
+    CurrentVRPInstance.save()
+    temp= p
     for route_number in range(routing.vehicles()):
         path = ''
         order = routing.Start(route_number)

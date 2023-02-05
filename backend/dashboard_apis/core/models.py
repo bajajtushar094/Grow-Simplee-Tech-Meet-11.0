@@ -133,6 +133,6 @@ class PickledVRPInstance(models.Model):
     current_instance = PickledObjectField()
 
     def __str__(self):
-        return f"current_VRP_Instance"
+        return f"PickledVRPInstance"
 
 
