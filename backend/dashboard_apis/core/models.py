@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .choices import *
 import os
-
+from picklefield.fields import PickledObjectField
 
 # Create your models here.
 
@@ -128,3 +128,11 @@ class RiderRewards(models.Model):
 
     def __str__(self):
         return {self.rider_name} + "RiderRewards"
+
+class PickledVRPInstance(models.Model):
+    current_instance = PickledObjectField()
+
+    def __str__(self):
+        return f"current_VRP_Instance"
+
+

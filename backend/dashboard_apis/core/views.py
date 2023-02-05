@@ -7,6 +7,7 @@ from utils.vehicle_routing.vrp import VRP
 from utils.vehicle_routing.customers import Order as OrderVRP
 from core.models import *
 import zipfile
+from celery.result import AsyncResult
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from rest_framework.response import Response
@@ -20,6 +21,7 @@ import pytz
 from rest_framework import status
 from core.tasks import solveVRP
 import pickle
+
 class getData(APIView):
     def get(self, request, *args, **kwargs):
         person = {'name': 'siddhartha'}
@@ -180,30 +182,25 @@ class generateInitialSolution(APIView):
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
         # manager, routing, solution = vrp_instance.process_VRP()
-        dct={"vrp_instance":vrp_instance}
+        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order}
         sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
-        paths = sol.get()
-        for (i, path) in enumerate(paths):
-            all_riders[i].delievery_orders = path
-            for node in path.split(","):
-                if (node != "0"):
-                    curr_order = Order.objects.get(id=int(node))
-                    curr_order.rider = all_riders[i]
-                    curr_order.save()
-            all_riders[i].save()
-        routes = []
+        print(sol.task_id)
+        return Response(sol.task_id)
 
+class checkCeleryStatus(APIView):
+    def get(self,request,*args,**kwargs):
+        task_id = kwargs['task_id']
+        res = AsyncResult(task_id).status
+        return Response(res)
 
-        for path in paths:
-            list_path = path.split(',')
-            temp=[]
-            for loc in list_path:
-                if int(loc)==0:
-                    continue
-                else:
-                    temp.append([float(all_orders[int(loc)-1].address.latitude), float(all_orders[int(loc)-1].address.longitude)])
-            routes.append(temp)
+class getResultCelery(APIView):
+    def get(self,request,*args,**kwargs):
+        task_id = kwargs['task_id']
+        res = AsyncResult(task_id)
+        routes = res.get()
         return Response(routes)
 
+
 class generateSolution(APIView):
-    
+    def get(self, request, *args, **kwargs):
+        return

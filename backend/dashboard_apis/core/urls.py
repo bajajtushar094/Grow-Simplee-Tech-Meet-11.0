@@ -21,6 +21,8 @@ urlpatterns = [
     path('bags/all', views.getBags.as_view()),
     path('orders/cancel', views.cancelOrder.as_view()),
     path('orders/add', views.addDynamicPickup.as_view()),
-    path('solve_initial/', views.generateInitialSolution.as_view())
-    path('solve/',views.generateSolution.as_view())
+    path('solve_initial/', views.generateInitialSolution.as_view()),
+    path('solve/',views.generateSolution.as_view()),
+    path('check_task_status/<str:task_id>',views.checkCeleryStatus.as_view()),
+    path('get_celery_result/<str:task_id>',views.getResultCelery.as_view())
 ]    
