@@ -18,29 +18,31 @@ import Ridermanagement from "./Pages/Ridermanagement";
 import UploadZip from "./Component/VolumeEstimation/UploadZip";
 import ManagerLogin from "./Pages/ManagerLogin";
 import Demo from "./Pages/Demo";
+import Mapmarker from "./Component/Global/Marker/Mapmarker.jsx";
+// import RiderDetails from "./Pages/RiderDetails";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        Dashboard
+       {/* // Dashboard */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/managerlogin" element={<ManagerLogin />} />
 
-        Inventory
+        {/* Inventory */}
         <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
 
-        Rider Management
+        {/* Rider Management */}
         <Route path="/riderManagement/:riderManagementTab" element={<Riders />} />
         <Route path="/riderDetails" element={<RiderDetails />} />
         
-        Task 1
+        {/* Task 1 */}
         <Route path="/volumeestimation" element={<InventoryWebcam />} />
         <Route path="/uploadzip" element={<UploadZip />} />
         {/* <Route path="/listview" element={<InventoryImages />} /> */}
         
-        Mobile Screens
+        {/* Mobile Screens */}
         <Route path="/scanQR" element={<ScanQR />} />
         <Route path="/createBag" element={<CreateBag />} />
         <Route path="/tripRoute" element={<TripRoute />} />
@@ -50,8 +52,10 @@ function App() {
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
 
-        Demo        
+        {/* Demo         */}
         <Route path="/demo" element={<Demo/>}/>
+        {/* <Route path="/riderDetails" element={<RiderDetails/>}/> */}
+        <Route path="/marker" element={<Mapmarker/>}/>
 
       </Routes>
     </BrowserRouter>
