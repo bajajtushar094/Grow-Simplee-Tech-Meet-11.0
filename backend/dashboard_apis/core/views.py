@@ -182,7 +182,7 @@ class generateInitialSolution(APIView):
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
         # manager, routing, solution = vrp_instance.process_VRP()
-        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order}
+        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
         sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
@@ -203,4 +203,10 @@ class getResultCelery(APIView):
 
 class generateSolution(APIView):
     def get(self, request, *args, **kwargs):
-        return
+        all_riders = Rider.objects.all()        
+        all_orders = Order.objects.all()
+        vrp_instance = PickledVRPInstance.objects.all()[0].current_instance
+        dct={"vrp_instance":vrp_instance,"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
+        return Response(sol.task_id)
