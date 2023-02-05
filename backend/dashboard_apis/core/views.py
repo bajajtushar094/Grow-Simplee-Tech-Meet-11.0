@@ -21,12 +21,8 @@ import pytz
 from rest_framework import status
 from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
+from utils.google_map import *
 
-
-class getData(APIView):
-    def get(self, request, *args, **kwargs):
-        person = {"name": "siddhartha"}
-        return Response(person)
 
 
 class getRiderManagementMap(APIView):
@@ -317,3 +313,9 @@ class binPacking(APIView):
         
         data = box.pack()
         return Response(data)
+
+class getGeoCode(APIView):
+    def post(self, request, *args, **kwargs):
+        address = request.data["address"]
+        geocode = extract_lat_long_via_address(address)
+        return Response(geocode, status=status.HTTP_200_OK)
