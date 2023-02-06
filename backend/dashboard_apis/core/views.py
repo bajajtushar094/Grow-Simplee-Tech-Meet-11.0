@@ -46,7 +46,7 @@ class getRiderManagementMap(APIView):
 #        data = {}
 #        data["riders"] = [
 #            RiderRewardsSerializer(rider).data for rider in rider_rewards_list
-        ]
+#        ]
 #        return Response(data)
 
 #    def post(self, request, *args, **kwargs):
@@ -57,91 +57,12 @@ class getRiderManagementMap(APIView):
 #        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class upload(APIView):
-    def get(self, request, *args, **kwargs):
-        return render(request, "core/upload.html")
-
-    def post(self, request, *args, **kwargs):
-        print('-------------------------')
-        print(request)
-        print('-------------------------')
-        print(request.FILES)
-        if request.FILES["myfile"]:
-            my_file= request.FILES["myfile"]
-            zf= zipfile.ZipFile(my_file)
-
-            with zipfile.ZipFile(my_file, "r") as zip_ref:
-                zip_ref.extractall(path=settings.MEDIA_ROOT + "/")
-
-            top_folders= {item.split("/")[0] for item in zf.namelist()}
-
-            data= {}
-            data["folders"]= []
-
-            for folder in top_folders:
-                # create a record for the order below
-                order_record= Order(order_name=folder)
-                order_record.save()
-                print(order_record.order_name)
-
-                _folder= {"folderName": folder, "files": []}
-
-                for filename in os.listdir(os.path.join(settings.MEDIA_ROOT, folder)):
-                    # f = os.path.join(os.path.join(settings.MEDIA_ROOT, folder), filename)
-                    # create a record for the image file below:
-                    order_image_record= OrderImage(order=order_record)
-                    order_image_record.images.name= folder + "/" + filename
-                    order_image_record.save()
-                    link= (
-                        "http://localhost:8000/media/" + order_image_record.images.name
-                    )
-                    _folder["files"].append(link)
-                    # print(order_image_record.images)
-
-                data["folders"].append(_folder)
-
-            return Response(json.dumps(data))
-        else:
-            return render(request, "core/upload.html")
-
-
 def modify_input_for_multiple_files(image, order_record):
     dict = {}
     dict["images"] = image
     dict["order"] = order_record.id
     print(dict)
     return dict
-
-
-class uploadImages(APIView):
-    def get(self, request, *args, **kwargs):
-        return render(request, "core/uploadimg.html")
-
-    def post(self, request, *args, **kwargs):
-        # converts querydict to original dict
-        print(request.data)
-        images = dict((request.data).lists())["myfile"]
-        flag = 1
-        order_record = Order(order_name="new")
-        order_record.save()
-        print(order_record.order_name)
-
-        arr = []
-        for img_name in images:
-            modified_data = modify_input_for_multiple_files(
-                img_name, order_record)
-            file_serializer = ImageSerializer(data=modified_data)
-            if file_serializer.is_valid():
-                file_serializer.save()
-                arr.append(file_serializer.data)
-            else:
-                flag = 0
-                print(file_serializer.errors)
-
-        if flag == 1:
-            return Response(arr, status=status.HTTP_201_CREATED)
-        else:
-            return Response(arr, status=status.HTTP_400_BAD_REQUEST)
 
 
 # dashboard APIS
@@ -181,8 +102,7 @@ class getOrders(APIView):
 class getRiders(APIView):
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
-        data = {}
-        data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
+        data = {"riders": [RiderSerializer(rider).data for rider in all_riders]}
         for i in range(len(data['riders'])):
             data['riders'][i]['current_address'] = {
                 'latitude':RiderSerializer(all_riders[i]).data['latitude'],
@@ -193,37 +113,40 @@ class getRiders(APIView):
             trip_id = data['riders'][i]['current_trip_id']
             if trip_id:
                 trip = Trip.objects.get(pk=trip_id)
-                data['riders'][i]['trip'] = trip # with trip deserializer
+                data['riders'][i]['trip'] = TripSerializer(trip)  # with trip deserializer
                 orders_id = trip['orders'].split(',')
                 orders_completed = 0
-                for i in range (len(orders_id)):
+                for j in range (len(orders_id)):
                     order = Order.objects.get(order_id=orders_id[i])
+                    data['riders'][i]["orders"][j] = OrderSerializer(order).data
                     if order.order_status == 'delivered' or order.order_status == 'failed':
                         orders_completed = orders_completed + 1
+                current_order = Order.objects.get(order_id=orders_id[orders_completed-1])
+                data['riders'][i]['current_order'] = OrderSerializer(current_order).data
                 if len(orders_id) == 1:
                     data['riders'][i]['progress'] = "100"
                 else:
-                    data['riders'][i]['progress'] = all_riders[i].last_delivered_pointer / \
-                        (len(orders) - 2) * 100
+                    data['riders'][i]['progress'] = orders_completed / \
+                        (len(orders_id)) * 100
         return Response(data)
 
 
-class cancelOrder(APIView):
+class cancelOrder(APIView):  # should not be needed
     def post(self, request, *args, **kwargs):
         order_id = request.data["order_id"]
-        order = Order.objects.get(id=order_id)
+        order = Order.objects.get(order_id=order_id)
         order.order_status = "failed"
-        rider_orders = order.rider.delievery_orders.split(",")
-        rider_orders.remove(str(order_id))
+        #rider_orders = order.rider.delievery_orders.split(",")
+        #rider_orders.remove(str(order_id))
         order_rider = Rider.objects.get(rider_id=order.rider.rider_id)
         # print(rider_orders)
         # print(order_rider)
-        order_rider.delievery_orders = ",".join(rider_orders)
-        order.rider.delievery_orders = ",".join(rider_orders)
+        #order_rider.delievery_orders = ",".join(rider_orders)
+        #order.rider.delievery_orders = ",".join(rider_orders)
         # print(order_rider.delievery_orders)
         # print(order.rider.delievery_orders)
         order.save()
-        order_rider.save()
+        #order_rider.save()
         return Response(OrderSerializer(order).data)
 
 
