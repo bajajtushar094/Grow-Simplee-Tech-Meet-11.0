@@ -7,6 +7,7 @@ import PickupPackageIcon from '../../Shared/Icons/PickupPackage';
 const ChecklistPackage = (props) => {
 
     const details = props.package;
+    const index = props.index;
 
     let color='', vector=null, icon=null, borderColor=null, borderCorner='';
 
@@ -27,15 +28,15 @@ const ChecklistPackage = (props) => {
         icon = <PickupPackageIcon/>;
     }
 
-    if(details.id===1){
+    if(index===1){
         borderCorner = 'rounded-tl-xl rounded-tr-xl';
-    }else if(details.id === props.length){
+    }else if(index === props.length){
         borderCorner = 'rounded-bl-xl rounded-br-xl';
     }
 
-    if(details.isVerified){
+    if(details.isDelivered && !details.isFailed){
         vector = <div className='mx-[8px] my-[6px] rounded-[100%] text-sm pt-[12px] pb-[13px] px-[10px] items-center justify-center flex bg-[#4CAF50]'><CorrectArrowIcon /></div>;
-    }else if(details.isCancelled){
+    }else if(details.isFailed){
         vector = <div className='mx-[8px] my-[6px] w-[36px] h-[36px] rounded-[100%] text-sm p-[12px] items-center justify-center flex bg-[#ea5252]'><CrossIcon /></div>;
     }else{
         vector = <div className='w-[48px] h-[48px] border border-solid rounded-xl border-[#231F20]/[.50] flex items-center justify-center text-[24px] text-black font-semibold'><div>{details.rank}</div></div>

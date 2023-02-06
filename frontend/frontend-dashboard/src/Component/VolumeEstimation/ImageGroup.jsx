@@ -1,29 +1,30 @@
 import React from "react";
 
-const ImageGroup = () => {
-  const data = [
-    {
-      folderName: "order1",
-      array: ["building", "design", "drone", "forest", "ocean"],
-    },
-    {
-      folderName: "order2",
-      array: ["building", "design", "drone", "forest", "ocean"],
-    },
-  ];
+const ImageGroup = (props) => {
+  // const data = [
+  //   {
+  //     folderName: "order1",
+  //     files: ["building", "design", "drone", "forest", "ocean"],
+  //   },
+  //   {
+  //     folderName: "order2",
+  //     files: ["building", "design", "drone", "forest", "ocean"],
+  //   },
+  // ];
+  const data = props.data;
 
   return data.map((folder, index) => {
     return (
-        <div className="mb-8">
+        <div className="mb-8" key={index}>
           <h1 className="ml-4">{folder.folderName}</h1>
           <div className="flex">
-            {folder.array.map((image) => {
+            {folder.files.map((image) => {
               return (
                 <img
                   key={image}
                   width={"60px"}
                   className="h-12 m-4"
-                  src={require(`./images/${folder.folderName}/${image}.jpg`)}
+                  src = {image}
                 />
               );
             })}
