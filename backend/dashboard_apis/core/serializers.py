@@ -37,6 +37,12 @@ class MultipleImageSerializer(serializers.Serializer):
         child=serializers.ImageField()
     )
 
+class BagSerializer(serializers.Serializer):
+
+    class Meta:
+        model = Bag
+        fields = '__all__'
+
 # class RiderRewardsSerializer(serializers.ModelSerializer):
 
 #     class Meta:

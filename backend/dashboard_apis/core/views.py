@@ -41,21 +41,21 @@ class getRiderManagementMap(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class rider_rewards(APIView):
-#     def get(self, request, *args, **kwargs):
-#         rider_rewards_list = RiderRewards.objects.all()
-#         data = {}
-#         data["riders"] = [
-#             RiderRewardsSerializer(rider).data for rider in rider_rewards_list
-#         ]
-#         return Response(data)
+class rider_rewards(APIView):
+    def get(self, request, *args, **kwargs):
+        rider_rewards_list = Rider.objects.all()
+        data = {}
+        data["riders"] = [
+            RiderSerializer(rider).data for rider in rider_rewards_list
+        ]
+        return Response(data)
 
-#     def post(self, request, *args, **kwargs):
-#         serializer = RiderRewardsSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, *args, **kwargs):
+    #     serializer = RiderRewardsSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class upload(APIView):
@@ -148,8 +148,8 @@ class uploadImages(APIView):
 # dashboard APIS
 class populateData(APIView):
     def get(self, request, *args, **kwargs):
-        populate_address()
-        populate_owners()
+        # populate_address()
+        # populate_owners()
         populate_riders()
         populate_order()
         return Response(True)
@@ -175,8 +175,14 @@ class getOrder(APIView):
         for i in range(len(data["orders"])):
             data["orders"][i]["rider"] = RiderSerializer(
                 all_orders[i].rider).data
-            # data["orders"][i]["address"] = AddressSerializer(
-            #     all_orders[i].address).data
+            data["orders"][i]["address"] = {
+                'latitude':OrderSerializer(
+                all_orders[i]).data['latitude'],
+                'longitude':OrderSerializer(
+                all_orders[i]).data['longitude'],
+                'location':OrderSerializer(
+                all_orders[i]).data['text_address']
+                }
         return Response(data)
 
 
@@ -186,10 +192,11 @@ class getRider(APIView):
         data = {}
         data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
         for i in range(len(data['riders'])):
-            # current_address = [all_riders[i].]
-            # current_address.append()
-            # data['riders'][i]['current_address'] = AddressSerializer(
-            #     all_riders[i].current_address).data
+            data['riders'][i]['current_address'] = {
+                'latitude':RiderSerializer(all_riders[i]).data['latitude'],
+                'longitude':RiderSerializer(all_riders[i]).data['longitude'],
+                'location':RiderSerializer(all_riders[i]).data['text_address']
+            }
             orders = data['riders'][i]['delievery_orders'].split(',')
             if (len(orders) == 1):
                 data['riders'][i]['progress'] = "100"
@@ -207,12 +214,12 @@ class cancelOrder(APIView):
         rider_orders = order.rider.delievery_orders.split(",")
         rider_orders.remove(str(order_id))
         order_rider = Rider.objects.get(rider_id=order.rider.rider_id)
-        print(rider_orders)
-        print(order_rider)
+        # print(rider_orders)
+        # print(order_rider)
         order_rider.delievery_orders = ",".join(rider_orders)
         order.rider.delievery_orders = ",".join(rider_orders)
-        print(order_rider.delievery_orders)
-        print(order.rider.delievery_orders)
+        # print(order_rider.delievery_orders)
+        # print(order.rider.delievery_orders)
         order.save()
         order_rider.save()
         return Response(OrderSerializer(order).data)
@@ -234,12 +241,12 @@ class addDynamicPickup(APIView):
         return Response(OrderSerializer(order).data)
 
 
-# class getBags(APIView):
-#     def get(self, request, *args, **kwargs):
-#         all_bags = Bags.objects.all()
-#         data = {}
-#         data["bags"] = [RiderSerializer(bag).data for bag in all_bags]
-#         return Response(data)
+class getBags(APIView):
+    def get(self, request, *args, **kwargs):
+        all_bags = Bag.objects.all()
+        data = {}
+        data["bags"] = [BagSerializer(bag).data for bag in all_bags]
+        return Response(data)
 
 
 class getRiderOrders(APIView):
