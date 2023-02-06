@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'core',
     'corsheaders',
     'django_celery_results',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,4 @@ CELERY_RESULT_SERIALIZER = 'pickle'
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_TIMEZONE = 'Asia/Kolkata'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

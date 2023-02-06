@@ -1,16 +1,16 @@
 from celery import shared_task
 import copy
 import pickle
+from .models import *
 @shared_task()
 def solveVRP(all_riders,all_orders,Order,PickledVRPInstance):
-    PickledModelObject = PickledVRPInstance.objects.get()[0]
+    PickledModelObject = PickledVRPInstance.objects.all()[len(PickledVRPInstance.objects.all())-1]
     vrp_instance= PickledModelObject.current_instance
     manager, routing, solution = vrp_instance.process_VRP()
     data = []
-    PickledModelObject.current_instance = vrp_instance
-    PickledModelObject.save()
-    CurrentVRPInstance.current_instance=vrp_instance
-    CurrentVRPInstance.save()
+    print(PickledModelObject.current_instance)
+    # PickledModelObject.current_instance = vrp_instance
+    # PickledModelObject.save()
     for route_number in range(routing.vehicles()):
         path = ''
         order = routing.Start(route_number)
@@ -52,12 +52,12 @@ def solveVRP(all_riders,all_orders,Order,PickledVRPInstance):
 
 
 @shared_task()
-def solveVRPReroute(vrp_instance,all_riders,all_orders,Order):
+def solveVRPReroute(all_riders,all_orders):
+    PickledModelObject = PickledVRPInstance.objects.all()[len(PickledVRPInstance.objects.all())-1]
+    vrp_instance= PickledModelObject.current_instance
+    
     manager, routing, solution = vrp_instance.process_VRP(isReroute=True)
     data = []
-    CurrentVRPInstance.current_instance=vrp_instance
-    CurrentVRPInstance.save()
-    temp= p
     for route_number in range(routing.vehicles()):
         path = ''
         order = routing.Start(route_number)
