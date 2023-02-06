@@ -20,7 +20,7 @@ def populate_riders():
         rider.contact_number = int(np.random.rand()*1000000)
         rider.rider_status = 'trip'
         rider.manager = manager
-        rider.current_trip_id = 0
+        rider.current_trip_id = 1
         rider.save()
 
 def populate_order():

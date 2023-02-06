@@ -65,7 +65,7 @@ class Trip(models.Model):
     etf = models.DateTimeField(_("ETF date"), blank=True, null=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Order(models.Model):
