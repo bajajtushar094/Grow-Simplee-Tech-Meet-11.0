@@ -17,7 +17,7 @@ class RiderSerializer(serializers.ModelSerializer):
 class TripSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Rider
+        model = Trip
         fields = '__all__'
 
 # class AddressSerializer(serializers.ModelSerializer):
