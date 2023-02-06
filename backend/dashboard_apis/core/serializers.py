@@ -13,17 +13,17 @@ class RiderSerializer(serializers.ModelSerializer):
         model = Rider
         fields = '__all__'
 
-class AddressSerializer(serializers.ModelSerializer):
+# class AddressSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Address
-        fields = '__all__'
+#     class Meta:
+#         model = Address
+#         fields = '__all__'
 
-class OwnerSerializer(serializers.ModelSerializer):
+# class OwnerSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Owner
-        fields = '__all__'
+#     class Meta:
+#         model = Owner
+#         fields = '__all__'
 
 class ImageSerializer(serializers.ModelSerializer):
 
@@ -37,8 +37,8 @@ class MultipleImageSerializer(serializers.Serializer):
         child=serializers.ImageField()
     )
 
-class RiderRewardsSerializer(serializers.ModelSerializer):
+# class RiderRewardsSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = RiderRewards
-        fields = '__all__'
+#     class Meta:
+#         model = RiderRewards
+#         fields = '__all__'

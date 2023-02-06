@@ -24,14 +24,14 @@ urlpatterns = [
     path('orders/', order_view.get_all_orders.as_view()),
 
     # rider api
-    path('rider-rewards/', views.rider_rewards.as_view()),
+    # path('rider-rewards/', views.rider_rewards.as_view()),
     path('rider-management/', views.getRiderManagementMap.as_view()),
     path('orders/all', views.getOrder.as_view()),
 
     path('riders/all', views.getRider.as_view()),
     path('orders/rider/<str:id>', views.getRiderOrders.as_view()),
     path('rider/<str:id>', views.getRiderById.as_view()),
-    path('bags/all', views.getBags.as_view()),
+    # path('bags/all', views.getBags.as_view()),
     path('orders/cancel', views.cancelOrder.as_view()),
 
     path('orders/add', views.addDynamicPickup.as_view()),

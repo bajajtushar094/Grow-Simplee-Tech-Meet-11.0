@@ -41,21 +41,21 @@ class getRiderManagementMap(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class rider_rewards(APIView):
-    def get(self, request, *args, **kwargs):
-        rider_rewards_list = RiderRewards.objects.all()
-        data = {}
-        data["riders"] = [
-            RiderRewardsSerializer(rider).data for rider in rider_rewards_list
-        ]
-        return Response(data)
+# class rider_rewards(APIView):
+#     def get(self, request, *args, **kwargs):
+#         rider_rewards_list = RiderRewards.objects.all()
+#         data = {}
+#         data["riders"] = [
+#             RiderRewardsSerializer(rider).data for rider in rider_rewards_list
+#         ]
+#         return Response(data)
 
-    def post(self, request, *args, **kwargs):
-        serializer = RiderRewardsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request, *args, **kwargs):
+#         serializer = RiderRewardsSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class upload(APIView):
@@ -175,8 +175,8 @@ class getOrder(APIView):
         for i in range(len(data["orders"])):
             data["orders"][i]["rider"] = RiderSerializer(
                 all_orders[i].rider).data
-            data["orders"][i]["address"] = AddressSerializer(
-                all_orders[i].address).data
+            # data["orders"][i]["address"] = AddressSerializer(
+            #     all_orders[i].address).data
         return Response(data)
 
 
@@ -186,8 +186,10 @@ class getRider(APIView):
         data = {}
         data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
         for i in range(len(data['riders'])):
-            data['riders'][i]['current_address'] = AddressSerializer(
-                all_riders[i].current_address).data
+            # current_address = [all_riders[i].]
+            # current_address.append()
+            # data['riders'][i]['current_address'] = AddressSerializer(
+            #     all_riders[i].current_address).data
             orders = data['riders'][i]['delievery_orders'].split(',')
             if (len(orders) == 1):
                 data['riders'][i]['progress'] = "100"
@@ -223,21 +225,21 @@ class addDynamicPickup(APIView):
         longitude = request.data["longitude"]
         location = request.data["location"]
         name = request.data["name"]
-        address = Address(latitude=latitude, longitude=longitude,
-                          location=location, name=name)
-        address.save()
+        # address = Address(latitude=latitude, longitude=longitude,
+        #                   location=location, name=name)
+        # address.save()
         order = Order(order_name=name, volume=volume,
-                      address=address, delivery_action='pickup')
+                      latitude=latitude, longitude=longitude, text_address=location, delivery_action='pickup')
         order.save()
         return Response(OrderSerializer(order).data)
 
 
-class getBags(APIView):
-    def get(self, request, *args, **kwargs):
-        all_bags = Bags.objects.all()
-        data = {}
-        data["bags"] = [RiderSerializer(bag).data for bag in all_bags]
-        return Response(data)
+# class getBags(APIView):
+#     def get(self, request, *args, **kwargs):
+#         all_bags = Bags.objects.all()
+#         data = {}
+#         data["bags"] = [RiderSerializer(bag).data for bag in all_bags]
+#         return Response(data)
 
 
 class getRiderOrders(APIView):
@@ -305,11 +307,11 @@ class generateSolution(APIView):
         return Response(plan_output)
 
 
-# class startButton(APIView):
-#    def get(self, request, *args, **kwargs):
-#        vol = VolumeCalc()
-#        vol.startProcess()
-#        return Response("camera feed started", status=status.HTTP_200_OK)
+class startButton(APIView):
+   def get(self, request, *args, **kwargs):
+       vol = VolumeCalc()
+       vol.startProcess()
+       return Response("camera feed started", status=status.HTTP_200_OK)
 
 
 class binPacking(APIView):
