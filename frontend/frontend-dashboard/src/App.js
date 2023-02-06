@@ -27,8 +27,8 @@ function App() {
       <Routes>
 
        {/* Dashboard */}
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/managerlogin" element={<ManagerLogin />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<ManagerLogin />} />
 
         {/* Inventory */}
         <Route index path="/warehouse/:warehouseTab" element={<Inventory />} />
