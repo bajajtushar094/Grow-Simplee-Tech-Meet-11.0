@@ -1,13 +1,18 @@
-RIDER_STATUS =[
-    ('trip', 'Trip'),
-    ('return', 'Return'),
+RIDER_STATUS = [
+    ('on trip', 'On Trip'),
     ('at warehouse', 'At Warehouse')
 ]
 ORDER_STATUS = [
-    ('delivered', 'Delivered'),
+    ('unassigned', 'Unassigned'),
     ('undelivered', 'Undelivered'),
-    ('delayed', 'Delayed'),
+    # ('delayed', 'Delayed'), undelivered
+    ('delivered', 'Delivered'),
     ('failed', 'Failed')
+]
+TRIP_STATUS = [
+    ('completed', 'Completed'),
+    ('ongoing', 'Ongoing'),
+    ('upcoming', 'Upcoming')
 ]
 DELIVERY_ACTION = [
     ('drop', 'Drop'),

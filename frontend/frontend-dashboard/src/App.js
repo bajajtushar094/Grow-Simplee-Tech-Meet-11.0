@@ -26,7 +26,7 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-       {/* // Dashboard */}
+       {/* Dashboard */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/managerlogin" element={<ManagerLogin />} />
 
@@ -52,7 +52,7 @@ function App() {
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
 
-        {/* Demo         */}
+        {/* Demo */}
         <Route path="/demo" element={<Demo/>}/>
         {/* <Route path="/riderDetails" element={<RiderDetails/>}/> */}
         <Route path="/marker" element={<Mapmarker/>}/>

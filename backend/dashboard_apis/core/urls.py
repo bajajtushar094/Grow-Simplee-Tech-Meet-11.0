@@ -22,24 +22,28 @@ urlpatterns = [
     path('uploadimages/', views.uploadImages.as_view()),
 
     path('orders/', order_view.get_all_orders.as_view()),
+
     # rider api
     path('rider-rewards/', views.rider_rewards.as_view()),
     path('rider-management/', views.getRiderManagementMap.as_view()),
     path('orders/all', views.getOrder.as_view()),
+
     path('riders/all', views.getRider.as_view()),
     path('orders/rider/<str:id>', views.getRiderOrders.as_view()),
     path('rider/<str:id>', views.getRiderById.as_view()),
     path('bags/all', views.getBags.as_view()),
     path('orders/cancel', views.cancelOrder.as_view()),
+
     path('orders/add', views.addDynamicPickup.as_view()),
+
     # To solve the first instance of VRP
     path('solve/', views.generateSolution.as_view()),
     path('populate/', views.populateData.as_view()),
 
 
-    #task1 APIs
+    # task1 APIs
     path('start-process/', views.startButton.as_view()),
     path('bin-packing/<str:id>', views.binPacking.as_view()),
 
     path('geocode/', views.getGeoCode.as_view())
-]    
+]
