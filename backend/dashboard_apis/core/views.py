@@ -68,8 +68,6 @@ def modify_input_for_multiple_files(image, order_record):
 # dashboard APIS
 class populateData(APIView):
     def get(self, request, *args, **kwargs):
-        # populate_address()
-        # populate_owners()
         populate_riders()
         populate_order()
         return Response(True)
