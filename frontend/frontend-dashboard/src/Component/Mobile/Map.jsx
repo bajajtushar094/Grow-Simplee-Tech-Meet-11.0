@@ -22,11 +22,11 @@ function rider(img){
 }
 var latCenter = 26.148043
 var lonCenter = 91.731377
-const Map = ({setRouteDetails, ...props}) => {
+const Map = ({setRouteDetails,riderData,orders, ...props}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [coordinates, setCoordinates] = useState(props.coordinates);
-
+  const pickupArray = orders.filter(order => order.delivery_action ==="pickup")
   function handleClick(e) {
     setSelectedIndex(e.target.options.index)
   }
@@ -95,12 +95,23 @@ const Map = ({setRouteDetails, ...props}) => {
       />
       {props.coordinates && route}
 
-         { props.data && props.data.map((item, index) => (
+         { riderData && riderData.map((item, index) => (
         <Marker
           key={index}
           index={index}
-          position={item.position}
-          icon={item.type==='pickup'?createIcon(delivery):rider(R)}
+          position={[item.current_address.latitude,item.current_address.longitude]}
+          icon={rider(R)}
+          // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
+          // icon = {sus}
+          onclick={handleClick}
+        />
+      ))}
+      { pickupArray && pickupArray.map((item, index) => (
+        <Marker
+          key={index}
+          index={index}
+          position={[item.address.latitude,item.address.longitude]}
+          icon={createIcon(delivery)}
           // icon = {sus}
           onclick={handleClick}
         />

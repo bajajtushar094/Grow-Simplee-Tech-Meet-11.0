@@ -120,7 +120,7 @@ const data = [
   },
 ];
 
-const RiderMapContainer = () => {
+const RiderMapContainer = ({riderData, orders}) => {
   const [open, setOpen] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -183,6 +183,8 @@ const RiderMapContainer = () => {
           coordinates={coordinates}
           setRouteDetails={setRouteDetails}
           data={data}
+          riderData={riderData}
+          orders={orders}
           className="flex-grow z-0 h-full]"
         ></Map>
         <div
