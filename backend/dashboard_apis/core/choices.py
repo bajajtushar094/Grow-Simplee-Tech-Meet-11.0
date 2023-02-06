@@ -5,7 +5,6 @@ RIDER_STATUS = [
 ORDER_STATUS = [
     ('unassigned', 'Unassigned'),
     ('undelivered', 'Undelivered'),
-    # ('delayed', 'Delayed'), undelivered
     ('delivered', 'Delivered'),
     ('failed', 'Failed')
 ]
