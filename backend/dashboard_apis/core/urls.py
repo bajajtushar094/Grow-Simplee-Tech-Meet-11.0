@@ -17,16 +17,16 @@ urlpatterns = [
     # product api
     path('product/<str:id>', order_view.order_detail.as_view()),
     path('product/<str:id>', order_view.order_image_update.as_view()),
-    path('upload/', views.upload.as_view()),
+    # path('upload/', views.upload.as_view()),
     # path('images/', views.imageView.as_view()),
-    path('uploadimages/', views.uploadImages.as_view()),
+    # path('uploadimages/', views.uploadImages.as_view()),
 
     path('orders/', order_view.get_all_orders.as_view()),
 
     # rider api
-    path('rider-rewards/', views.rider_rewards.as_view()),
+    # path('rider-rewards/', views.rider_rewards.as_view()),
     path('rider-management/', views.getRiderManagementMap.as_view()),
-    path('orders/all', views.getOrder.as_view()),
+    path('orders/all', views.getOrders.as_view()),
 
     path('riders/all', views.getRiders.as_view()),
     path('orders/rider/<str:id>', views.getRiderOrders.as_view()),

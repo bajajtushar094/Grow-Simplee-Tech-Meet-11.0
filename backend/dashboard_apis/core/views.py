@@ -23,9 +23,11 @@ from rest_framework import status
 from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
 from utils.google_map import *
+from rest_framework import permissions
 
 
 class getRiderManagementMap(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         data = {}
@@ -74,6 +76,7 @@ class populateData(APIView):
 
 
 class getOrders(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         utc = pytz.UTC
 
@@ -98,6 +101,7 @@ class getOrders(APIView):
 
 
 class getRiders(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         data = {"riders": [RiderSerializer(rider).data for rider in all_riders]}
