@@ -20,30 +20,31 @@ from datetime import datetime
 #         address.location = row[2]
 #         address.save()
 
-def populate_managers():
-    dataReader = csv.reader(open('./bang_final_data.csv'), delimiter=',', quotechar='"')
-    i=0
-    # all_address = Address.objects.all()
-    for row in dataReader:
-        i+=1
-        if i==1:
-            continue
-        print(row)
-        manager = Manager()
-        manager.name = row[5]
-        manager.contact_number = int(np.random.rand()*1000000)
-        manager.latitude = row[8]
-        # manager
-        manager.save()
+# def populate_managers():
+#     dataReader = csv.reader(open('./bang_final_data.csv'), delimiter=',', quotechar='"')
+#     i=0
+#     # all_address = Address.objects.all()
+#     for row in dataReader:
+#         i+=1
+#         if i==1:
+#             continue
+#         print(row)
+#         manager = Manager()
+#         manager.name = row[5]
+#         manager.contact_number = int(np.random.rand()*1000000)
+#         manager.latitude = row[8]
+#         manager.longitude = row[7]
+#         manager.location = row[2]
+#         manager.save()
 
 def populate_riders():
     i=0
     rider_name = ["Ram", "Shyam", "Rajesh", "Suresh", "Kamlesh", "John", "Han", "Timothy", "Johnson", "Tree"]
-    all_address = Address.objects.all()
+    # all_address = Address.objects.all()
     manager = Manager()
     manager.name = "Pete Davidson"
     manager.contact_number = int(np.random.rand()*1000000)
-    manager.address_id = all_address[0].id
+    manager.latitude = all_address[0].id
     manager.save()
     for i in range(len(rider_name)):
         owner = Rider()
