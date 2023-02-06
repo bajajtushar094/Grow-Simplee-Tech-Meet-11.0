@@ -6,7 +6,7 @@ import ProgressBar from "../Component/Layout/ProgressBar";
 
 const App = () => {
   return (
-    <Layout isLeftSidebarPresent={true}>
+    <Layout isLeftSidebarPresent={false}>
       <RightSideBar />
       <ProgressBar progress="1"/>
     </Layout>

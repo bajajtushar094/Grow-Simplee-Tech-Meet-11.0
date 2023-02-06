@@ -15,7 +15,7 @@ const ImageGroup = (props) => {
 
   return data.map((folder, index) => {
     return (
-        <div className="mb-8">
+        <div className="mb-8" key={index}>
           <h1 className="ml-4">{folder.folderName}</h1>
           <div className="flex">
             {folder.files.map((image) => {
@@ -24,7 +24,6 @@ const ImageGroup = (props) => {
                   key={image}
                   width={"60px"}
                   className="h-12 m-4"
-                  // src={require(`./images/${folder.folderName}/${image}.jpg`)}
                   src = {image}
                 />
               );
