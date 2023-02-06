@@ -1,10 +1,10 @@
 from django.urls import path
 from . import views
 from . import order_view
-# from rest_framework_simplejwt.views import (
-#     TokenObtainPairView,
-#     TokenRefreshView,
-# )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 urlpatterns = [
@@ -15,10 +15,15 @@ urlpatterns = [
     # test api
     path('', views.getData.as_view()),
 
+    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     # product api
     path('product/<str:id>', order_view.order_detail.as_view()),
     path('product/<str:id>', order_view.order_image_update.as_view()),
     path('upload/', views.upload.as_view()),
+    # path('images/', views.imageView.as_view()),
+    path('uploadimages/', views.uploadImages.as_view()),
 
     path('orders/', order_view.get_all_orders.as_view()),
     # rider api
@@ -26,10 +31,15 @@ urlpatterns = [
     path('rider-management/', views.getRiderManagementMap.as_view()),
     path('orders/all', views.getOrder.as_view()),
     path('riders/all', views.getRider.as_view()),
+    path('orders/rider/<str:id>', views.getRiderOrders.as_view()),
     path('bags/all', views.getBags.as_view()),
     path('manager', views.getManager.as_view()),
     path('orders/cancel', views.cancelOrder.as_view()),
+    path('orders/upcoming', views.getUpcomingCount.as_view()),
     path('orders/add', views.addDynamicPickup.as_view()),
     path('count/riders', views.countRiders.as_view()),
+    # To solve the first instance of VRP
+    path('solve/', views.generateSolution.as_view()),
+    path('bin-packing/<str:id>', views.binPacking.as_view())
 ]    
 

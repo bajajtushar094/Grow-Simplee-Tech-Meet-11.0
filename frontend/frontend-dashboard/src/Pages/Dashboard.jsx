@@ -13,14 +13,22 @@ import MapBox from "../Component/Global/MapBox";
 
 const Dashboard = () => {
   const [manager, setManager] = useState({})
+  const [upcomingCount, setUpcomingCount] = useState(0)
+  const fetchManager = async () => {
+    const res = await fetch("http://localhost:8000/core/manager")
+    const response = await res.json()
+    console.log(response)
+    setManager(response.manager[0])
+  }
+  const fetchUpcomingCount = async () => {
+    const res = await fetch("http://localhost:8000/core/orders/upcoming")
+    const response = await res.json()
+    console.log(response)
+    setUpcomingCount(response.count)
+  }
   useEffect(()=>{
-    const fetchData = async () => {
-      const res = await fetch("http://localhost:8000/core/manager")
-      const response = await res.json()
-      console.log(response)
-      setManager(response.manager[0])
-    }
-    fetchData()
+    // fetchManager()
+    fetchUpcomingCount()
   }, [])
   return (
     <Layout isLeftSidebarPresent={false} flex_dir={"col"}>

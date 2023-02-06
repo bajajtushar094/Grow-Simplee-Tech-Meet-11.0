@@ -1,12 +1,63 @@
 import {React, useState} from 'react';
 import MobileLayout from '../../Component/Layout/MobileLayout';
-import {Link} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import OtpInput from 'react-otp-input';
+import { useSelector, useDispatch } from 'react-redux'
+import {
+    getPackages,
+    getIsBagScanned,
+    setIsDelivered,
+    setIsFailed,
+    getLoggedIn
+  } from '../../features/rider/riderSlice';
 
 const Verification = (props) => {
 
     const [otp, setOtp] = useState('');
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const loggedIn = useSelector(getLoggedIn);
+    if(!loggedIn){
+        navigate('/login');
+    }
+
+    const packages = useSelector(getPackages);
+    const location = useLocation();
+    const isBagScanned = useSelector(getIsBagScanned);
+
+    const orderId = location.state.orderId;
+    let item = null;
+
+    if(!isBagScanned){
+        navigate('/login');
+    }
+
+    //if(orderId){
+        item = packages.find((p) => p.orderId === orderId);
+    /* }else{
+        dispatch(setIsAtWarehouse(true));
+        navigate('/checklist');
+    } */
+
+    const updateOtp = (otp) => {
+        setOtp(otp);
+        if(otp.length === 4){
+            if(otp === '1234'){
+                dispatch(setIsDelivered({orderId: item.orderId, isDelivered: false}));
+                navigate('/singleRoute');
+            }else{
+                alert('Wrong OTP');
+            }
+        }
+    }
+
+    const skip = () => {
+        dispatch(setIsDelivered({orderId: item.orderId, isDelivered: true}));
+        dispatch(setIsFailed({orderId: item.orderId, isFailed: true}));
+        navigate('/singleRoute');
+    }
 
     return (
         <MobileLayout subHeading='Delivery Verification'>
@@ -16,7 +67,7 @@ const Verification = (props) => {
                 <div className='flex w-full align-center justify-center'>
                     <OtpInput
                         value={otp}
-                        onChange={setOtp}
+                        onChange={updateOtp}
                         numInputs={4}
                         separator={<span></span>}
                         inputStyle={{
@@ -34,7 +85,9 @@ const Verification = (props) => {
                     <Link to='/verification'>Resend verification code</Link>
                 </div>
                 <div className="flex-grow"></div>
-                <div className="text-[20px] text-black border border-[#777777] rounded-xl text-center py-2 font-medium mx-4 my-8 absolute bottom-0 left-0 right-0 px-10"><Link to='/tripRoute' >Skip</Link></div>
+                <div onClick='skip' className="text-[20px] text-black border border-[#777777] rounded-xl text-center py-2 font-medium mx-4 my-8 absolute bottom-0 left-0 right-0 px-10">
+                    Skip
+                </div>
             </div>
             </>
         </MobileLayout>

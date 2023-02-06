@@ -4,7 +4,7 @@ import SideProfile from '../../Global/SideProfile'
 import Topbar from '../TopBar'
 import Layout from '../Layout'
 import Table2 from '../../Global/Table2'
-import { useState } from 'react'
+import { useState, useEffect,useLocation, useNavigate } from 'react'
 import arrow from './arrow.svg'
 import Open from './Open.svg'
 import Drone from './Drone.svg'
@@ -17,6 +17,26 @@ import delay from './icon2.svg'
 import {TOP_TABS} from '../../../constants/sidebarconst'
 
 function DroneManagement() {
+
+
+   const navigate = useNavigate();
+    const location = useLocation();
+    //const riderId = location.state.id;
+
+    const [orders, setOrders] = useState([]);
+
+    const riderId = '65';
+
+    const fetchData = async () => {
+        const response = await fetch("http://127.0.0.1:8000/core/orders/rider/"+riderId);
+        const data = await response.json();
+        console.log(data);
+        return setOrders(data.riders);
+    }
+
+    useEffect(() => {
+        fetchData();
+      },[])
 
   const [isHover, setIsHover] = useState(false);
   const [overview,setOverview] = useState(true);
