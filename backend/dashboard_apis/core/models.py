@@ -89,7 +89,6 @@ class Order(models.Model):
         _("order status"), max_length=50, choices=ORDER_STATUS, blank=True
     )
     edd = models.DateTimeField(_("EDD date"), blank=True, null=True)
-    eta = models.DateTimeField(_("ETA date"), blank=True, null=True)
     completed_time = models.DateTimeField(_("Completed Time"), blank=True, null=True)
     latitude = models.CharField(max_length=50, null=True)
     longitude = models.CharField(max_length=50, null=True)
@@ -97,6 +96,7 @@ class Order(models.Model):
     contact_number = models.CharField(max_length=50, null=True)
     location = models.CharField(max_length=500, null=True)
     address_name = models.CharField(max_length=500, null=True)
+    delay_status = models.CharField(max_length=50, null=True, default='not delayed')
 
     def __str__(self):
         return self.order_id
@@ -110,14 +110,3 @@ def get_upload_to(instance, filename):
 class OrderImage(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     images = models.ImageField(upload_to="media/", blank=True)
-
-
-#class RiderRewards(models.Model):
-#    rider = models.ForeignKey(
-#        Rider, on_delete=models.CASCADE, null=True, blank=True
-#    )
-#    successful_deliveries = models.IntegerField(blank=True, null=True)
-#    earnings = models.IntegerField(blank=True, null=True)
-
-#    def __str__(self):
-#        return {self.id} + "RiderRewards"

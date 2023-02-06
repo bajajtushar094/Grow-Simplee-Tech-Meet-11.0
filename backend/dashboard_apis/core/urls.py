@@ -28,7 +28,7 @@ urlpatterns = [
     path('rider-management/', views.getRiderManagementMap.as_view()),
     path('orders/all', views.getOrder.as_view()),
 
-    path('riders/all', views.getRider.as_view()),
+    path('riders/all', views.getRiders.as_view()),
     path('orders/rider/<str:id>', views.getRiderOrders.as_view()),
     path('rider/<str:id>', views.getRiderById.as_view()),
     path('bags/all', views.getBags.as_view()),

@@ -13,6 +13,13 @@ class RiderSerializer(serializers.ModelSerializer):
         model = Rider
         fields = '__all__'
 
+
+class TripSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rider
+        fields = '__all__'
+
 # class AddressSerializer(serializers.ModelSerializer):
 
 #     class Meta:
