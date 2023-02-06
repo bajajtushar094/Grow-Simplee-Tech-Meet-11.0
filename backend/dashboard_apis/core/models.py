@@ -12,7 +12,7 @@ class Manager(models.Model):
     contact_number = models.CharField(max_length=500, null=True)
     latitude = models.CharField(max_length=50, null=True)
     longitude = models.CharField(max_length=50, null=True)
-    text_address = models.CharField(max_length=500, null=True)
+    location = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return self.name + str(self.id)
@@ -95,7 +95,8 @@ class Order(models.Model):
     longitude = models.CharField(max_length=50, null=True)
     owner_name = models.CharField(max_length=500, null=True)
     contact_number = models.CharField(max_length=50, null=True)
-    text_address = models.CharField(max_length=500, null=True)
+    location = models.CharField(max_length=500, null=True)
+    address_name = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return self.order_id

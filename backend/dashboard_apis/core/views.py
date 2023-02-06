@@ -181,8 +181,11 @@ class getOrder(APIView):
                 'longitude':OrderSerializer(
                 all_orders[i]).data['longitude'],
                 'location':OrderSerializer(
-                all_orders[i]).data['text_address']
-                }
+                all_orders[i]).data['location'],
+                'address_name':OrderSerializer(
+                all_orders[i]).data['address_name'],
+                },
+                
         return Response(data)
 
 
@@ -195,7 +198,8 @@ class getRider(APIView):
             data['riders'][i]['current_address'] = {
                 'latitude':RiderSerializer(all_riders[i]).data['latitude'],
                 'longitude':RiderSerializer(all_riders[i]).data['longitude'],
-                'location':RiderSerializer(all_riders[i]).data['text_address']
+                'location':RiderSerializer(all_riders[i]).data['location'],
+                'address_name':RiderSerializer(all_riders[i]).data['address_name'],
             }
             orders = data['riders'][i]['delievery_orders'].split(',')
             if (len(orders) == 1):
@@ -236,7 +240,7 @@ class addDynamicPickup(APIView):
         #                   location=location, name=name)
         # address.save()
         order = Order(order_name=name, volume=volume,
-                      latitude=latitude, longitude=longitude, text_address=location, delivery_action='pickup')
+                      latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
         order.save()
         return Response(OrderSerializer(order).data)
 

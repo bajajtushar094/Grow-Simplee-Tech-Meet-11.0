@@ -4,36 +4,37 @@ import numpy as np
 from datetime import datetime
 
 
-def populate_address():
+# def populate_address():
+#     dataReader = csv.reader(open('./bang_final_data.csv'), delimiter=',', quotechar='"')
+#     i=0
+
+#     for row in dataReader:
+#         i+=1
+#         if i==1:
+#             continue
+
+#         address = Address()
+#         address.name = row[5]
+#         address.latitude = row[8]
+#         address.longitude = row[7]
+#         address.location = row[2]
+#         address.save()
+
+def populate_managers():
     dataReader = csv.reader(open('./bang_final_data.csv'), delimiter=',', quotechar='"')
     i=0
-
-    for row in dataReader:
-        i+=1
-        if i==1:
-            continue
-
-        address = Address()
-        address.name = row[5]
-        address.latitude = row[8]
-        address.longitude = row[7]
-        address.location = row[2]
-        address.save()
-
-def populate_owners():
-    dataReader = csv.reader(open('./bang_final_data.csv'), delimiter=',', quotechar='"')
-    i=0
-    all_address = Address.objects.all()
+    # all_address = Address.objects.all()
     for row in dataReader:
         i+=1
         if i==1:
             continue
         print(row)
-        owner = Owner()
-        owner.name = row[5]
-        owner.contact_number = int(np.random.rand()*1000000)
-        owner.address_id = all_address[i-2].id
-        owner.save()
+        manager = Manager()
+        manager.name = row[5]
+        manager.contact_number = int(np.random.rand()*1000000)
+        manager.latitude = row[8]
+        # manager
+        manager.save()
 
 def populate_riders():
     i=0
