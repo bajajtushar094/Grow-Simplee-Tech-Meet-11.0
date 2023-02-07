@@ -6,6 +6,7 @@ import Layout from "../Layout";
 import ImageGroup from "./ImageGroup";
 import OrderList from "../Global/TableOrders";
 import RightArrow from "../../Shared/Icons/RightArrow";
+import { LOCAL_SERVER_URL_IP } from "../../constants/config";
 
 const UploadZip = () => {
   const [zip, setZip] = useState("");
@@ -60,8 +61,14 @@ const UploadZip = () => {
   };
 
   const startEstimation = () => {
-    // axios.post();
-    window.location = '/volumeestimation'
+    axios
+      .get(`${LOCAL_SERVER_URL_IP}/start-process/`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -74,7 +81,7 @@ const UploadZip = () => {
               <h1 className="font-bold w-full text-center mb-10 text-lg">
                 Image Volume Estimation
               </h1>
-              <div className="bg-white h-fit rounded-xl py-4 px-40 w-full flex flex-col items-center align-center">
+              <div className="bg-white h-fit rounded-xl py-4 w-full flex flex-col items-center align-center">
                 <div>
                   <label
                     for="myfile"

@@ -61,8 +61,9 @@ class VolumeCalc:
         shape = obj_details.shape
 
         base_path = os.getcwd()
-        # base_path = '/home/gunjan/Desktop/task1_interiit/dump'
-        folderPath = os.path.join(base_path+'static/', folder_name)
+        print(base_path)
+        # base_path = 'E:\InterIIT\clone\Grow-Simplee-Tech-Meet-11.0\backend\dashboard_apis'
+        folderPath = os.path.join(base_path, 'static', folder_name)
         folderExist = os.path.exists(folderPath)
 
         if not folderExist:
