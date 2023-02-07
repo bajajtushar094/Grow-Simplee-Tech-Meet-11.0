@@ -185,10 +185,14 @@ class getUpcomingCount(APIView):
     # permission_classes = (IsAuthenticated, )
     def get(self, request, *args, **kwargs):
         # date = datetime.datetime.now()
-        orders = Order.objects.filter(edd__gte = datetime.now()).filter(completed_time__isnull = True)
+        orders_upcoming = Order.objects.filter(order_status = "upcoming")
+        orders_delivered = Order.objects.filter(order_status = "delivered")
+        orders_error = Order.objects.filter(order_status = "error")
         data = {}
         # print(orders[0].__dict__)
-        data['Upcoming Count'] = len([OrderSerializer(man).data for man in orders])
+        data['Upcoming Count'] = len([OrderSerializer(man).data for man in orders_upcoming])
+        data['Delivered Count'] = len([OrderSerializer(man).data for man in orders_delivered])
+        data['Error Count'] = len([OrderSerializer(man).data for man in orders_error])
         return Response(data)
 
 
@@ -196,7 +200,7 @@ class countRiders(APIView):
     def get(self, request, *args, **kwargs):
         riders = Rider.objects.all()
         data = {}
-        data['count'] = len(RiderSerializer(riders).data)
+        data['count'] = len([RiderSerializer(rider).data for rider in riders])
         return Response(data)
 
 
