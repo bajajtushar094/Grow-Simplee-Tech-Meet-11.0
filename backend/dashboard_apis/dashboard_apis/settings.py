@@ -191,6 +191,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -205,7 +206,7 @@ SECRET_KEY = '!(phsn-g8#p6ly+8s5&c98$p*k5_h@%v#^y!o+^kbqoixrg2*='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -222,7 +223,9 @@ INSTALLED_APPS = [
     'core',
     'corsheaders',
     'django_celery_results',
-    'django_celery_beat'
+    'django_celery_beat',
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -237,6 +240,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'dashboard_apis.urls'
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 TEMPLATES = [
     {
@@ -323,3 +333,34 @@ CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=120),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=240),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}

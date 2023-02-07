@@ -1,18 +1,18 @@
 from django.urls import path
 from . import views
 from . import order_view
-# from rest_framework_simplejwt.views import (
-#     TokenObtainPairView,
-#     TokenRefreshView,
-# )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 urlpatterns = [
     # test api
 
     # auth api
-    # path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # product api
     path('product/<str:id>', order_view.order_detail.as_view()),

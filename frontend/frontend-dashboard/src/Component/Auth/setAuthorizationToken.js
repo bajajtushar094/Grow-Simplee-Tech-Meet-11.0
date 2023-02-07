@@ -20,6 +20,6 @@ export function parseJwt (token) {
 
 export const configHeaders = localStorage.getItem('authTokens')?{
   headers: {
-      'Authorization': `Bearer ${JSON.parse(localStorage.getItem('authTokens')).access}`
+      'Authorization': `Bearer ${parseJwt(localStorage.getItem('authTokens'))}`
   }
 }:""

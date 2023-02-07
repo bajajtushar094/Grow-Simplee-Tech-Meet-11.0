@@ -21,7 +21,7 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
-from core.tasks import solveVRP
+from core.tasks import *
 import pickle
 from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
