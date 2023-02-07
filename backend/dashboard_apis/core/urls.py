@@ -45,7 +45,7 @@ urlpatterns = [
 
 
     # task1 APIs
-    # path('start-process/', views.startButton.as_view()),
+    path('start-process/', views.startButton.as_view()),
     path('bin-packing/<str:id>', views.binPacking.as_view()),
 
     path('geocode/', views.getGeoCode.as_view())

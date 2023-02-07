@@ -23,7 +23,7 @@ import pytz
 from rest_framework import status
 from core.tasks import solveVRP
 import pickle
-# from volume_estimation.cuboid import VolumeCalc
+from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
 from utils.google_map import *
 from rest_framework import permissions
@@ -200,11 +200,11 @@ class getRiderById(APIView):
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
-# class startButton(APIView):
-#    def get(self, request, *args, **kwargs):
-#        vol = VolumeCalc()
-#        vol.startProcess()
-#        return Response("camera feed started", status=status.HTTP_200_OK)
+class startButton(APIView):
+   def get(self, request, *args, **kwargs):
+       vol = VolumeCalc()
+       vol.startProcess()
+       return Response("camera feed started", status=status.HTTP_200_OK)
 
 
 class binPacking(APIView):
