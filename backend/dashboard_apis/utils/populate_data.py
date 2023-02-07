@@ -6,15 +6,21 @@ from datetime import datetime
 def populate_riders():
     i=0
     rider_name = ["Ram", "Shyam", "Rajesh", "Suresh", "Kamlesh", "John", "Han", "Timothy", "Johnson", "Tree"]
+    user = User(username="Pete Davidson", password="password", is_manager=True)
+    user.save()
     manager = Manager()
     manager.name = "Pete Davidson"
+    manager.user = user
     manager.contact_number = int(np.random.rand()*1000000)
     manager.latitude = 12.909694
     manager.longitude = 77.586607
     manager.location = "JP Nagar"
     manager.save()
     for i in range(len(rider_name)):
+        user = User(username=rider_name[i], password="password", is_rider=True)
+        user.save()
         rider = Rider()
+        rider.user = user
         rider.name = rider_name[i]
         rider.photoURL = "https://www.askideas.com/media/06/Funny-Human-Naomi-Grossman-Face.jpg"
         rider.contact_number = int(np.random.rand()*1000000)
