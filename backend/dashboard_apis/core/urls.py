@@ -1,18 +1,18 @@
 from django.urls import path
 from . import views
 from . import order_view
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+# )
 
 
 urlpatterns = [
     # test api
 
     # auth api
-    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # product api
     path('product/<str:id>', order_view.order_detail.as_view()),
@@ -35,9 +35,12 @@ urlpatterns = [
     path('orders/cancel', views.cancelOrder.as_view()),
 
     path('orders/add', views.addDynamicPickup.as_view()),
+    path('solve_initial/', views.generateInitialSolution.as_view()),
+    path('solve/',views.generateRerouteSolution.as_view()),
+    path('check_task_status/<str:task_id>',views.checkCeleryStatus.as_view()),
+    path('get_celery_result/<str:task_id>',views.getResultCelery.as_view()),
 
     # To solve the first instance of VRP
-    path('solve/', views.generateSolution.as_view()),
     path('populate/', views.populateData.as_view()),
 
 
