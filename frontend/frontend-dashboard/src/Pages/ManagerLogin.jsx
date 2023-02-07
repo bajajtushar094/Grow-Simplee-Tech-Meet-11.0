@@ -7,9 +7,12 @@ import { LOCAL_SERVER_URL_IP } from "../constants/config";
 import setAuthorizationToken, { parseJwt } from "../Component/Auth/setAuthorizationToken";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../redux/actions/auth";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 
 const ManagerLogin = () => {
   const dispatch = useDispatch();
+  // const history = useHistory();
+  const navigate = useNavigate();
   const login = () => {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
@@ -21,11 +24,12 @@ const ManagerLogin = () => {
       .then((res) => {
         console.log(res);
         const token = res.data.access;
-        localStorage.setItem("jwtToken", token);
+        localStorage.setItem("authTokens", token);
         setAuthorizationToken(token);
         console.log(token);
         console.log(parseJwt(token))
-        dispatch(setCurrentUser(parseJwt(token)))
+        dispatch(setCurrentUser(parseJwt(token)));
+        navigate('/dashboard');
       })
       .catch((error) => {
         console.log(error);

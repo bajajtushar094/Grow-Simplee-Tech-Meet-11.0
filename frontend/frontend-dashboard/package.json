@@ -21,6 +21,8 @@
     "classnames": "^2.3.2",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
+    "jwt-decode": "^3.1.2",
     "leaflet": "^1.9.3",
     "leaflet-routing-machine": "^3.2.12",
     "mapbox": "^1.0.0-beta10",

@@ -10,13 +10,19 @@ import axios from "axios"
 const Riders = () => {
   let { riderManagementTab } = useParams();
   const [riders, setRiders] = useState([]);
+  const[orders,setOrders] = useState([])
   useEffect(() => {
     const fetchRiders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/riders/all`);
       console.log(res.data.riders)
       setRiders(res.data.riders);
     };
+    const fetchOrders = async () => {
+      const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
+      setOrders(res.data.orders);
+    };
     fetchRiders();
+    fetchOrders();
   }, []);
   const displayedList = [
     {
@@ -76,7 +82,7 @@ const Riders = () => {
           </div>
         </div>
         <Table tab={riderManagementTab} displayedList={riders} checkboxSelection={false} className='px-6'/>
-      </div>: <RiderMapContainer />
+      </div>: <RiderMapContainer riderData={riders} orders={orders}/>
       }
     </Layout>
   );

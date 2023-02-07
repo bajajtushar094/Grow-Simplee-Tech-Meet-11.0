@@ -1,6 +1,7 @@
 from django.conf import settings
 from utils.bin_packing.packing import Packer
-import os, json
+import os
+import json
 from utils.routing_util import vehicle_output_string
 from utils.vehicle_routing.customers import Node
 from utils.vehicle_routing.vehicle import Vehicle
@@ -8,28 +9,32 @@ from utils.vehicle_routing.vrp import VRP
 from utils.vehicle_routing.customers import Order as OrderVRP
 from core.models import *
 import zipfile
+from celery.result import AsyncResult
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from .forms import RiderRewardsForm, OrderForm
 from .models import Rider
 from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
+from core.tasks import solveVRP, solveVRPReroute
+import pickle
 from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
-
-
-class getData(APIView):
-    def get(self, request, *args, **kwargs):
-        person = {"name": "siddhartha"}
-        return Response(person)
-
+from utils.google_map import *
+from rest_framework import permissions
+import pandas as pd
+from shapely.geometry import Point, LineString
+import geopandas as gpd
+from django.core.files.storage import default_storage
 
 class getRiderManagementMap(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         data = {}
@@ -44,69 +49,21 @@ class getRiderManagementMap(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class rider_rewards(APIView):
-    def get(self, request, *args, **kwargs):
-        rider_rewards_list = RiderRewards.objects.all()
-        data = {}
-        data["riders"] = [
-            RiderRewardsSerializer(rider).data for rider in rider_rewards_list
-        ]
-        return Response(data)
+# class rider_rewards(APIView):
+#    def get(self, request, *args, **kwargs):
+#        rider_rewards_list = RiderRewards.objects.all()
+#        data = {}
+#        data["riders"] = [
+#            RiderRewardsSerializer(rider).data for rider in rider_rewards_list
+#        ]
+#        return Response(data)
 
-    def post(self, request, *args, **kwargs):
-        serializer = RiderRewardsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class upload(APIView):
-    def get(self, request, *args, **kwargs):
-        return render(request, "core/upload.html")
-
-    def post(self, request, *args, **kwargs):
-        print('-------------------------')
-        print(request)
-        print('-------------------------')
-        print(request.FILES)
-        if request.FILES["myfile"]:
-            my_file = request.FILES["myfile"]
-            zf = zipfile.ZipFile(my_file)
-
-            with zipfile.ZipFile(my_file, "r") as zip_ref:
-                zip_ref.extractall(path=settings.MEDIA_ROOT + "/")
-
-            top_folders = {item.split("/")[0] for item in zf.namelist()}
-
-            data = {}
-            data["folders"] = []
-
-            for folder in top_folders:
-                # create a record for the order below
-                order_record = Order(order_name=folder)
-                order_record.save()
-                print(order_record.order_name)
-
-                _folder = {"folderName": folder, "files": []}
-
-                for filename in os.listdir(os.path.join(settings.MEDIA_ROOT, folder)):
-                    # f = os.path.join(os.path.join(settings.MEDIA_ROOT, folder), filename)
-                    # create a record for the image file below:
-                    order_image_record = OrderImage(order=order_record)
-                    order_image_record.images.name = folder + "/" + filename
-                    order_image_record.save()
-                    link = (
-                        "http://localhost:8000/media/" + order_image_record.images.name
-                    )
-                    _folder["files"].append(link)
-                    # print(order_image_record.images)
-
-                data["folders"].append(_folder)
-
-            return Response(json.dumps(data))
-        else:
-            return render(request, "core/upload.html")
+#    def post(self, request, *args, **kwargs):
+#        serializer = RiderRewardsSerializer(data=request.data)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return Response(serializer.data, status=status.HTTP_201_CREATED)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def modify_input_for_multiple_files(image, order_record):
@@ -117,99 +74,93 @@ def modify_input_for_multiple_files(image, order_record):
     return dict
 
 
-class uploadImages(APIView):
-    def get(self, request, *args, **kwargs):
-        return render(request, "core/uploadimg.html")
-
-    def post(self, request, *args, **kwargs):
-        # converts querydict to original dict
-        print(request.data)
-        images = dict((request.data).lists())["myfile"]
-        flag = 1
-        order_record = Order(order_name="new")
-        order_record.save()
-        print(order_record.order_name)
-        
-        arr = []
-        for img_name in images:
-            modified_data = modify_input_for_multiple_files(img_name, order_record)
-            file_serializer = ImageSerializer(data=modified_data)
-            if file_serializer.is_valid():
-                file_serializer.save()
-                arr.append(file_serializer.data)
-            else:
-                flag = 0
-                print(file_serializer.errors)
-
-        if flag == 1:
-            return Response(arr, status=status.HTTP_201_CREATED)
-        else:
-            return Response(arr, status=status.HTTP_400_BAD_REQUEST)
-
-
 # dashboard APIS
 class populateData(APIView):
     def get(self, request, *args, **kwargs):
-        populate_address()
-        populate_owners()
         populate_riders()
         populate_order()
         return Response(True)
 
-class getOrder(APIView):
+
+class getOrders(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         utc = pytz.UTC
 
         all_orders = Order.objects.all()
+        data = {}
+        data["orders"] = []
 
         for i in range(len(all_orders)):
             if all_orders[i].delivery_action == "pickup":
                 continue
             date_time_now = datetime.now().replace(tzinfo=utc)
-            if date_time_now > all_orders[i].edd:
-                if all_orders[i].order_status == "undelivered":
-                    all_orders[i].order_status = "delayed"
-                    all_orders[i].save()
+            if date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
+                all_orders[i].delay_status = "delayed"
+                all_orders[i].save()
+            data['orders'].append(OrderSerializer(all_orders[i]).data)
 
-        data = {}
-        data["orders"] = [OrderSerializer(order).data for order in all_orders]
-        for i in range(len(data["orders"])):
-            data["orders"][i]["rider"] = RiderSerializer(all_orders[i].rider).data
-            data["orders"][i]["address"] = AddressSerializer(all_orders[i].address).data
+        #data = {}
+        #data["orders"] = [OrderSerializer(order).data for order in all_orders]
+        #for i in range(len(data["orders"])):
+        #    data["orders"][i]["rider"] = RiderSerializer(all_orders[i].rider).data
+
+        #return Response(data)
+
         return Response(data)
 
 
-class getRider(APIView):
+class getRiders(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
-        data = {}
-        data["riders"] = [RiderSerializer(rider).data for rider in all_riders]
+        data = {"riders": [RiderSerializer(rider).data for rider in all_riders]}
         for i in range(len(data['riders'])):
-            data['riders'][i]['current_address'] = AddressSerializer(all_riders[i].current_address).data
-            orders = data['riders'][i]['delievery_orders'].split(',')
-            if (len(orders) == 1):
-                data['riders'][i]['progress'] = "100"
-            else:
-                data['riders'][i]['progress'] = all_riders[i].last_delivered_pointer / (len(orders) - 2) * 100
+            # data['riders'][i]['current_address'] = {
+            #     'latitude':RiderSerializer(all_riders[i]).data['latitude'],
+            #     'longitude':RiderSerializer(all_riders[i]).data['longitude'],
+            #     'location':RiderSerializer(all_riders[i]).data['location'],
+            #     'address_name':RiderSerializer(all_riders[i]).data['address_name'],
+            # }
+            trip_id = data['riders'][i]['current_trip_id']
+
+            if trip_id:
+                trip = Trip.objects.get(pk=trip_id)
+                data['riders'][i]['trip'] = TripSerializer(trip).data  # with trip deserializer
+                orders_id = trip.orders.split(',')
+                orders_completed = 0
+                data['riders'][i]["orders"] = []
+                for j in range (len(orders_id)):
+                    order = Order.objects.get(order_id=int(orders_id[j]))
+                    data['riders'][i]["orders"].append(OrderSerializer(order).data)
+                    if order.order_status == 'delivered' or order.order_status == 'failed':
+                        orders_completed = orders_completed + 1
+                current_order = Order.objects.get(order_id=orders_id[orders_completed-1])
+                data['riders'][i]['current_order'] = OrderSerializer(current_order).data
+                if len(orders_id) == 1:
+                    data['riders'][i]['progress'] = "100"
+                else:
+                    data['riders'][i]['progress'] = orders_completed / \
+                        (len(orders_id)) * 100
         return Response(data)
 
 
-class cancelOrder(APIView):
+class cancelOrder(APIView):  # should not be needed
     def post(self, request, *args, **kwargs):
         order_id = request.data["order_id"]
-        order = Order.objects.get(id=order_id)
+        order = Order.objects.get(order_id=order_id)
         order.order_status = "failed"
-        rider_orders = order.rider.delievery_orders.split(",")
-        rider_orders.remove(str(order_id))
+        #rider_orders = order.rider.delievery_orders.split(",")
+        #rider_orders.remove(str(order_id))
         order_rider = Rider.objects.get(rider_id=order.rider.rider_id)
-        print(rider_orders)
-        print(order_rider)
-        order_rider.delievery_orders = ",".join(rider_orders)
-        order.rider.delievery_orders = ",".join(rider_orders)
-        print(order_rider.delievery_orders)
-        print(order.rider.delievery_orders)
+        # print(rider_orders)
+        # print(order_rider)
+        #order_rider.delievery_orders = ",".join(rider_orders)
+        #order.rider.delievery_orders = ",".join(rider_orders)
+        # print(order_rider.delievery_orders)
+        # print(order.rider.delievery_orders)
         order.save()
-        order_rider.save()
+        #order_rider.save()
         return Response(OrderSerializer(order).data)
 
 
@@ -220,20 +171,54 @@ class addDynamicPickup(APIView):
         longitude = request.data["longitude"]
         location = request.data["location"]
         name = request.data["name"]
-        address = Address(latitude=latitude, longitude=longitude, location=location, name=name)
-        address.save()
-        order = Order(order_name=name, volume=volume, address=address, delivery_action='pickup')
+        # address = Address(latitude=latitude, longitude=longitude,
+        #                   location=location, name=name)
+        # address.save()
+        order = Order(order_name=name, volume=volume,
+                      latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
         order.save()
         return Response(OrderSerializer(order).data)
 
 
-
 class getBags(APIView):
     def get(self, request, *args, **kwargs):
-        all_bags = Bags.objects.all()
+        all_bags = Bag.objects.all()
         data = {}
-        data["bags"] = [RiderSerializer(bag).data for bag in all_bags]
+        data["bags"] = [BagSerializer(bag).data for bag in all_bags]
         return Response(data)
+    
+class getManager(APIView):
+    # permission_classes = (IsAuthenticated, )
+    def get(self, request, *args, **kwargs):
+        manager = Manager.objects.all()
+        data = {}
+        print(manager[0].__dict__)
+        data['manager'] = [ManagerSerializer(man).data for man in manager]
+        return Response(data)
+    
+class getUpcomingCount(APIView):
+    # permission_classes = (IsAuthenticated, )
+    def get(self, request, *args, **kwargs):
+        # date = datetime.datetime.now()
+        orders_upcoming = Order.objects.filter(order_status = "upcoming")
+        orders_delivered = Order.objects.filter(order_status = "delivered")
+        orders_error = Order.objects.filter(order_status = "error")
+        data = {}
+        # print(orders[0].__dict__)
+        data['Upcoming Count'] = len([OrderSerializer(man).data for man in orders_upcoming])
+        data['Delivered Count'] = len([OrderSerializer(man).data for man in orders_delivered])
+        data['Error Count'] = len([OrderSerializer(man).data for man in orders_error])
+        return Response(data)
+
+
+class countRiders(APIView):
+    def get(self, request, *args, **kwargs):
+        riders = Rider.objects.all()
+        data = {}
+        data['count'] = len([RiderSerializer(rider).data for rider in riders])
+        return Response(data)
+
+
 
 class getRiderOrders(APIView):
     def get(self, request, *args, **kwargs):
@@ -243,59 +228,13 @@ class getRiderOrders(APIView):
         orders_serialized = [OrderSerializer(o).data for o in orders]
         return Response(orders_serialized)
 
+
 class getRiderById(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=rider_id)
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
-        
-
-        
-
-class generateSolution(APIView):
-    def get(self, request, *args, **kwargs):
-        # TODO: Get the coordinates of the depot
-        depot = Node([12.944013565497546, 77.69623411806606], 0)
-        orders = []
-        vehicles = []
-
-        all_riders = Rider.objects.all()
-        for rider in all_riders:
-            vehicles.append(Vehicle(int(rider.bag_volume), start=depot, end=depot))
-        
-        all_orders = Order.objects.all()
-        for order in all_orders:
-            orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
-        # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
-        vrp_instance = VRP(depot, orders, vehicles)
-        manager, routing, solution = vrp_instance.process_VRP()
-
-        plan_output, dropped = vehicle_output_string(manager, routing, solution)
-        for route_number in range(routing.vehicles()):
-            all_riders[route_number].delievery_orders = ''
-            order = routing.Start(route_number)
-            if routing.IsEnd(solution.Value(routing.NextVar(order))):
-                all_riders[route_number].delievery_orders = ''
-            else:
-                while True:
-                    node = manager.IndexToNode(order)
-                    all_riders[route_number].delievery_orders += "," + str(node)
-                    if (node != 0):
-                        curr_order = Order.objects.get(id=int(node))
-                        curr_order.rider = all_riders[route_number]
-                        curr_order.save()
-
-                    if routing.IsEnd(order):
-                        break
-                    order = solution.Value(routing.NextVar(order))
-
-            if all_riders[route_number].delievery_orders != '':
-                all_riders[route_number].delievery_orders = all_riders[route_number].delievery_orders[1:]
-
-            all_riders[route_number].save()
-        return Response(plan_output)
-
 
 class startButton(APIView):
     def get(self, request, *args, **kwargs):
@@ -328,19 +267,142 @@ class getFolder(APIView):
         data['details']=file_data
         print(file_data)
         return Response(data, status=status.HTTP_200_OK)
-    
+
 
 class binPacking(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
         rider = Rider.objects.get(rider_id=rider_id)
-        url="http://localhost:4550"
-        
+        url = "http://localhost:4550"
+
         box = Packer(url, rider.bag_length, rider.bag_width, rider.bag_height)
         order_ids = rider.delievery_orders.split(",")[1:-1]
         for (i, order_id) in enumerate(order_ids):
             order = Order.objects.get(id=order_id)
-            box.add_item(order_id, order.length, order.width, order.height, i+1)
-        
+            box.add_item(order_id, order.length,
+                         order.width, order.height, i+1)
+
         data = box.pack()
         return Response(data)
+
+class getGeoCode(APIView):
+    def post(self, request, *args, **kwargs):
+        address = request.data["address"]
+        geocode = extract_lat_long_via_address(address)
+        return Response(geocode, status=status.HTTP_200_OK)
+
+
+class demo(APIView):
+    def post(self, request, *args, **kwargs):
+        file = request.FILES['drops']
+        file_name = default_storage.save(file.name, file)
+        file_url = default_storage.url(file_name)
+        dataframe = pd.read_excel(file_url[1:])
+        depot_coordinates = (12.944013565497546, 77.69623411806606)
+        depot = Node([depot_coordinates[0], depot_coordinates[1]], 0)
+        coordinates = []
+        orders = []
+        vehicles = []
+        for index, row in dataframe.iterrows():
+            print("Reached")
+            address = row['address']
+            awb = row['AWB']
+            name = row['names']
+            product_id = row['product_id']
+            edd = row['EDD']
+            geocode = extract_lat_long_via_address(address)
+            if geocode[0] == None:
+                continue
+            coordinates.append(geocode)
+            orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1))
+        
+        for i in range(int(len(orders)/30) + 1):
+            vehicles.append(Vehicle(dataframe.shape[0], start=depot, end=depot))
+
+        vrp_instance = VRP(depot, orders, vehicles)
+        manager, routing, solution = vrp_instance.process_VRP()
+
+        routes = []
+
+        for route_number in range(routing.vehicles()):
+            route = []
+            order = routing.Start(route_number)
+            if routing.IsEnd(solution.Value(routing.NextVar(order))):
+                continue
+            else:
+                while True:
+                    node = manager.IndexToNode(order)
+                    if (node != 0):
+                        route.append(coordinates[node-1])
+                    else:
+                        route.append(depot_coordinates)
+
+                    if routing.IsEnd(order):
+                        break
+                    order = solution.Value(routing.NextVar(order))
+                routes.append(route)
+        
+        geo_routes = []
+        data = pd.DataFrame({'Route': [str(i+1) for i in range(len(routes))]})
+
+        for route in routes:
+            points_list = []
+            for point in route:
+                points_list.append(Point(point[0], point[1]))
+            geo_routes.append(LineString(points_list))
+        
+        myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
+        myGDF.to_file(filename='myshapefile.shp.zip', driver='ESRI Shapefile')
+        response = HttpResponse(open('myshapefile.shp.zip', 'rb').read())
+        response['Content-Disposition'] = 'attachment; filename=solution.zip'
+        response['Content-Type'] = 'application/zip'
+        return response
+            
+
+class generateInitialSolution(APIView):
+    def get(self, request, *args, **kwargs):
+        # TODO: Get the coordinates of the depot
+        depot = Node([12.944013565497546, 77.69623411806606], 0)
+        orders = []
+        vehicles = []
+
+        all_riders = Rider.objects.all()
+        for rider in all_riders:
+            vehicles.append(Vehicle(int(rider.bag_volume), start=depot, end=depot))
+        
+        all_orders = Order.objects.all()
+        for order in all_orders:
+            orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
+        # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
+        vrp_instance = VRP(depot, orders, vehicles)
+        pick_vrp =  PickledVRPInstance(current_instance=vrp_instance)
+        pick_vrp.save()
+        # manager, routing, solution = vrp_instance.process_VRP()
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
+        return Response(sol.task_id)
+
+class checkCeleryStatus(APIView):
+    def get(self,request,*args,**kwargs):
+        task_id = kwargs['task_id']
+        res = AsyncResult(task_id).status
+        return Response(res)
+
+class getResultCelery(APIView):
+    def get(self,request,*args,**kwargs):
+        task_id = kwargs['task_id']
+        res = AsyncResult(task_id)
+        routes = res.get()
+        return Response(routes)
+
+
+class generateRerouteSolution(APIView):
+    def get(self, request, *args, **kwargs):
+        all_riders = Rider.objects.all()        
+        all_orders = Order.objects.all()
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
+        return Response(sol.task_id)
+
