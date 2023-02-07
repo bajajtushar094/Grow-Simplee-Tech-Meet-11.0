@@ -326,7 +326,7 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1))
         
         for i in range(int(len(orders)/30) + 1):
-            vehicles.append(Vehicle(dataframe.shape[0], start=depot, end=depot))
+            vehicles.append(Vehicle(len(orders), start=depot, end=depot))
 
         vrp_instance = VRP(depot, orders, vehicles)
         manager, routing, solution = vrp_instance.process_VRP()
@@ -350,14 +350,23 @@ class demo(APIView):
                         break
                     order = solution.Value(routing.NextVar(order))
                 routes.append(route)
-        
+
         geo_routes = []
         data = pd.DataFrame({'Route': [str(i+1) for i in range(len(routes))]})
-
+        #http://router.project-osrm.org/route/v1/driving/77.586607,12.909694;77.652492,12.91763?overview=full&geometries=geojson
+        osrm_url_base = "https://routing.openstreetmap.de/routed-bike/route/v1/driving/"
         for route in routes:
             points_list = []
             for point in route:
-                points_list.append(Point(point[0], point[1]))
+                points_list.append(str(point[1])  + "," + str(point[0]))
+            osrm_url = osrm_url_base + ";".join(points_list) + "?overview=full&geometries=geojson"
+            print(osrm_url)
+            r = requests.get(osrm_url)
+            t = json.loads(r.text)
+            coordinates = t['routes'][0]['geometry']['coordinates']
+            points_list = []
+            for point in coordinates:
+                points_list.append(Point(point[1], point[0]))
             geo_routes.append(LineString(points_list))
         
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
