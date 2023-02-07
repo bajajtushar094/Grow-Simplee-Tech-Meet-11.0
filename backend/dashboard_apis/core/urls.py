@@ -30,7 +30,7 @@ urlpatterns = [
     # rider api
     # path('rider-rewards/', views.rider_rewards.as_view()),
     path('rider-management/', views.getRiderManagementMap.as_view()),
-    # path('orders/all', views.getOrder.as_view()),
+    path('orders/all', views.getOrders.as_view()),
 
     path('riders/all', views.getRiders.as_view()),
     path('orders/rider/<str:id>', views.getRiderOrders.as_view()),

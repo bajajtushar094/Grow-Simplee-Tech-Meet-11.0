@@ -24,9 +24,11 @@ from rest_framework import status
 from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
 from utils.google_map import *
+from rest_framework import permissions
 
 
 class getRiderManagementMap(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         data = {}
@@ -75,10 +77,13 @@ class populateData(APIView):
 
 
 class getOrders(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         utc = pytz.UTC
 
         all_orders = Order.objects.all()
+        data = {}
+        data["orders"] = []
 
         for i in range(len(all_orders)):
             if all_orders[i].delivery_action == "pickup":
@@ -87,6 +92,7 @@ class getOrders(APIView):
             if date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
                 all_orders[i].delay_status = "delayed"
                 all_orders[i].save()
+            data['orders'].append(OrderSerializer(all_orders[i]).data)
 
         #data = {}
         #data["orders"] = [OrderSerializer(order).data for order in all_orders]
@@ -95,29 +101,32 @@ class getOrders(APIView):
 
         #return Response(data)
 
-        return Response(all_orders)
+        return Response(data)
 
 
 class getRiders(APIView):
+    permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         data = {"riders": [RiderSerializer(rider).data for rider in all_riders]}
         for i in range(len(data['riders'])):
-            data['riders'][i]['current_address'] = {
-                'latitude':RiderSerializer(all_riders[i]).data['latitude'],
-                'longitude':RiderSerializer(all_riders[i]).data['longitude'],
-                'location':RiderSerializer(all_riders[i]).data['location'],
-                'address_name':RiderSerializer(all_riders[i]).data['address_name'],
-            }
+            # data['riders'][i]['current_address'] = {
+            #     'latitude':RiderSerializer(all_riders[i]).data['latitude'],
+            #     'longitude':RiderSerializer(all_riders[i]).data['longitude'],
+            #     'location':RiderSerializer(all_riders[i]).data['location'],
+            #     'address_name':RiderSerializer(all_riders[i]).data['address_name'],
+            # }
             trip_id = data['riders'][i]['current_trip_id']
+
             if trip_id:
                 trip = Trip.objects.get(pk=trip_id)
-                data['riders'][i]['trip'] = TripSerializer(trip)  # with trip deserializer
-                orders_id = trip['orders'].split(',')
+                data['riders'][i]['trip'] = TripSerializer(trip).data  # with trip deserializer
+                orders_id = trip.orders.split(',')
                 orders_completed = 0
+                data['riders'][i]["orders"] = []
                 for j in range (len(orders_id)):
-                    order = Order.objects.get(order_id=orders_id[i])
-                    data['riders'][i]["orders"][j] = OrderSerializer(order).data
+                    order = Order.objects.get(order_id=int(orders_id[j]))
+                    data['riders'][i]["orders"].append(OrderSerializer(order).data)
                     if order.order_status == 'delivered' or order.order_status == 'failed':
                         orders_completed = orders_completed + 1
                 current_order = Order.objects.get(order_id=orders_id[orders_completed-1])
