@@ -66,6 +66,8 @@ class Order(Node):
         The orientation of the order (default None).
     position: str
         The position of the order in the vehicle (default None).
+    deadline: int
+        The number of days left for EDD
     All other attributes are inherited from the Node class.
 
     Methods:
@@ -74,14 +76,21 @@ class Order(Node):
     update_order_status(self, new_status): Update the status of the order and also updates the vehicle's capacity accordingly.
     """
 
-    def __init__(self, volume, coordinates, type, AWB=None, SKU=None, carryforward_penalty=1000000000000, status=0, vehicle=None, orientation=None, position=None, start_time=None, end_time=None):
+    def __init__(self, volume, coordinates, type, AWB=None, SKU=None, status=0, vehicle=None, orientation=None, position=None, start_time=None, end_time=None, deadline=0):
         super().__init__(coordinates, type, volume, status, start_time, end_time)
         self.AWB = AWB
         self.SKU = SKU
-        self.carryforward_penalty = carryforward_penalty
         self.vehicle = vehicle
         self.orientation = orientation
         self.position = position
+
+        self.deadline = deadline
+        self.priority = 0
+        self._carryforward_penalty = None
+
+    @property
+    def carryforward_penalty(self):
+        return 1000_000 * math.exp(-self.deadline) + 1000 * math.exp(8 * self.priority)
 
     def update_order_status(self, new_status):
         """
@@ -146,7 +155,7 @@ class Customers():
         
         self.number = len(customer_list)
         return customer_list
-           
+
     def set_manager(self, manager):
         self.manager = manager
 
@@ -175,7 +184,7 @@ class Customers():
 
     def _euclidean(self, nodes):
         # calculate the distance matrix using the euclidean method
-        input_locations = [[math.radians(float(o.lat)), math.radians(float(o.lon))] for o in nodes]
+        input_locations = [[float(o.lat), float(o.lon)] for o in nodes]
         return np.ceil(pairwise.euclidean_distances(input_locations) * 1000)
 
     def _haversine(self, nodes):

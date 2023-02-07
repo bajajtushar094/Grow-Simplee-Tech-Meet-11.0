@@ -11,7 +11,7 @@ from core.models import *
 import zipfile
 from celery.result import AsyncResult
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -21,13 +21,16 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
-from core.tasks import *
+from core.tasks import solveVRP, solveVRPReroute
 import pickle
 from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
 from utils.google_map import *
 from rest_framework import permissions
-
+import pandas as pd
+from shapely.geometry import Point, LineString
+import geopandas as gpd
+from django.core.files.storage import default_storage
 
 class getRiderManagementMap(APIView):
     permission_class = [permissions.IsAuthenticated]
@@ -229,6 +232,74 @@ class getGeoCode(APIView):
         geocode = extract_lat_long_via_address(address)
         return Response(geocode, status=status.HTTP_200_OK)
 
+
+class demo(APIView):
+    def post(self, request, *args, **kwargs):
+        file = request.FILES['drops']
+        file_name = default_storage.save(file.name, file)
+        file_url = default_storage.url(file_name)
+        dataframe = pd.read_excel(file_url[1:])
+        depot_coordinates = (12.944013565497546, 77.69623411806606)
+        depot = Node([depot_coordinates[0], depot_coordinates[1]], 0)
+        coordinates = []
+        orders = []
+        vehicles = []
+        for index, row in dataframe.iterrows():
+            print("Reached")
+            address = row['address']
+            awb = row['AWB']
+            name = row['names']
+            product_id = row['product_id']
+            edd = row['EDD']
+            geocode = extract_lat_long_via_address(address)
+            if geocode[0] == None:
+                continue
+            coordinates.append(geocode)
+            orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1))
+        
+        for i in range(int(len(orders)/30) + 1):
+            vehicles.append(Vehicle(dataframe.shape[0], start=depot, end=depot))
+
+        vrp_instance = VRP(depot, orders, vehicles)
+        manager, routing, solution = vrp_instance.process_VRP()
+
+        routes = []
+
+        for route_number in range(routing.vehicles()):
+            route = []
+            order = routing.Start(route_number)
+            if routing.IsEnd(solution.Value(routing.NextVar(order))):
+                continue
+            else:
+                while True:
+                    node = manager.IndexToNode(order)
+                    if (node != 0):
+                        route.append(coordinates[node-1])
+                    else:
+                        route.append(depot_coordinates)
+
+                    if routing.IsEnd(order):
+                        break
+                    order = solution.Value(routing.NextVar(order))
+                routes.append(route)
+        
+        geo_routes = []
+        data = pd.DataFrame({'Route': [str(i+1) for i in range(len(routes))]})
+
+        for route in routes:
+            points_list = []
+            for point in route:
+                points_list.append(Point(point[0], point[1]))
+            geo_routes.append(LineString(points_list))
+        
+        myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
+        myGDF.to_file(filename='myshapefile.shp.zip', driver='ESRI Shapefile')
+        response = HttpResponse(open('myshapefile.shp.zip', 'rb').read())
+        response['Content-Disposition'] = 'attachment; filename=solution.zip'
+        response['Content-Type'] = 'application/zip'
+        return response
+            
+
 class generateInitialSolution(APIView):
     def get(self, request, *args, **kwargs):
         # TODO: Get the coordinates of the depot
@@ -275,3 +346,4 @@ class generateRerouteSolution(APIView):
         sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
+
