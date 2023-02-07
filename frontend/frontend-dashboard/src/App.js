@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Switch } from "react-router-dom";
 import Inventory from "./Pages/Inventory";
-import InventoryWebcam from "./Pages/InventoryWebcam";
+import InventoryWebcam from "./Pages/VolumeEstimation";
 // import InventoryImages from "./Pages/InventoryImages";
 import Riders from "./Pages/Riders"
 import Dashboard from "./Pages/Dashboard";

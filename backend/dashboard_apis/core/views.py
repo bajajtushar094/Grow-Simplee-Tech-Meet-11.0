@@ -236,11 +236,45 @@ class getRiderById(APIView):
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
+class updateOrder(APIView):
+    def get(self, request, *args, **kwargs):
+        order_id = kwargs['id']
+        order = Order.objects.get(order_id=int(order_id))
+        order.order_status = 'delivered'
+        order.save()
+        return Response(OrderSerializer(order).data)
+
 class startButton(APIView):
-   def get(self, request, *args, **kwargs):
-       vol = VolumeCalc()
-       vol.startProcess()
-       return Response("camera feed started", status=status.HTTP_200_OK)
+    def get(self, request, *args, **kwargs):
+        vol = VolumeCalc()   
+        vol.startProcess()
+        base_path = os.getcwd()
+        folderPath = os.path.join(base_path, 'static', 'folder1')
+        folderExist = os.path.exists(folderPath)
+        data = {}
+        data['status']='Unsuccessful'
+        data['folder']=None
+        data['howManyFolders']=0
+        if folderExist:
+            data['status']='Successful'
+            data['folder']='1'
+            data['howManyFolders']=len(next(os.walk(os.getcwd()))[1])
+            return Response(data, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+
+class getFolder(APIView):
+    def get(self, request, *args, **kwargs):
+        folderNumber = kwargs['folder']
+        print(folderNumber)
+        base_path = os.getcwd()
+        folderPath = os.path.join(base_path, 'static', 'folder')+folderNumber
+        with open(os.path.join(folderPath, 'details.json'), "r") as file:
+            file_data = json.load(file)
+        data={}
+        data['details']=file_data
+        print(file_data)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class binPacking(APIView):
