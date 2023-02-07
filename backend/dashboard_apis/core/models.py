@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .choices import *
 import os
-
+from picklefield.fields import PickledObjectField
 
 # Create your models here.
 
@@ -105,6 +105,12 @@ class Order(models.Model):
 
 def get_upload_to(instance, filename):
     return os.path.join("media/", str(instance.order.order_id), filename)
+
+class PickledVRPInstance(models.Model):
+    current_instance = PickledObjectField()
+
+    def __str__(self):
+        return f"PickledVRPInstance"
 
 
 class OrderImage(models.Model):

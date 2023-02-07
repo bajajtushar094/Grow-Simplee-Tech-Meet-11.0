@@ -9,6 +9,7 @@ from utils.vehicle_routing.vrp import VRP
 from utils.vehicle_routing.customers import Order as OrderVRP
 from core.models import *
 import zipfile
+from celery.result import AsyncResult
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from rest_framework.response import Response
@@ -20,7 +21,9 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
-from volume_estimation.cuboid import VolumeCalc
+from core.tasks import solveVRP
+import pickle
+# from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
 from utils.google_map import *
 from rest_framework import permissions
@@ -197,60 +200,11 @@ class getRiderById(APIView):
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
-
-class generateSolution(APIView):
-    def get(self, request, *args, **kwargs):
-        # TODO: Get the coordinates of the depot
-        depot = Node([12.944013565497546, 77.69623411806606], 0)
-        orders = []
-        vehicles = []
-
-        all_riders = Rider.objects.all()
-        for rider in all_riders:
-            vehicles.append(
-                Vehicle(int(rider.bag_volume), start=depot, end=depot))
-
-        all_orders = Order.objects.all()
-        for order in all_orders:
-            orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(
-                order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
-        # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
-        vrp_instance = VRP(depot, orders, vehicles)
-        manager, routing, solution = vrp_instance.process_VRP()
-
-        plan_output, dropped = vehicle_output_string(
-            manager, routing, solution)
-        for route_number in range(routing.vehicles()):
-            all_riders[route_number].delievery_orders = ''
-            order = routing.Start(route_number)
-            if routing.IsEnd(solution.Value(routing.NextVar(order))):
-                all_riders[route_number].delievery_orders = ''
-            else:
-                while True:
-                    node = manager.IndexToNode(order)
-                    all_riders[route_number].delievery_orders += "," + \
-                        str(node)
-                    if (node != 0):
-                        curr_order = Order.objects.get(id=int(node))
-                        curr_order.rider = all_riders[route_number]
-                        curr_order.save()
-
-                    if routing.IsEnd(order):
-                        break
-                    order = solution.Value(routing.NextVar(order))
-
-            if all_riders[route_number].delievery_orders != '':
-                all_riders[route_number].delievery_orders = all_riders[route_number].delievery_orders[1:]
-
-            all_riders[route_number].save()
-        return Response(plan_output)
-
-
-class startButton(APIView):
-   def get(self, request, *args, **kwargs):
-       vol = VolumeCalc()
-       vol.startProcess()
-       return Response("camera feed started", status=status.HTTP_200_OK)
+# class startButton(APIView):
+#    def get(self, request, *args, **kwargs):
+#        vol = VolumeCalc()
+#        vol.startProcess()
+#        return Response("camera feed started", status=status.HTTP_200_OK)
 
 
 class binPacking(APIView):
@@ -274,3 +228,50 @@ class getGeoCode(APIView):
         address = request.data["address"]
         geocode = extract_lat_long_via_address(address)
         return Response(geocode, status=status.HTTP_200_OK)
+
+class generateInitialSolution(APIView):
+    def get(self, request, *args, **kwargs):
+        # TODO: Get the coordinates of the depot
+        depot = Node([12.944013565497546, 77.69623411806606], 0)
+        orders = []
+        vehicles = []
+
+        all_riders = Rider.objects.all()
+        for rider in all_riders:
+            vehicles.append(Vehicle(int(rider.bag_volume), start=depot, end=depot))
+        
+        all_orders = Order.objects.all()
+        for order in all_orders:
+            orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
+        # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
+        vrp_instance = VRP(depot, orders, vehicles)
+        pick_vrp =  PickledVRPInstance(current_instance=vrp_instance)
+        pick_vrp.save()
+        # manager, routing, solution = vrp_instance.process_VRP()
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
+        return Response(sol.task_id)
+
+class checkCeleryStatus(APIView):
+    def get(self,request,*args,**kwargs):
+        task_id = kwargs['task_id']
+        res = AsyncResult(task_id).status
+        return Response(res)
+
+class getResultCelery(APIView):
+    def get(self,request,*args,**kwargs):
+        task_id = kwargs['task_id']
+        res = AsyncResult(task_id)
+        routes = res.get()
+        return Response(routes)
+
+
+class generateRerouteSolution(APIView):
+    def get(self, request, *args, **kwargs):
+        all_riders = Rider.objects.all()        
+        all_orders = Order.objects.all()
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
+        return Response(sol.task_id)
