@@ -19,7 +19,7 @@ const Layout = ({ children, isLeftSidebarPresent = true, flex_dir="row" }) => {
     setIsSideBarOpen(!isSideBarOpen);
   };
   const handleTopTabChange = (option) => {
-    setActiveTab(option.value);
+    setActiveTopTab(option.value);
     navigate(option.value);
   };
   const handleTabChange = (option) => {
