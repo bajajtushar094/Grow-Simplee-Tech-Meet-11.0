@@ -19,7 +19,7 @@ useEffect(() => {
     });
     });
   return (
-    <div ref={mapContainer} className="h-[650px]" />
+    <div ref={mapContainer} className="h-[300px]" />
   )
 }
 

@@ -15,6 +15,7 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from .forms import RiderRewardsForm, OrderForm
 from .models import Rider
 from .serializers import *
@@ -185,6 +186,38 @@ class getBags(APIView):
         data = {}
         data["bags"] = [BagSerializer(bag).data for bag in all_bags]
         return Response(data)
+    
+class getManager(APIView):
+    # permission_classes = (IsAuthenticated, )
+    def get(self, request, *args, **kwargs):
+        manager = Manager.objects.all()
+        data = {}
+        print(manager[0].__dict__)
+        data['manager'] = [ManagerSerializer(man).data for man in manager]
+        return Response(data)
+    
+class getUpcomingCount(APIView):
+    # permission_classes = (IsAuthenticated, )
+    def get(self, request, *args, **kwargs):
+        # date = datetime.datetime.now()
+        orders_upcoming = Order.objects.filter(order_status = "upcoming")
+        orders_delivered = Order.objects.filter(order_status = "delivered")
+        orders_error = Order.objects.filter(order_status = "error")
+        data = {}
+        # print(orders[0].__dict__)
+        data['Upcoming Count'] = len([OrderSerializer(man).data for man in orders_upcoming])
+        data['Delivered Count'] = len([OrderSerializer(man).data for man in orders_delivered])
+        data['Error Count'] = len([OrderSerializer(man).data for man in orders_error])
+        return Response(data)
+
+
+class countRiders(APIView):
+    def get(self, request, *args, **kwargs):
+        riders = Rider.objects.all()
+        data = {}
+        data['count'] = len([RiderSerializer(rider).data for rider in riders])
+        return Response(data)
+
 
 
 class getRiderOrders(APIView):

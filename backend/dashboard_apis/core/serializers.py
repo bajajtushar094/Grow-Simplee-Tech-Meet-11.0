@@ -50,6 +50,12 @@ class BagSerializer(serializers.Serializer):
         model = Bag
         fields = '__all__'
 
+class ManagerSerializer(serializers.Serializer):
+
+    class Meta:
+        model = Manager
+        fields = '__all__'
+
 # class RiderRewardsSerializer(serializers.ModelSerializer):
 
 #     class Meta:
