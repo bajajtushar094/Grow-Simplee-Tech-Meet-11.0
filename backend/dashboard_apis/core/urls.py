@@ -47,9 +47,12 @@ urlpatterns = [
 
 
     path('orders/add', views.addDynamicPickup.as_view()),
+    path('solve_initial/', views.generateInitialSolution.as_view()),
+    path('solve/',views.generateRerouteSolution.as_view()),
+    path('check_task_status/<str:task_id>',views.checkCeleryStatus.as_view()),
+    path('get_celery_result/<str:task_id>',views.getResultCelery.as_view()),
 
     # To solve the first instance of VRP
-    path('solve/', views.generateSolution.as_view()),
     path('populate/', views.populateData.as_view()),
 
 
@@ -57,5 +60,6 @@ urlpatterns = [
     path('start-process/', views.startButton.as_view()),
     path('bin-packing/<str:id>', views.binPacking.as_view()),
 
-    path('geocode/', views.getGeoCode.as_view())
+    path('geocode/', views.getGeoCode.as_view()),
+    path('demo/', views.demo.as_view())
 ]

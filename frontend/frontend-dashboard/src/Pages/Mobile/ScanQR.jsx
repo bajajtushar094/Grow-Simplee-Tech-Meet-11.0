@@ -142,7 +142,7 @@ const App = (props) => {
                 </div>
               </p>
               <p className="mt-2 font-medium text-[#F14336]">
-                Unable to scan? <button onClick={skipScan} className="inline underline">Skip this -></button>
+                Unable to scan? <button onClick={skipScan} className="inline underline">Skip this </button>
               </p>
             </div>
             {/* <p className="mt-2">Lorem ipsum dolor sit amet.</p> */}
