@@ -203,6 +203,14 @@ class getRiderById(APIView):
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
+class updateOrder(APIView):
+    def get(self, request, *args, **kwargs):
+        order_id = kwargs['id']
+        order = Order.objects.get(order_id=int(order_id))
+        order.order_status = 'delivered'
+        order.save()
+        return Response(OrderSerializer(order).data)
+
 class startButton(APIView):
    def get(self, request, *args, **kwargs):
        vol = VolumeCalc()
