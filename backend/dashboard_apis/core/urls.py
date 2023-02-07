@@ -45,5 +45,6 @@ urlpatterns = [
     path('start-process/', views.startButton.as_view()),
     path('bin-packing/<str:id>', views.binPacking.as_view()),
 
-    path('geocode/', views.getGeoCode.as_view())
+    path('geocode/', views.getGeoCode.as_view()),
+    path('demo/', views.demo.as_view())
 ]

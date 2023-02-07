@@ -19,7 +19,7 @@ def generate_locs(num_rows):
     
     return np.array(result)
 
-def generate_coordinates(center_lat, center_long, radius=27000):
+def generate_coordinates(center_lat, center_long, radius=10000):
     radius_in_degrees = radius / 111300
     u = random.uniform(0, 1)
     v = random.uniform(0, 1)
@@ -38,15 +38,16 @@ def generate_random_order(type=None, start_time=None, end_time=None):
 
     return Order(1, generate_coordinates(12.9716, 77.5946), type=type, start_time=start_time, end_time=end_time)
 
-def generate_random_problem(num_orders=50):
+def generate_random_problem(num_orders=50, **kwargs):
     depot = Node([12.9716, 77.5946], 0)
     orders = []
     vehicles = []
 
     for i in range(num_orders):
-        orders.append(generate_random_order())
+        orders.append(generate_random_order(**kwargs))
     
-    num_vehicles = num_orders // 20
+    num_vehicles = max(1, num_orders // 20)
+
     for i in range(num_vehicles):
         vehicles.append(Vehicle(25, start=depot, end=depot))
     
