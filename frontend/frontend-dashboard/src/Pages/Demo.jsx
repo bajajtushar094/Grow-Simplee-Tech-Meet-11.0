@@ -14,7 +14,7 @@ function App() {
   
   function handleSubmit(event) {
     event.preventDefault()
-    const url = 'http://localhost:3000/uploadFile';
+    const url = 'http://localhost:8000/core/demo/';
     const formData = new FormData();
     formData.append('file', file);
     formData.append('fileName', file.name);
