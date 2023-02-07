@@ -21,16 +21,13 @@ from .serializers import *
 from datetime import datetime
 import pytz
 from rest_framework import status
-<<<<<<< HEAD
 from core.tasks import solveVRP
 import pickle
-=======
-from volume_estimation.cuboid import VolumeCalc
+# from volume_estimation.cuboid import VolumeCalc
 from utils.populate_data import *
 from utils.google_map import *
 from rest_framework import permissions
 
->>>>>>> 5d07e11667854a9a6421c0e7dfa3e6fddab70a88
 
 class getRiderManagementMap(APIView):
     permission_class = [permissions.IsAuthenticated]
@@ -203,11 +200,11 @@ class getRiderById(APIView):
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
-class startButton(APIView):
-   def get(self, request, *args, **kwargs):
-       vol = VolumeCalc()
-       vol.startProcess()
-       return Response("camera feed started", status=status.HTTP_200_OK)
+# class startButton(APIView):
+#    def get(self, request, *args, **kwargs):
+#        vol = VolumeCalc()
+#        vol.startProcess()
+#        return Response("camera feed started", status=status.HTTP_200_OK)
 
 
 class binPacking(APIView):
