@@ -48,8 +48,8 @@ def populate_order():
         order.latitude = row[8]
         order.longitude = row[7]
         order.location = row[2]
-        order.delivery_action = "undelivered"
-        order.order_status = "drop"
+        order.delivery_action = "drop"
+        order.order_status = "undelivered"
         order.edd = datetime.now()
         order.owner_name = row[5]
         order.address_name = row[5]

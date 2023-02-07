@@ -31,7 +31,7 @@ const Inventory = () => {
     else
     setInventoryHeading(inventoryConstant[1])
   }, [warehouseTab]);
-
+ 
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
@@ -50,6 +50,8 @@ const Inventory = () => {
       return delivery_action === "drop" && (order_status==="delayed" || order_status==="undelivered")
   }
   const displayedList = orders.filter(checkRoute);
+  console.log(orders)
+  console.log(displayedList)
   return (
     <Layout>
       <div className='w-full flex-col'>
