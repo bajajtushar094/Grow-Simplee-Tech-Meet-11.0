@@ -268,7 +268,8 @@ class getGeoCode(APIView):
 
 class demo(APIView):
     def post(self, request, *args, **kwargs):
-        file = request.FILES['drops']
+        print(request.FILES)
+        file = request.FILES['file']
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
         dataframe = pd.read_excel(file_url[1:])
@@ -278,7 +279,7 @@ class demo(APIView):
         orders = []
         vehicles = []
         for index, row in dataframe.iterrows():
-            print("Reached")
+            print(index)
             address = row['address']
             awb = row['AWB']
             name = row['names']

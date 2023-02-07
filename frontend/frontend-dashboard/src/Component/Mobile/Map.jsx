@@ -26,7 +26,7 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [coordinates, setCoordinates] = useState(props.coordinates);
-  const pickupArray = orders.filter(order => order.delivery_action ==="pickup")
+  const pickupArray = orders!=undefined?orders.filter(order => order.delivery_action ==="pickup"):[]
   function handleClick(e) {
     setSelectedIndex(e.target.options.index)
   }
