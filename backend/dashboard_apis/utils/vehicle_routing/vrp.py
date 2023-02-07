@@ -4,6 +4,7 @@ from utils.vehicle_routing.customers import Customers
 from utils.vehicle_routing.vehicle import Fleet
 from utils.vehicle_routing.route import Route, RoutesList
 from ortools.constraint_solver import pywrapcp
+from utils.vehicle_routing.city_graph import CityGraph
 from ortools.constraint_solver import routing_enums_pb2
 
 class VRP:
@@ -92,37 +93,36 @@ class VRP:
         self.routes_list = RoutesList(routes_list)
 
     def vehicle_output_plot(self, block=True):
-        plt.figure()
-        s_del_x = []
-        s_del_y = []
-        s_pick_x = []
-        s_pick_y = []
+        s_del_lon = []
+        s_del_lat = []
+        s_pick_lon = []
+        s_pick_lat = []
 
         for order in self.customers.orders:
             if order.type == 1:
-                s_del_x.append(order.lat)
-                s_del_y.append(order.lon)
+                s_del_lon.append(order.lon)
+                s_del_lat.append(order.lat)
             else:
-                s_pick_x.append(order.lat)
-                s_pick_y.append(order.lon)
+                s_pick_lon.append(order.lon)
+                s_pick_lat.append(order.lat)
 
-            plt.text(order.lat, order.lon, order.current_vrp_index, fontsize = 8)
+            plt.text(order.lon, order.lat, order.current_vrp_index, fontsize = 8)
 
-        plt.scatter(s_del_x, s_del_y, color='b', label='Delivery')
-        plt.scatter(s_pick_x, s_pick_y, color='g', label='Pickup')
-        plt.scatter(self.depot.lat, self.depot.lon, color='black', s=70, label='Depot')
+        plt.scatter(s_del_lon, s_del_lat, color='b', label='Delivery')
+        plt.scatter(s_pick_lon, s_pick_lat, color='g', label='Pickup')
+        plt.scatter(self.depot.lon, self.depot.lat, color='black', s=70, label='Depot')
 
         for vehicle_idx, route in self.get_routes().items():
             if route == -1:
                 continue
 
-            x_coords = []
-            y_coords = []
+            lon_coords = []
+            lat_coords = []
 
             for n in route.route:
-                x_coords.append(n.lat)
-                y_coords.append(n.lon)
-            plt.plot(x_coords, y_coords)
+                lon_coords.append(n.lon)
+                lat_coords.append(n.lat)
+            plt.plot(lon_coords, lat_coords)
             
         plt.title('Routes')
         plt.xlabel('Longitude')
@@ -130,11 +130,21 @@ class VRP:
         plt.legend()
         plt.show(block=block)
 
-    def process_VRP(self, isReroute=False, time_limit=300, total_transit_time = 10000000, max_wait_time=10000, first_sol_strategy="AUTOMATIC", initial_metaheuristic="AUTOMATIC", rerouting_metaheuristic="AUTOMATIC"):
+    def process_VRP(self, isReroute=False, centrality_check=False, 
+            time_limit=300, total_transit_time = 10_000_000, max_wait_time=10_000, 
+            max_route_distance=50_000, equalize_routes=False, equalize_routes_penalty=10_000,
+            first_sol_strategy="AUTOMATIC", initial_metaheuristic="AUTOMATIC", rerouting_metaheuristic="AUTOMATIC"):
+
         self.fleet = Fleet(self.vehicles)
         self.customers = Customers(self.depot, self.orders)
         self.fleet.set_starts_ends()
+        self.city_graph = CityGraph(self.customers.orders)
 
+        if centrality_check:
+            self.priorities = self.city_graph.get_priorities()
+
+        # for order in self.customers.orders:
+        #     print(order.priority, order.deadline, order.carryforward_penalty)
         """
         PROBLEM SETUP
         -------------
@@ -155,6 +165,36 @@ class VRP:
         dist_fn = self.customers.return_dist_callback(method='haversine')
         dist_fn_index = routing.RegisterTransitCallback(dist_fn)
         routing.SetArcCostEvaluatorOfAllVehicles(dist_fn_index)
+
+        routing.AddDimension(
+            dist_fn_index,  # total distance function callback
+            0, 
+            max_route_distance,
+            True,
+            'Distance')
+        distance_dimension = routing.GetDimensionOrDie('Distance')
+        
+        # if global_span_coefficient is not None:
+        #     distance_dimension.SetGlobalSpanCostCoefficient(global_span_coefficient)
+
+        if equalize_routes:
+            routing.AddConstantDimension(
+                1, # increment by one every time
+                self.customers.number, # large enough
+                True,  # set count to zero
+            'Count')
+
+            count_dimension = routing.GetDimensionOrDie('Count')
+            count_dimension.SetGlobalSpanCostCoefficient(equalize_routes_penalty)
+
+            # Add penalty if vehicle serve too much nodes
+            for v in range(manager.GetNumberOfVehicles()):
+                end = routing.End(v)
+                count_dimension.SetCumulVarSoftUpperBound(
+                    end, # index
+                    (self.customers.number - 1) // self.fleet.num_vehicles + 1, # soft max
+                    equalize_routes_penalty # penalty
+                )
 
         print(
             self.customers.number,  # int number
@@ -226,7 +266,7 @@ class VRP:
             routing.solver().Add(deliveries_dimension.CumulVar(index) == loads_dimension.CumulVar(index))
 
         for node in range(1, self.customers.number):
-            routing.AddDisjunction([manager.NodeToIndex(node)], self.customers.customers[node].carryforward_penalty)
+            routing.AddDisjunction([manager.NodeToIndex(node)], int(self.customers.customers[node].carryforward_penalty))
 
         """
         SETTING PARAMETERS
