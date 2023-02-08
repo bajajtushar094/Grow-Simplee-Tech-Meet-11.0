@@ -129,7 +129,7 @@ Setup:
 
 # Task 1 Readme
 
-## Stereoscopic Depth-Based Multi-Modal Volume Estimation
+### Stereoscopic Depth-Based Multi-Modal Volume Estimation
 Our primary aim is to accurately calculate the volumetric weight of objects at the last-mile hub using the most reliable and efficient method available. To this end, we propose a stereoscopic depth-based multi-modal volume approximation approach that is based on shape-specific features, with filter enhancements and zero manual intervention in the pipeline.
 
 The file `cuboid.py` contains the code for the volume calculation, and all the dependencies to use the Intel Realsense SDK are in the `opt_realsense.py` file.
