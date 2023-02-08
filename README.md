@@ -126,15 +126,16 @@ Installation:
 3. To run the VRP solver use the following commandd:
     python main.py
 
-Directory structure
-|  vehicle_routing
-|  |-- city_graph.py
-|  |-- customers.py
-|  |-- helpers.py
-|  |-- route.py
-|  |-- vehicle.py
-|  |-- vrp.py 
-|--main.py
-|--input
-|--mock
-|--wards
+## Directory structure 
+
+├── vehicle_routing/
+│   ├── city_graph.py
+│   ├── customers.py
+|   ├── helpers.py
+|   ├── route.py
+|   ├── vehicle.py
+|   ├── vrp.py
+└── main.py
+└── input
+└── mock
+└── wards
