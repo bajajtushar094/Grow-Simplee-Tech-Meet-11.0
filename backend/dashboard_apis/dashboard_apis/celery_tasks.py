@@ -17,8 +17,8 @@ all_riders = Rider.objects.all()
 all_orders = Order.objects.all()
 app.conf.beat_schedule={
     'run_vrp':{
-    'task':'core.tasks.solveVRPReroute',
-    'schedule': timedelta(minutes=1),
+    'task':'core.tasks.solveVRPReRoute',
+    'schedule': timedelta(minutes=180),
     'args': {
         'all_riders': RiderSerializer(all_riders, many=True).data,
         'all_orders': OrderSerializer(all_orders, many=True).data,
