@@ -128,14 +128,16 @@ Installation:
 
 ## Directory structure 
 
-├── vehicle_routing/
-│   ├── city_graph.py
-│   ├── customers.py
-|   ├── helpers.py
-|   ├── route.py
-|   ├── vehicle.py
-|   ├── vrp.py
-└── main.py
-└── input
-└── mock
-└── wards
+```
+    ├── vehicle_routing/
+    │   ├── city_graph.py
+    │   ├── customers.py
+    |   ├── helpers.py
+    |   ├── route.py
+    |   ├── vehicle.py
+    |   ├── vrp.py
+    └── main.py
+    └── input
+    └── mock
+    └── wards
+```
