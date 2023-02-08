@@ -366,7 +366,7 @@ class demo(APIView):
             coordinates = t['routes'][0]['geometry']['coordinates']
             points_list = []
             for point in coordinates:
-                points_list.append(Point(point[1], point[0]))
+                points_list.append(Point(point[0], point[1]))
             geo_routes.append(LineString(points_list))
         
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
