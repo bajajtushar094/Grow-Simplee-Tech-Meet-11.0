@@ -1,6 +1,0 @@
-rembg
-open3d-python
-numpy
-pandas
-opencv-python
-torch
