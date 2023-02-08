@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Component/Layout";
-// import Webcam from "../Component/VolumeEstimation/Webcam";
-import RightSideBar from "../Component/Layout/RightSidebar";
-import ProgressBar from "../Component/Layout/ProgressBar";
 import axios from "axios";
 import { LOCAL_SERVER_URL_IP, LOCALHOST_URL } from "../constants/config";
 import RightArrow from "../Shared/Icons/RightArrow";
 import RightOrderDetails from "../Component/Layout/RightOrderDetails";
+import RaiseIssueIcon from "../Shared/Icons/RaiseIssueIcon";
+import IssueStatusIcon from "../Shared/Icons/IssueStatusIcon";
 
 const App = () => {
   const [src, setSrc] = useState("");
@@ -71,55 +70,75 @@ const App = () => {
   return (
     <Layout isLeftSidebarPresent={false}>
       {/* <RightSideBar /> */}
-      <div className="absolute right-10 w-1/4">
+      <div className="absolute left-0 w-1/4">
+        <div className="ml-10 mt-20">
+          <h4 className="text-sm font-semibold text-[#706D64]">ACTIONS</h4>
+          <button
+            onClick={() => {
+              console.log("process started");
+              startEstimation();
+            }}
+            className={`bg-green-500 block mt-4 mb-4 text-white px-4 py-2 rounded-xl w-32 ${
+              currentFolder !== 1 ? "cursor-default" : null
+            }`}
+          >
+            {currentFolder === 1 ? "Start" : "Restart"}{" "}
+            <RightArrow className="inline" />
+          </button>
+          <button
+            className="bg-black text-white px-4 py-2 rounded-xl w-32"
+            onClick={nextFolder}
+          >
+            Next {currentFolder - 1}
+          </button>
+        </div>
+        <div className="ml-10 mt-20">
+          <h4 className="text-sm font-semibold text-[#706D64]">SUPPORT</h4>
+          <button className="block mt-6 ml-4 text-sm text-[#706D64] flex">
+            {" "}
+            <RaiseIssueIcon style={{ marginRight: "6px" }} /> Raise Issue
+          </button>
+          <button className="block mt-6 ml-4 text-sm text-[#706D64] flex justify-between">
+            {" "}
+            <IssueStatusIcon style={{ marginRight: "6px" }} /> Issue Status
+          </button>
+        </div>
+      </div>
+
+      <div className="absolute right-10 w-1/5">
         <RightOrderDetails
           details={orderDetails}
           showDeletePanel="hide"
           orderID="hide"
         />
       </div>
-      <div className="absolute left-10 w-2/3">
-        <div className="w-1/2 max-h-16 flex justify-between">
-          <button
-            onClick={() => {
-              console.log("process started");
-              startEstimation();
-            }}
-            className={`bg-black text-white p-4 rounded-xl w-48 ${
-              currentFolder !== 1 ? "cursor-default" : null
-            }`}
-          >
-            {currentFolder === 1 ? "Start Estimation" : "Restart"}{" "}
-            <RightArrow className="inline" />
-          </button>
-          <button
-            className="bg-black text-white p-4 rounded-xl w-32"
-            onClick={nextFolder}
-          >
-            Next {currentFolder - 1}
-          </button>
-        </div>
+      <div className="absolute w-1/2" style={{ marginLeft: "250px" }}>
+        <div className="w-1/2 max-h-16 flex justify-between"></div>
         {src && src2 && (
-          <div className="flex w-full justify-between my-10">
-            <div style={{ width: "450px", height: "340px" }}>
-              <h1>Color Image</h1>
-              <div className="flex items-center">
+          <>
+            <h1 className="text-2xl font-bold">8954DS</h1>
+            <h1 className="text-sm font-semibold text-[#706D64]">Object ID</h1>
+            <div className="flex w-full justify-between my-10">
+              <div style={{ width: "360px", height: "auto" }}>
+                <h1>Color Image</h1>
+                <div className="flex items-center">
+                  <img
+                    alt="Depth Image"
+                    src={src}
+                    style={{ width: "auto", maxHeight: "340px" }}
+                  />
+                </div>
+              </div>
+              <div style={{ width: "360px", height: "auto" }}>
+                <h1>Depth Image</h1>
                 <img
                   alt="Depth Image"
-                  src={src}
+                  src={src2}
                   style={{ width: "auto", maxHeight: "340px" }}
                 />
               </div>
             </div>
-            <div style={{ width: "450px", height: "340px" }}>
-              <h1>Depth Image</h1>
-              <img
-                alt="Depth Image"
-                src={src2}
-                style={{ width: "auto", maxHeight: "340px" }}
-              />
-            </div>
-          </div>
+          </>
         )}
       </div>
       {/* <ProgressBar progress="1"/> */}

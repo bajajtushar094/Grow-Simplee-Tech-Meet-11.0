@@ -166,6 +166,33 @@ class cancelOrder(APIView):  # should not be needed
         return Response(OrderSerializer(order).data)
 
 
+class updateOrder(APIView):
+
+    def post(self, request, *args, **kwargs):
+        order_id = request.data["order_id"]
+        isDelivered = request.data["is_delivered"]
+        isFailed = request.data["is_failed"]
+        order = Order.objects.get(order_id=int(order_id))
+        if isFailed == 'true':
+            order.order_status = "failed"
+        elif isDelivered == 'true':
+            order.order_status = 'delivered'
+        order.save()
+        return Response(OrderSerializer(order).data)
+
+class updateTrip(APIView):
+
+    def post(self, request, *args, **kwargs):
+        trip_id = request.data["trip_id"]
+        trip_status = request.data["trip_status"]
+        trip = Trip.objects.get(id=trip_id)
+        trip.trip_status = trip_status
+        trip.save()
+
+        return Response('success')
+
+
+
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
         volume = request.data["volume"]
@@ -188,7 +215,7 @@ class getBags(APIView):
         data = {}
         data["bags"] = [BagSerializer(bag).data for bag in all_bags]
         return Response(data)
-    
+
 class getManager(APIView):
     # permission_classes = (IsAuthenticated, )
     def get(self, request, *args, **kwargs):
@@ -197,7 +224,7 @@ class getManager(APIView):
         print(manager[0].__dict__)
         data['manager'] = [ManagerSerializer(man).data for man in manager]
         return Response(data)
-    
+
 class getUpcomingCount(APIView):
     # permission_classes = (IsAuthenticated, )
     def get(self, request, *args, **kwargs):
@@ -238,17 +265,28 @@ class getRiderById(APIView):
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
-class updateOrder(APIView):
+
+class getTripById(APIView):
     def get(self, request, *args, **kwargs):
-        order_id = kwargs['id']
-        order = Order.objects.get(order_id=int(order_id))
-        order.order_status = 'delivered'
-        order.save()
-        return Response(OrderSerializer(order).data)
+        trip_id = kwargs['id']
+        trip = Trip.objects.get(id=trip_id)
+        orders_id = trip.orders.split(',')
+        print(orders_id)
+        #trip_serialized = TripSerializer(Trip).data
+        #trip_serialized["order_objects"] = []
+        data = []
+        for j in range(len(orders_id)):
+            order = Order.objects.get(order_id=orders_id[j])
+            #trip_serialized["order_objects"].append(OrderSerializer(order).data)
+            data.append(OrderSerializer(order).data)
+
+        return Response(data)
+
+
 
 class startButton(APIView):
     def get(self, request, *args, **kwargs):
-        vol = VolumeCalc()   
+        vol = VolumeCalc()
         vol.startProcess()
         base_path = os.getcwd()
         folderPath = os.path.join(base_path, 'static', 'folder1')
@@ -282,13 +320,13 @@ class getFolder(APIView):
 class binPacking(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
-        rider = Rider.objects.get(rider_id=rider_id)
+        rider = Rider.objects.get(id=rider_id)
         url = "http://localhost:4550"
-
-        box = Packer(url, rider.bag_length, rider.bag_width, rider.bag_height)
-        order_ids = rider.delievery_orders.split(",")[1:-1]
+        trip = Trip.objects.get(id=rider.current_trip_id)
+        box = Packer(url, trip.bag.length, trip.bag.width, trip.bag.height)
+        order_ids = trip.orders.split(",")
         for (i, order_id) in enumerate(order_ids):
-            order = Order.objects.get(id=order_id)
+            order = Order.objects.get(order_id=order_id)
             box.add_item(order_id, order.length,
                          order.width, order.height, i+1)
 
@@ -326,7 +364,7 @@ class demo(APIView):
                 continue
             coordinates.append(geocode)
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1))
-        
+
         for i in range(int(len(orders)/30) + 1):
             vehicles.append(Vehicle(len(orders), start=depot, end=depot))
 
@@ -370,14 +408,14 @@ class demo(APIView):
             for point in coordinates:
                 points_list.append(Point(point[0], point[1]))
             geo_routes.append(LineString(points_list))
-        
+
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
         myGDF.to_file(filename='myshapefile.shp.zip', driver='ESRI Shapefile')
         response = HttpResponse(open('myshapefile.shp.zip', 'rb').read())
         response['Content-Disposition'] = 'attachment; filename=solution.zip'
         response['Content-Type'] = 'application/zip'
         return response
-            
+
 
 class generateInitialSolution(APIView):
     def get(self, request, *args, **kwargs):
@@ -389,7 +427,7 @@ class generateInitialSolution(APIView):
         all_riders = Rider.objects.all()
         for rider in all_riders:
             vehicles.append(Vehicle(int(rider.bag_volume), start=depot, end=depot))
-        
+
         all_orders = Order.objects.all()
         for order in all_orders:
             orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
@@ -419,7 +457,7 @@ class getResultCelery(APIView):
 
 class generateRerouteSolution(APIView):
     def get(self, request, *args, **kwargs):
-        all_riders = Rider.objects.all()        
+        all_riders = Rider.objects.all()
         all_orders = Order.objects.all()
         dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
         sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
