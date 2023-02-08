@@ -353,10 +353,10 @@ class demo(APIView):
         depot_coordinates = (12.944013565497546, 77.69623411806606)
         depot = Node([depot_coordinates[0], depot_coordinates[1]], 0)
         coordinates = []
+        awbs = []
         orders = []
         vehicles = []
         for index, row in dataframe.iterrows():
-            print(index)
             address = row['address']
             awb = row['AWB']
             name = row['names']
@@ -366,8 +366,11 @@ class demo(APIView):
             if geocode[0] == None:
                 continue
             coordinates.append(geocode)
-            orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1))
-
+            awbs.append(awb)
+            orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
+            print(name, end=": ")
+            print(geocode)
+       
         for i in range(int(len(orders)/30) + 1):
             vehicles.append(Vehicle(len(orders), start=depot, end=depot))
 
@@ -375,9 +378,11 @@ class demo(APIView):
         manager, routing, solution = vrp_instance.process_VRP()
 
         routes = []
+        routes_with_order = []
 
         for route_number in range(routing.vehicles()):
             route = []
+            route_coords = []
             order = routing.Start(route_number)
             if routing.IsEnd(solution.Value(routing.NextVar(order))):
                 continue
@@ -386,6 +391,7 @@ class demo(APIView):
                     node = manager.IndexToNode(order)
                     if (node != 0):
                         route.append(coordinates[node-1])
+                        route_coords.append([awbs[node-1], coordinates[node-1]])
                     else:
                         route.append(depot_coordinates)
 
@@ -393,8 +399,10 @@ class demo(APIView):
                         break
                     order = solution.Value(routing.NextVar(order))
                 routes.append(route)
+                routes_with_order.append(route_coords)
 
         geo_routes = []
+        geo_routes_map = []
         data = pd.DataFrame({'Route': [str(i+1) for i in range(len(routes))]})
         #http://router.project-osrm.org/route/v1/driving/77.586607,12.909694;77.652492,12.91763?overview=full&geometries=geojson
         osrm_url_base = "https://routing.openstreetmap.de/routed-bike/route/v1/driving/"
@@ -408,18 +416,38 @@ class demo(APIView):
             t = json.loads(r.text)
             coordinates = t['routes'][0]['geometry']['coordinates']
             points_list = []
+            points_list_map = []
             for point in coordinates:
                 points_list.append(Point(point[0], point[1]))
+                points_list_map.append([point[0], point[1]])
             geo_routes.append(LineString(points_list))
+            geo_routes_map.append(points_list_map)
+        
+        routes_data_map = pd.DataFrame({'S. No.': [str(i+1) for i in range(len(geo_routes_map))], 'Route': geo_routes_map})
+        routes_data_map.to_csv('all_routes_map.csv', index=False)
+
+        routes_data = pd.DataFrame({'S. No.': [str(i+1) for i in range(len(routes_with_order))], 'Route': routes_with_order})
+        routes_data.to_csv('all_routes.csv', index=False)
 
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
-        myGDF.to_file(filename='myshapefile.shp.zip', driver='ESRI Shapefile')
-        with open('myshapefile.shp.zip', 'rb') as file:
-            response = HttpResponse(base64.b64encode(file.read()))
-        print(response.__dict__)
-        response['Content-Disposition'] = 'attachment; filename=solution.zip'
-        response['Content-Type'] = 'application/zip'
-        return response
+        myGDF.to_file(filename='myshapefile.shp', driver='ESRI Shapefile')
+
+        vrp_instance.city_graph.city.plot(facecolor="lightgrey", edgecolor="grey", linewidth=0.3)
+        vrp_instance.vehicle_output_plot()
+
+        filenames = ["myshapefile.shp", "all_routes_map.csv", "all_routes.csv", "static/Routes4.png"]
+        
+        with zipfile.ZipFile('solution.zip', 'w') as f:
+            for filename in filenames:
+                f.write(filename)
+        
+
+        with open('solution.zip', 'rb') as file:
+            resp = HttpResponse(base64.b64encode(file.read()))
+        resp['Content-Disposition'] = 'attachment; filename=solution.zip'
+        resp['Content-Type'] = 'application/zip'
+
+        return resp
     
 class demoPickup(APIView):
     def post(self, request, *args, **kwargs):

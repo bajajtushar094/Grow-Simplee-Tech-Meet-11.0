@@ -90,7 +90,7 @@ class Order(Node):
 
     @property
     def carryforward_penalty(self):
-        return 1000_000 * math.exp(-self.deadline) + 1000 * math.exp(8 * self.priority)
+        return 1000_000 * math.exp(-self.deadline) + 1000 * math.exp(7 * self.priority)
 
     def update_order_status(self, new_status):
         """
@@ -190,7 +190,7 @@ class Customers():
     def _haversine(self, nodes):
         # calculate the distance matrix using the haversine method
         input_locations = [[math.radians(float(o.lat)), math.radians(float(o.lon))] for o in nodes]
-        return np.ceil(pairwise.haversine_distances(input_locations) * 637100)
+        return np.ceil(pairwise.haversine_distances(input_locations) * 6371000)
 
     def get_total_volume(self):
         """
