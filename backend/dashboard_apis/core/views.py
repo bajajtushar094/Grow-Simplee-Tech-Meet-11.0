@@ -370,7 +370,7 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
-        
+       
         for i in range(int(len(orders)/30) + 1):
             vehicles.append(Vehicle(len(orders), start=depot, end=depot))
 

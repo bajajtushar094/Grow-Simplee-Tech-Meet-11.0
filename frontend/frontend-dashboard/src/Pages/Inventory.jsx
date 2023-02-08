@@ -13,6 +13,8 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import cx from 'classnames'
 import { LOCAL_SERVER_URL_IP } from "../constants/config";
 import { inventoryConstant } from "../constants/inventoryConst";
+import CubeWithArrowIcon from "../Shared/Icons/CubeWithArrowIcon";
+import TruckIcon from "../Shared/Icons/TruckIcon";
 
 
 const Inventory = () => {
@@ -29,7 +31,7 @@ const Inventory = () => {
     else
     setInventoryHeading(inventoryConstant[1])
   }, [warehouseTab]);
-
+ 
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
@@ -48,6 +50,8 @@ const Inventory = () => {
       return delivery_action === "drop" && (order_status==="delayed" || order_status==="undelivered")
   }
   const displayedList = orders.filter(checkRoute);
+  console.log(orders)
+  console.log(displayedList)
   return (
     <Layout>
       <div className='w-full flex-col'>
@@ -57,12 +61,12 @@ const Inventory = () => {
             <div><BoxesIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
-              )}>{orders.length}</h2>
+              )}>{displayedList.length}</h2>
               <h4 className="text-sm text-gs-text-gray font-semibold">Packages in inventory</h4>
             </div>
           </div>
           <div className="flex items-center pl-4 border-l-2">
-            <div><BoxesIcon /></div>
+            <div><TruckIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
               )}>15/01/23</h2>
@@ -70,10 +74,10 @@ const Inventory = () => {
             </div>
           </div>
           <div className="flex items-center pl-4 border-l-2">
-            <div><BoxesIcon /></div>
+            <div><CubeWithArrowIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
-              )}>{displayedList.length}</h2>
+              )}>{(displayedList.filter(order=> order.delivery_action==="pickup")).length}</h2>
               <h4 className="text-sm text-gs-text-gray font-semibold">Pickups in inventory</h4>
             </div>
           </div>
@@ -89,7 +93,7 @@ const Inventory = () => {
         </div>
         }
         
-        <div className='flex justify-end w-full space-x-8 rounded-tl-3xl'>
+        {/* <div className='flex justify-end w-full space-x-8 rounded-tl-3xl'>
           <div className='flex py-3 space-x-8 border-solid border-l-2 border-t-2  px-8 rounded-tl-sm '>
             <KeyboardDoubleArrowRightOutlinedIcon className='cursor-pointer' />
             <button className='text-gs-black text-sm font-semibold'><FileDownloadIcon fontSize='medium' /> Download</button>
@@ -97,7 +101,7 @@ const Inventory = () => {
             <button className='text-gs-black text-sm font-semibold'><FileDownloadIcon fontSize='medium' />Move</button>
             <button className='text-gs-black text-sm font-semibold'><ContentCopyOutlinedIcon fontSize='small' />Copy</button>
           </div>
-        </div>
+        </div> */}
         <div className='bg-white rounded-tl-3xl border-2 '>
           <div className='flex pb-4 pt-6 px-8'>
             <div>

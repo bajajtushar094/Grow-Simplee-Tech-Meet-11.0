@@ -19,6 +19,7 @@ import UploadZip from "./Component/VolumeEstimation/UploadZip";
 import ManagerLogin from "./Pages/ManagerLogin";
 import Demo from "./Pages/Demo";
 import Mapmarker from "./Component/Global/Marker/Mapmarker.jsx";
+import BinPacking from "./Pages/Mobile/BinPacking";
 // import RiderDetails from "./Pages/RiderDetails";
 
 function App() {
@@ -44,13 +45,14 @@ function App() {
         
         {/* Mobile Screens */}
         <Route path="/scanQR" element={<ScanQR />} />
-        <Route path="/createBag" element={<CreateBag />} />
+        <Route path="/createBag" element={<BinPacking />} />
         <Route path="/tripRoute" element={<TripRoute />} />
         <Route path="/singleRoute" element={<SingleRoute />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/login" element={<Login />} />
         <Route path="/checklist" element={<Checklist />} />
         <Route path="/destinationReached" element={<DestinationReached />} />
+        <Route path="/binpacking" element={<BinPacking />} />
 
         {/* Demo */}
         <Route path="/demo" element={<Demo/>}/>

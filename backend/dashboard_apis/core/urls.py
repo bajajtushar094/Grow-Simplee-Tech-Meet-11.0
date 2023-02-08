@@ -35,7 +35,9 @@ urlpatterns = [
     path('riders/all', views.getRiders.as_view()),
     path('orders/rider/<str:id>', views.getRiderOrders.as_view()),
     path('rider/<str:id>', views.getRiderById.as_view()),
-    path('orders/update/<str:id>/', views.updateOrder.as_view()),
+    path('trip/<str:id>', views.getTripById.as_view()),
+    path('orders/update/', views.updateOrder.as_view()),
+    path('trips/update/', views.updateTrip.as_view()),
     path('bags/all', views.getBags.as_view()),
     path('manager', views.getManager.as_view()),
     path('orders/cancel', views.cancelOrder.as_view()),
@@ -62,5 +64,11 @@ urlpatterns = [
     path('bin-packing/<str:id>', views.binPacking.as_view()),
 
     path('geocode/', views.getGeoCode.as_view()),
-    path('demo/', views.demo.as_view())
+    path('demo/', views.demo.as_view()),
+    path('locations/rider', views.getRiderLocations.as_view()),
+    path('demoPickup/', views.demoPickup.as_view()),
+
+    #pagination urls
+    path('pagination/rider/<int:limit>/<int:offset>', views.getRidersPaginate.as_view()),
+    path('pagination/order/<int:limit>/<int:offset>', views.getOrdersPaginate.as_view()),
 ]

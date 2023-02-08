@@ -5,16 +5,16 @@ import Layout from "../Component/Layout";
 import PlayListAddCheckIcon from "../Shared/Icons/PlayListAddCheckIcon";
 import RiderMapContainer from "../Component/RiderManagement/RiderMapContainer";
 import { LOCAL_SERVER_URL_IP } from "../constants/config";
-import axios from "axios"
+import axios from "axios";
 
 const Riders = () => {
   let { riderManagementTab } = useParams();
   const [riders, setRiders] = useState([]);
-  const[orders,setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
   useEffect(() => {
     const fetchRiders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/riders/all`);
-      console.log(res.data.riders)
+      console.log(res.data.riders);
       setRiders(res.data.riders);
     };
     const fetchOrders = async () => {
@@ -64,26 +64,33 @@ const Riders = () => {
   ];
   return (
     <Layout>
-      {
-        riderManagementTab === "listView"?<div className="bg-white rounded-tl-3xl border-2 w-full">
-        <div className="flex pb-4 pt-6 px-8">
-          <div>
-            <PlayListAddCheckIcon />
-          </div>
-          <div className="pl-4 w-full">
-            <div className="flex justify-between w-full">
-              <h4 className="text-gs-blue text-sm font-semibold">Riders</h4>
-              <div className="flex space-x-6"></div>
+      {riderManagementTab === "listView" ? (
+        <div className="bg-white rounded-tl-3xl border-2 w-full">
+          <div className="flex pb-4 pt-6 px-8">
+            <div>
+              <PlayListAddCheckIcon />
             </div>
-            <h2 className="text-xl font-semibold mt-2">List</h2>
-            <h4 className="text-md text-[#5F5D59] font-semibold mt-1">
-              List of all the riders in your network
-            </h4>
+            <div className="pl-4 w-full">
+              <div className="flex justify-between w-full">
+                <h4 className="text-gs-blue text-sm font-semibold">Riders</h4>
+                <div className="flex space-x-6"></div>
+              </div>
+              <h2 className="text-xl font-semibold mt-2">List</h2>
+              <h4 className="text-md text-[#5F5D59] font-semibold mt-1">
+                List of all the riders in your network
+              </h4>
+            </div>
           </div>
+          <Table
+            tab={riderManagementTab}
+            displayedList={riders}
+            checkboxSelection={false}
+            className="px-6"
+          />
         </div>
-        <Table tab={riderManagementTab} displayedList={riders} checkboxSelection={false} className='px-6'/>
-      </div>: <RiderMapContainer riderData={riders} orders={orders}/>
-      }
+      ) : (
+        <RiderMapContainer riderData={riders} orders={orders} />
+      )}
     </Layout>
   );
 };

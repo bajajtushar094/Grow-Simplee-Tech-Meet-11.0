@@ -44,7 +44,7 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
     },
     { field: "range", headerName: "Range", headerClassName: 'bg-[#F8F8F7]', width: 130 },
     {
-      field: "current_address",
+      field: "current_order",
       headerClassName: 'bg-[#F8F8F7]',
       headerName: "Latest Location",
       flex: 0.8,
@@ -52,7 +52,7 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
       width: 400,
       renderCell: (params) => (
         <div>
-          {params.row.current_address.location}
+          {params.row.current_order.location}
         </div>
       ),
     },
@@ -83,23 +83,18 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
       </div>
     ), },
     {
-      field: "address",
+      field: "location",
       headerName: "Delivery Address",
       sortable: false,
       width: 320,
-      renderCell: (params) => (
-        <div>
-          {params.row.address.name}
-        </div>
-      ),
     },
     {
-      field: "category",
+      field: "delivery_action",
       headerName: "Category",
       width: 180,
       renderCell: (params) => (
         <div className="text-gs-blue text-sm font-semibold">
-          {params.row.category}
+          {params.row.delivery_action}
         </div>
       ),
     },
@@ -111,9 +106,9 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
         <div className="flex items-center justify-between">
           <Avatar
             sx={{ width: 21, height: 21 }}
-            src={params.row.rider.img_URL}
+            src={params.row.rider?.img_URL}
           />
-          <h4 className="mx-2">{params.row.rider.name}</h4>
+          <h4 className="mx-2">{params.row.rider?.name}</h4>
           <CallMadeIcon />
         </div>
       ),

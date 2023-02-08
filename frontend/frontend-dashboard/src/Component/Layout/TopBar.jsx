@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
+import { TOP_TABS_ICON } from '../../constants/sidebarconst'
 
 const Topbar = (props) => {
-
   const {topTabs,activeTab,onTopTabClick,location} = props
   
   return (
@@ -11,7 +11,12 @@ const Topbar = (props) => {
       <div className=''>
         <ul className='flex space-x-10 '>
           {topTabs.map((option,index)=>{
-            return (<li key={index} onClick={()=>onTopTabClick(option)} className={cx('text-gs-text-gray font-semibold cursor-pointer',{'!text-gs-blue':(option.value.indexOf(location?.pathname.split("/")[1]) > -1)})}>{option.label}</li>)
+            return (
+              <div className='flex items-center'>
+              {TOP_TABS_ICON(option, location)}
+              <li key={index} onClick={()=>onTopTabClick(option)} className={cx('ml-2 text-gs-text-gray font-semibold cursor-pointer',{'!text-gs-blue':(option.value.indexOf(location?.pathname.split("/")[1]) > -1)})}>{option.label}</li>
+              </div>
+              )
           })}
         </ul>
       </div>

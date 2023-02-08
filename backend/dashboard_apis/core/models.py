@@ -30,7 +30,7 @@ class Rider(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=250)
     photoURL = models.CharField(max_length=250, null=True)
-    contact_number = models.CharField(max_length=10)
+    contact_number = models.CharField(max_length=10, null=True)
     rider_status = models.CharField(
         _("filing form type"), max_length=50, choices=RIDER_STATUS
     )
@@ -41,7 +41,7 @@ class Rider(models.Model):
     packages_delayed = models.IntegerField(default=0)
     current_trip_id = models.CharField(max_length=50, null=True)
     earnings = models.IntegerField(blank=True, null=True)
-    bag_volume = models.FloatField(null=True)
+    # bag_volume = models.FloatField(null=True)
 
     def __str__(self):
         return f"{self.name} + {self.id}"

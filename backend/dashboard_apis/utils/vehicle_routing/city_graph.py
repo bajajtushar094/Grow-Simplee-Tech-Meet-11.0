@@ -16,7 +16,7 @@ class CityGraph():
         return orders
 
     def process_wards(self):
-        self.city = gpd.read_file(os.path.dirname(__file__) + r'\..\wards\bangalore.geojson')
+        self.city = gpd.read_file(os.path.dirname(__file__) + r'/../wards/bangalore.geojson')
         self.city['KGISWardNo'] = self.city['KGISWardNo'].astype('int')
 
         wards = {}
