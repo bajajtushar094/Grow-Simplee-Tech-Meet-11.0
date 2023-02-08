@@ -44,7 +44,7 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
     },
     { field: "range", headerName: "Range", headerClassName: 'bg-[#F8F8F7]', width: 130 },
     {
-      field: "current_address",
+      field: "current_order",
       headerClassName: 'bg-[#F8F8F7]',
       headerName: "Latest Location",
       flex: 0.8,
@@ -52,7 +52,7 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
       width: 400,
       renderCell: (params) => (
         <div>
-          {params.row.current_address.location}
+          {params.row.current_order.location}
         </div>
       ),
     },
