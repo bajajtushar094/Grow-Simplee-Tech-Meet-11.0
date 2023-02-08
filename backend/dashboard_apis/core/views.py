@@ -33,6 +33,7 @@ import pandas as pd
 from shapely.geometry import Point, LineString
 import geopandas as gpd
 from django.core.files.storage import default_storage
+import base64
 from datetime import datetime
 
 url = "http://localhost:8000/"
@@ -413,10 +414,21 @@ class demo(APIView):
 
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
         myGDF.to_file(filename='myshapefile.shp.zip', driver='ESRI Shapefile')
-        response = HttpResponse(open('myshapefile.shp.zip', 'rb').read())
+        with open('myshapefile.shp.zip', 'rb') as file:
+            response = HttpResponse(base64.b64encode(file.read()))
+        print(response.__dict__)
         response['Content-Disposition'] = 'attachment; filename=solution.zip'
         response['Content-Type'] = 'application/zip'
         return response
+    
+class demoPickup(APIView):
+    def post(self, request, *args, **kwargs):
+        print("Pickup file received")
+        print(request.FILES)
+        file = request.FILES['file']
+        file_name = default_storage.save(file.name, file)
+        file_url = default_storage.url(file_name)
+        return Response("Pickup file downloaded on backend")
 
 
 class generateInitialSolution(APIView):
