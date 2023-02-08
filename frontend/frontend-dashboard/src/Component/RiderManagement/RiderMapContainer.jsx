@@ -4,7 +4,7 @@ import Icon from "./Icon.svg";
 import Icon2 from "./Icon2.svg";
 import plus from "./plus.svg";
 import minus from "./minus.svg";
-// import SideProfile from '../Component/Global/SideProfile'
+import SideProfile from '../Global/SideProfile'
 import Boxsvg from "../Global/Box.svg";
 import Box from "@mui/material/Box";
 // import MapBox from '../Component/Global/MapBox'
@@ -121,6 +121,8 @@ const data = [
 ];
 
 const RiderMapContainer = ({riderData, orders}) => {
+  const [sideprofile,setSideprofile] = useState(false);
+  const [selectedRider, setSelectedRider] = useState({})
   const [open, setOpen] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -150,6 +152,9 @@ const RiderMapContainer = ({riderData, orders}) => {
     setRider(Rider[e.target.id]);
     setIsSelected(true);
   };
+  const toggleSidebar = ()=>{
+        setSideprofile(!sideprofile)
+  }
 
   console.log(rider);
 
@@ -170,7 +175,7 @@ const RiderMapContainer = ({riderData, orders}) => {
     width: 400,
     p: 4,
   };
-
+ console.log(selectedRider)
   return (
     <>
       <div
@@ -185,6 +190,8 @@ const RiderMapContainer = ({riderData, orders}) => {
           data={data}
           riderData={riderData}
           orders={orders}
+          toggleSidebar={toggleSidebar}
+          setSelectedRider = {setSelectedRider}
           className="flex-grow z-0 h-full]"
         ></Map>
         <div
@@ -233,75 +240,18 @@ const RiderMapContainer = ({riderData, orders}) => {
           <img style={{ height: "15px", margin: "10px" }} src={arrow} alt="" />
         </div>
       </div>
+      { sideprofile && 
       <div
         style={{
           position: "absolute",
-          marginLeft: "1050px",
           zIndex: "99",
           right: "0",
         }}
       >
-        {/* <SideProfile borderRadius='10px' {...rider}/>  */}
-      </div>
+        <SideProfile borderRadius='10px' selectedRider={selectedRider} {...rider}/>
+      </div> }
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          position: "absolute",
-          marginLeft: "400px",
-        }}
-      >
-        <div
-          id="1"
-          style={{
-            margin: "10px",
-            backgroundColor: "red",
-            padding: "5px",
-            borderRadius: "10px",
-            cursor: "pointer",
-          }}
-          onClick={handleClick}
-        >
-          Rider 1
-        </div>
-        <div
-          id="2"
-          style={{
-            margin: "10px",
-            backgroundColor: "blue",
-            padding: "5px",
-            borderRadius: "10px",
-          }}
-          onClick={handleClick}
-        >
-          Rider 2
-        </div>
-        <div
-          id="3"
-          style={{
-            margin: "10px",
-            backgroundColor: "green",
-            padding: "5px",
-            borderRadius: "10px",
-          }}
-          onClick={handleClick}
-        >
-          Rider 3
-        </div>
-        <div
-          id="4"
-          style={{
-            margin: "10px",
-            backgroundColor: "yellow",
-            padding: "5px",
-            borderRadius: "10px",
-          }}
-          onClick={handleClick}
-        >
-          Rider 4
-        </div>
-      </div>
+    
 
       <Modal
         open={open}
