@@ -1,8 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+
+
 const initialState = {
     packages: [
-        {
+/*        {
             name: 'Darrell Steward',
             orderId: 'RO10-445-A65E2',
             isInBag: false,
@@ -66,12 +68,13 @@ const initialState = {
             type:'delivery',
             textAddress: 'Brahmaputra Hostel, Guwahati, Assam, India - 781039',
             isNew: false,
-        },
+        }, */
         
     ],
     loggedIn: false,
     userId: null,
     bagId: null,
+    tripId: null,
     isBagScanned: false,
     isAtWarehouse: true,
     totalDelivered: 0,
@@ -82,7 +85,16 @@ export const riderSlice = createSlice({
     initialState,
     reducers: {
         setLoggedIn: (state, action) => {
-            state.loggedIn = action.payload;
+            state.loggedIn = action.payload.loggedIn;
+            if(!action.payload.loggedIn)
+            {
+                state.userId = null;
+                state.bagId = null;
+                state.isBagScanned = false;
+                state.isAtWarehouse = true;
+                state.packages = null
+                state.totalDelivered = 0;
+            }
         },
 
         setUserId: (state, action) => {
@@ -91,6 +103,10 @@ export const riderSlice = createSlice({
 
         setBagId: (state, action) => {
             state.bagId = action.payload;
+        },
+
+        setTripId: (state, action) => {
+            state.tripId = action.payload;
         },
 
         setIsBagScanned: (state, action) => {
@@ -151,15 +167,20 @@ export const riderSlice = createSlice({
             state.totalDelivered = state.packages.filter((item) => item.isDelivered).length;
         },
 
+        addPackages: (state, action) => {
+            state.packages = action.payload;
+        }
+
     }
 });
 
-export const {setLoggedIn, setUserId, setBagId, setIsBagScanned, setIsAtWarehouse, setIsInBag, setIsCancelled, setIsDelivered, setIsNew, setIsFailed, addPackage, removePackage} = riderSlice.actions;
+export const {setLoggedIn, setUserId, setBagId, setTripId, setIsBagScanned, setIsAtWarehouse, setIsInBag, setIsCancelled, setIsDelivered, setIsNew, setIsFailed, addPackage, removePackage, addPackages} = riderSlice.actions;
 
 export const getPackages = (state) => state.rider.packages;
 export const getLoggedIn = (state) => state.rider.loggedIn;
 export const getUserId = (state) => state.rider.userId;
 export const getBagId = (state) => state.rider.bagId;
+export const getTripId = (state) => state.rider.tripId;
 export const getIsBagScanned = (state) => state.rider.isBagScanned;
 export const getTotalDelivered = (state) => state.rider.totalDelivered;
 export const getIsAtWarehouse = (state) => state.rider.isAtWarehouse;
