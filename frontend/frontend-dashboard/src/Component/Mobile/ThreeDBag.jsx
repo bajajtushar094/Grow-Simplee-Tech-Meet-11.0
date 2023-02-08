@@ -36,16 +36,14 @@ const ThreeDBag = (props) => {
 
   var coordinates = [];
 
-  const randomColor = () => {
-    return (
-      "rgb(" +
-      Math.floor(Math.random() * 256) +
-      "," +
-      Math.floor(Math.random() * 256) +
-      "," +
-      Math.floor(Math.random() * 256) +
-      ")"
-    );
+  //generate an array of random colors in format rgb(r,g,b)
+  const colors = Array.from({ length: 20 }, () =>
+    Math.floor(Math.random() * 256)
+  );
+
+  const randomColor = (key) => {
+    let index = key % colors.length;
+    return colors[index];
   };
 
   let orderwise_coordinates = {};
@@ -54,7 +52,7 @@ const ThreeDBag = (props) => {
     orderwise_coordinates[data1[i][0]] = {
       type: "mesh3d",
       alphahull: 0,
-      color: randomColor(),
+      color: randomColor(data1[i][0]),
       flatshading: true,
       name: "case",
       showlegend: false,
