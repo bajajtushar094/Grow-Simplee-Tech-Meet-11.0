@@ -370,6 +370,8 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
+            if index==1:
+                break
        
         for i in range(int(len(orders)/30) + 1):
             vehicles.append(Vehicle(len(orders), start=depot, end=depot))
@@ -430,12 +432,12 @@ class demo(APIView):
         routes_data.to_csv('all_routes.csv', index=False)
 
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
-        myGDF.to_file(filename='myshapefile.shp', driver='ESRI Shapefile')
+        myGDF.to_file(filename='myshapefile', driver='ESRI Shapefile')
 
         vrp_instance.city_graph.city.plot(facecolor="lightgrey", edgecolor="grey", linewidth=0.3)
         vrp_instance.vehicle_output_plot()
 
-        filenames = ["myshapefile.shp", "all_routes_map.csv", "all_routes.csv", "static/Routes4.png"]
+        filenames = ["myshapefile/myshapefile.shp", "all_routes_map.csv", "all_routes.csv", "static/Routes4.png"]
         
         with zipfile.ZipFile('solution.zip', 'w') as f:
             for filename in filenames:
