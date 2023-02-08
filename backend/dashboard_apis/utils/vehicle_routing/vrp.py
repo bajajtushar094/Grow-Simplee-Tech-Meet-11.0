@@ -7,6 +7,7 @@ from ortools.constraint_solver import pywrapcp
 from utils.vehicle_routing.city_graph import CityGraph
 from ortools.constraint_solver import routing_enums_pb2
 import shapefile as shp
+import os
 
 class VRP:
     """
@@ -94,7 +95,9 @@ class VRP:
         self.routes_list = RoutesList(routes_list)
 
     def vehicle_output_plot(self, block=True):
-        sf = shp.Reader(r"C:\Users\Harshit\Desktop\my_fork\Grow-Simplee-Tech-Meet-11.0\backend\dashboard_apis\myshapefile\myshapefile.shp")
+        print(os.getcwd())
+        sf = shp.Reader(r".\myshapefile\myshapefile.shp")
+
         for shape in sf.shapeRecords():
             y = [i[0] for i in shape.shape.points[:]]
             x = [i[1] for i in shape.shape.points[:]]
