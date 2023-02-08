@@ -13,6 +13,7 @@ import {
   addPackages,
 } from "../../features/rider/riderSlice";
 import { LOCAL_SERVER_URL_IP } from "../../constants/config";
+import axios from 'axios';
 
 const Login = (props) => {
   const navigate = useNavigate();
