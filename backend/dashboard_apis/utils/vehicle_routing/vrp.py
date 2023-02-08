@@ -96,7 +96,8 @@ class VRP:
 
     def vehicle_output_plot(self, block=True):
         print(os.getcwd())
-        sf = shp.Reader(r".\myshapefile\myshapefile.shp")
+        #sf = shp.Reader("../../myshapefile/myshapefile.shp")
+        sf = shp.Reader('/home/aditya/Grow-Simplee-Tech-Meet-11.0/backend/dashboard_apis/myshapefile/myshapefile.shp')
 
         for shape in sf.shapeRecords():
             y = [i[0] for i in shape.shape.points[:]]

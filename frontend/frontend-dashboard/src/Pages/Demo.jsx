@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import Map from "../Component/Mobile/Map";
 import arrow from "../Component/Global/arrow.svg";
-import { LOCAL_SERVER_URL_IP } from "../constants/config";
+import { LOCAL_SERVER_URL_IP, LOCALHOST_URL } from "../constants/config";
 
 function App() {
   const [file, setFile] = useState();
   const [data, setData] = useState([]);
   const [pickupFile, setPickupFile] = useState();
+  const [isImage, setIsImage] = useState(0);
 
   function handleChange(event) {
     setFile(event.target.files[0]);
@@ -52,6 +53,7 @@ function App() {
       var sampleArr = base64ToArrayBuffer(response.data);
       console.log(sampleArr)
       saveByteArray("FileName.zip", sampleArr);
+      setIsImage(1);
     });
   }
 
@@ -111,12 +113,13 @@ function App() {
         }}
       >
         <div style={{ width: "100vw", height: "500px", margin: "40px" }}>
-          <Map
+          {isImage==0?<Map
             coordinates={coordinates}
             setRouteDetails={setRouteDetails}
             data={data}
             className="flex-grow z-0"
-          ></Map>
+          ></Map>:
+          <img src={LOCALHOST_URL+"/static/Routes4.png"} alt="Route image"/>}
         </div>
         <div
           className="App"
@@ -174,7 +177,7 @@ function App() {
             </button>
           </form>
 
-          <button
+          {/* <button
             style={{
               margin: "20px",
               backgroundColor: "black",
@@ -214,7 +217,7 @@ function App() {
               Dynamic Delivries
             </p>{" "}
             <img src={arrow} alt="" />
-          </button>
+          </button> */}
         </div>
       </div>
     </>
