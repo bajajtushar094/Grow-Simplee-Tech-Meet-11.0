@@ -35,7 +35,7 @@ def _plot_cuboids(positions, sizes,
     case_data = _get_all_cuboids(positions, sizes, color_coded, case_ids)
     return case_data
 
-def plot_cuboids(bin,size,container):
+def plot_cuboids(bin,size,container,id):
     color_coded=True
     num_cases = len(bin)
     positions = []
@@ -43,8 +43,14 @@ def plot_cuboids(bin,size,container):
     for i in range(num_cases):
         sizes.append(size[bin[i]['piece']])
         positions.append((bin[i]['position']['x'],bin[i]['position']['y'],bin[i]['position']['z']))
+
     case_data = _plot_cuboids(positions, sizes, container[0],
                         container[1], container[2], color_coded, [bin[i]['piece'] for i in range(num_cases)])
+
+    for j in range(len(case_data)):
+        case_data[j]=list(case_data[j])
+        case_data[j][0] = id[case_data[j][0]]
+        case_data[j]=tuple(case_data[j])
     return case_data
  
 
@@ -55,16 +61,25 @@ class Packer:
         self.sizes={}
         self.items=[]
         self.container=(length,width,height)
+        self.id={}
         self.post={"priority":1,"instance":{"name":"example","containers":[{"id":0,"length":length,"width":width,"height":height}],"pieces":[{"id":-1,"cubes":[{"x":0,"y":0,"z":0,"length":1000,"width":1000,"height":1000}]}]}}
     def add_item(self,id,length,width,height,priority):
         self.items.append({"id":id,"cubes":[{"x":0,"y":0,"z":0,"length":length,"width":width,"height":height}],"priority":priority})
-        self.volumes[id]=length*width*height
-        self.sizes[id]=[length,width,height]
+
     def pack(self):
         self.items.sort(key=lambda item: item['priority'])
+        # id = {}
+        temp_id = 0
         for item in self.items:
+            self.id[temp_id] = item['id']
+            item['id'] = temp_id
             self.post["instance"]["pieces"].append(item)
+            temp_id += 1
+            self.volumes[item['id']] = item['cubes'][0]['length'] * item['cubes'][0]['width'] * item['cubes'][0][
+                'height']
+            self.sizes[item['id']] = [item['cubes'][0]['length'], item['cubes'][0]['width'], item['cubes'][0]['height']]
         x=json.loads(requests.post(self.url+"/Packing/calculations",json=self.post).text)
+        # print(requests.post(self.url+"/Packing/calculations",json=self.post))
         while json.loads(requests.get(self.url+"/Packing/calculations/"+str(x["id"])+"/status").text)['status']!="DONE":
             continue
         results=json.loads(requests.get(self.url+"/Packing/calculations/"+str(x["id"])+"/solution").text)
@@ -91,5 +106,7 @@ class Packer:
                 self.sizes[piece['piece']][1]=self.sizes[piece['piece']][0]
                 self.sizes[piece['piece']][0]=temp
             self.sizes[piece['piece']]=tuple(self.sizes[piece['piece']])
-        data = plot_cuboids(results['containers'][0]['assignments'],self.sizes,self.container)
+
+        # print(results['containers'][0]['assignments'])
+        data = plot_cuboids(results['containers'][0]['assignments'],self.sizes,self.container,self.id)
         return data

@@ -329,7 +329,7 @@ class binPacking(APIView):
         order_ids = trip.orders.split(",")
         for (i, order_id) in enumerate(order_ids):
             order = Order.objects.get(order_id=order_id)
-            box.add_item(order_id, order.length,
+            box.add_item(int(order_id), order.length,
                          order.width, order.height, i+1)
 
         data = box.pack()
