@@ -119,14 +119,28 @@ export const LHS_BOTTOM_TABS_ICON = (options) => {
   return icon;
 };
 
-export const TOP_TABS_ICON = (options) => {
+export const TOP_TABS_ICON = (options, location) => {
   let icon;
   switch (options.value) {
     case routePaths.ridermanagement:
-      icon = <CartIcon />;
+      icon = (
+        <CartIcon
+          className={cx("", {
+            "!stroke-gs-blue stroke-[0.8px]":
+              options.value.indexOf(location?.pathname.split("/")[2]) > -1,
+          })}
+        />
+      );
       break;
     case routePaths.inventory || routePaths.history || routePaths.inhouse:
-      icon = <NotebookIcon />;
+      icon = (
+        <NotebookIcon
+          className={cx("", {
+            "!stroke-gs-blue stroke-1":
+              options.value.indexOf(location?.pathname.split("/")[2]) > -1,
+          })}
+        />
+      );
       break;
   }
   return icon;

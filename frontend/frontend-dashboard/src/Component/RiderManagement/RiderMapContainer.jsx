@@ -248,7 +248,7 @@ const RiderMapContainer = ({riderData, orders}) => {
           right: "0",
         }}
       >
-        <SideProfile borderRadius='10px' selectedRider={selectedRider} {...rider}/>
+        <SideProfile borderRadius='10px' selectedRider={selectedRider} toggleSidebar={toggleSidebar} {...rider}/>
       </div> }
 
     

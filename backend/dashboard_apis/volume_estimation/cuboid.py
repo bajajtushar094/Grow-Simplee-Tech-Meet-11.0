@@ -1,7 +1,6 @@
 import cv2
 # from realsense_depth import *
 from .opt_realsense import *
-# from opt_realsense import *
 import matplotlib.pyplot as plt
 import rembg
 import numpy.ma as ma
@@ -13,7 +12,6 @@ from collections import deque
 from typing import NamedTuple
 import warnings
 import time
-import pyrealsense2 as rs
 
 warnings.filterwarnings('ignore')
 
@@ -33,7 +31,7 @@ class VolumeCalc:
         self.point2 = None
         self.queue = deque([])
         self.MIN_VOL_THRESHOLD = 27
-
+        self.SPHERE_THRESHOLD = 0.3
 
     def startProcess(self):
         self.queue.clear()
@@ -60,10 +58,9 @@ class VolumeCalc:
         dimensions = obj_details.dimensions
         shape = obj_details.shape
 
-        base_path = os.getcwd()
-        print(base_path)
-        # base_path = 'E:\InterIIT\clone\Grow-Simplee-Tech-Meet-11.0\backend\dashboard_apis'
-        folderPath = os.path.join(base_path, 'static', folder_name)
+        # base_path = os.getcwd()
+        base_path = '/home/gunjan/Desktop/task1_interiit/dump'
+        folderPath = os.path.join(base_path, folder_name)
         folderExist = os.path.exists(folderPath)
 
         if not folderExist:
@@ -123,6 +120,20 @@ class VolumeCalc:
         norm = np.linalg.norm(matrix)
         matrix = matrix/norm  # normalized matrix
         return matrix
+    
+    def check_sphere(self, obj_area, obj_height, radius):
+
+        print(f"Radius = {radius} cm")
+        sphere = False
+
+        if abs(radius - obj_height/2)/radius < self.SPHERE_THRESHOLD:
+            print("Sphere detected!")
+            sphere = True
+            # radius = obj_height/2
+        else:
+            print("Not a sphere")
+            
+        return sphere
 
     def processImage(self, queue):
         # Initialize Camera Intel Realsense
@@ -156,12 +167,20 @@ class VolumeCalc:
             similarity_factor, obj_height = self.similarityFactor(depth_frame = depth_frame, color2= color2, depth_2=depth_2, alpha_threshold=250, obj_pixels=obj_pixels)
 
             obj_area = ratio * area * (similarity_factor**2)
+            
+            radius = np.sqrt(obj_area/np.pi)
+            if(self.check_sphere(obj_area,obj_height, radius)):
+                print(f"Difference in heights = {obj_height} cm")
+                print(f"Area of the top = {obj_area} cm2")
+                volume = 4/3 * np.pi * (radius**3)
+                print(f"Volume of object = {volume} cm3")
+            
+            else:
+                volume = obj_area * obj_height
 
-            volume = obj_area * obj_height
-
-            print(f"Difference in heights = {obj_height} cm")
-            print(f"Area of the top = {obj_area} cm2")
-            print(f"Volume of object = {volume} cm3")
+                print(f"Difference in heights = {obj_height} cm")
+                print(f"Area of the top = {obj_area} cm2")
+                print(f"Volume of object = {volume} cm3")
 
             max_pixel = np.argmax(depth_frame)
             min_pixel = np.argmin(depth_frame)
@@ -170,7 +189,7 @@ class VolumeCalc:
 
             cv2.putText(color_frame, "{}mm".format(distance), (point[0], point[1] - 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 2)
 
-            color_depth_frame = 127.5* 2 * self.normalize2D(depth_frame)
+            # color_depth_frame = 127.5* 2 * self.normalize2D(depth_frame)
 
             # colormap = plt.get_cmap('inferno')
             # heatmap = (colormap(color_depth_frame) * 2**16).astype(np.uint16)[:,:,:3]

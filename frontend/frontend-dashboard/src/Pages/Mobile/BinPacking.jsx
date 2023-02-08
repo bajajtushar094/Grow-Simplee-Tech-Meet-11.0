@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MobileLayout from "../../Component/Layout/MobileLayout";
 import { Link, useNavigate } from "react-router-dom";
 import CreateBagBoxIcon from "../../Shared/Icons/CreateBagBoxIcon";
@@ -11,6 +11,7 @@ import {
   getLoggedIn,
   getPackages,
   setIsInBag,
+  getTripId,
 } from "../../features/rider/riderSlice";
 import ThreeDBag from "../../Component/Mobile/ThreeDBag";
 
@@ -20,11 +21,32 @@ const BinPacking = () => {
 
   const loggedIn = useSelector(getLoggedIn);
 
+  const [coordinates, setCoordinates] = useState([]);
+
   if (!loggedIn) {
     navigate("/login");
   }
 
+  /* const getCoordinates = async () => {
+    const response = await fetch(
+      "http://127.0.0.1:8000/core/bin-packing/" + tripId
+    );
+    const coordinates = await response.json();
+  }; */
+
+  //getCoordinates();
+
   const packages = useSelector(getPackages);
+  const tripId = useSelector(getTripId);
+
+  const getCoordinates = useCallback(async () => {
+    const response = await fetch(
+      "http://127.0.0.1:8000/core/bin-packing/" + tripId
+    );
+    const data = await response.json();
+    console.log(data);
+    setCoordinates(data);
+  }, [tripId]);
 
   const [currentPackage, setCurrentPackage] = useState(0);
 
@@ -37,7 +59,9 @@ const BinPacking = () => {
 
     //set current package as the index of the first package that is not in bag
     setCurrentPackage(packages.findIndex((item) => !item.isInBag));
-  }, [packages, navigate]);
+
+    getCoordinates();
+  }, [packages, navigate, getCoordinates]);
 
   const next = () => {
     dispatch(
@@ -135,6 +159,7 @@ const BinPacking = () => {
               <ThreeDBag
                 packages={packages}
                 currentPackage={currentPackage}
+                data={coordinates}
               />{" "}
             </div>
             <div

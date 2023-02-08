@@ -10,7 +10,7 @@ import IssueStatusIcon from "../Shared/Icons/IssueStatusIcon";
 const App = () => {
   const [src, setSrc] = useState("");
   const [src2, setSrc2] = useState("");
-  const [currentFolder, setCurrentFolder] = useState(1);
+  const [currentFolder, setCurrentFolder] = useState(0);
 
   const [orderDetails, setOrderDetails] = useState({
     volume: "-----",
@@ -26,24 +26,28 @@ const App = () => {
     setSrc2(temp_src2);
   };
   const startEstimation = () => {
-    // if (currentFolder >= 2) return;
-    axios
-      .get(`${LOCAL_SERVER_URL_IP}/start-process/`)
-      .then((res) => {
-        console.log(res);
-        setCurrentFolder(() => 2);
-        updateImg(currentFolder);
-        howManyOrders = res.data.howManyOrders;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (currentFolder >= 1) setCurrentFolder(() => 0);
+    // axios
+    //   .get(`${LOCAL_SERVER_URL_IP}/start-process/`)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setCurrentFolder(() => 2);
+    //     console.log(currentFolder);
+    //     updateImg(currentFolder + 1);
+    //     howManyOrders = res.data.howManyOrders;
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
     axios
       .get(`${LOCAL_SERVER_URL_IP}/orders/json/` + 1)
       .then((res) => {
         console.log(res.data);
         setOrderDetails(res.data.details);
-        updateImg(currentFolder);
+        setCurrentFolder((currentFolder) => {
+          return currentFolder + 1;
+        });
+        updateImg(currentFolder + 1);
       })
       .catch((err) => {
         console.log(err);
@@ -58,9 +62,9 @@ const App = () => {
         console.log(res.data);
         setOrderDetails(res.data.details);
         setCurrentFolder((currentFolder) => {
-          return parseInt(currentFolder) + 1;
+          return currentFolder + 1;
         });
-        updateImg(currentFolder);
+        updateImg(nextFolder);
       })
       .catch((err) => {
         console.log(err);
@@ -78,19 +82,21 @@ const App = () => {
               console.log("process started");
               startEstimation();
             }}
-            className={`bg-green-500 block mt-4 mb-4 text-white px-4 py-2 rounded-xl w-32 ${
-              currentFolder !== 1 ? "cursor-default" : null
-            }`}
+            className={`bg-green-500 block mt-4 mb-4 text-white px-4 py-2 rounded-xl w-32`}
           >
-            {currentFolder === 1 ? "Start" : "Restart"}{" "}
+            {currentFolder === 0 ? "Start" : "Restart"}{" "}
             <RightArrow className="inline" />
           </button>
-          <button
-            className="bg-black text-white px-4 py-2 rounded-xl w-32"
-            onClick={nextFolder}
-          >
-            Next {currentFolder - 1}
-          </button>
+          {currentFolder !== 0 ? (
+            <button
+              className="bg-black text-white px-4 py-2 rounded-xl w-32"
+              onClick={nextFolder}
+            >
+              {/* Next {currentFolder + 1} */}
+              Next
+              <RightArrow className="inline ml-2" />
+            </button>
+          ) : null}
         </div>
         <div className="ml-10 mt-20">
           <h4 className="text-sm font-semibold text-[#706D64]">SUPPORT</h4>
@@ -120,21 +126,23 @@ const App = () => {
             <h1 className="text-sm font-semibold text-[#706D64]">Object ID</h1>
             <div className="flex w-full justify-between my-10">
               <div style={{ width: "360px", height: "auto" }}>
-                <h1>Color Image</h1>
+                <h1 className="font-bold">RGB Image</h1>
                 <div className="flex items-center">
                   <img
                     alt="Depth Image"
                     src={src}
                     style={{ width: "auto", maxHeight: "340px" }}
+                    className="rounded-2xl"
                   />
                 </div>
               </div>
-              <div style={{ width: "360px", height: "auto" }}>
-                <h1>Depth Image</h1>
+              <div style={{ width: "360px", height: "auto" }} className="ml-2">
+                <h1 className="font-bold">Heat Map</h1>
                 <img
                   alt="Depth Image"
                   src={src2}
                   style={{ width: "auto", maxHeight: "340px" }}
+                  className="rounded-2xl"
                 />
               </div>
             </div>
