@@ -32,6 +32,8 @@ class VolumeCalc:
         self.queue = deque([])
         self.MIN_VOL_THRESHOLD = 27
         self.SPHERE_THRESHOLD = 0.3
+
+    def startProcess(self):
         self.queue.clear()
         self.processImage(queue=self.queue)
         self.saveHandler(queue=self.queue)
