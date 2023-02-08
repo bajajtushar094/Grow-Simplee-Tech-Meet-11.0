@@ -2,8 +2,9 @@ from celery import shared_task
 import copy
 import pickle
 from .models import *
+from datetime import datetime
 @shared_task()
-def solveVRP(all_riders,all_orders,Order,PickledVRPInstance):
+def solveVRP(all_riders,all_orders, Trip, Order, PickledVRPInstance):
     PickledModelObject = PickledVRPInstance.objects.all()[len(PickledVRPInstance.objects.all())-1]
     vrp_instance= PickledModelObject.current_instance
     manager, routing, solution = vrp_instance.process_VRP()
@@ -39,15 +40,30 @@ def solveVRP(all_riders,all_orders,Order,PickledVRPInstance):
     for (i,route) in enumerate(data):
         temp=[]
         list_route = route.split(',')
+        trip = Trip(orders = "", rider_id=all_riders[i].id, trip_status="ongoing", created_time=datetime.now())
+        trip.save()
+        order_ids=""
         for loc in list_route:
             if int(loc)==0:
                 continue
             else:
-                temp.append([float(all_orders[int(loc)-1].address.latitude), float(all_orders[int(loc)-1].address.longitude)])
+                
+                order_ids += f"{all_orders[int(loc)-1].order_id},"
+                temp.append([all_orders[int(loc)-1].order_id,float(all_orders[int(loc)-1].latitude), float(all_orders[int(loc)-1].longitude)])
+        order_ids=order_ids[0:len(order_ids)-1]
+        trip.orders = order_ids
+        trip.save()
         all_riders[i].delievery_orders = str(temp)
         all_riders[i].save()
         routes.append(temp)
 
+
+    # list_riders = routes[0]
+
+    # for (i, orders) in list_riders:
+    #     for (j, order) in orders:
+    #         trip = Trip(order_id = order[0], rider_id=all_riders[i].id, trip_status="upcoming", created_time=datetime.now())
+    #         trip.save()
     return routes
 
 
@@ -90,7 +106,7 @@ def solveVRPReroute(all_riders,all_orders):
             if int(loc)==0:
                 continue
             else:
-                temp.append([float(all_orders[int(loc)-1].address.latitude), float(all_orders[int(loc)-1].address.longitude)])
+                temp.append([float(all_orders[int(loc)-1].latitude), float(all_orders[int(loc)-1].longitude)])
         all_riders[i].delievery_orders = str(temp)
         all_riders[i].save()
         routes.append(temp)

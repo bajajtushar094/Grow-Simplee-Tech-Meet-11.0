@@ -10,6 +10,7 @@ from utils.vehicle_routing.customers import Order as OrderVRP
 from core.models import *
 import zipfile
 from celery.result import AsyncResult
+from .choices import *
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from rest_framework.response import Response
@@ -32,6 +33,7 @@ import pandas as pd
 from shapely.geometry import Point, LineString
 import geopandas as gpd
 from django.core.files.storage import default_storage
+from datetime import datetime
 
 url = "http://localhost:8000/"
 
@@ -388,17 +390,17 @@ class generateInitialSolution(APIView):
 
         all_riders = Rider.objects.all()
         for rider in all_riders:
-            vehicles.append(Vehicle(int(rider.bag_volume), start=depot, end=depot))
+            vehicles.append(Vehicle(int(100), start=depot, end=depot))
         
         all_orders = Order.objects.all()
         for order in all_orders:
-            orders.append(OrderVRP(int(order.volume), [float(order.address.latitude), float(order.address.longitude)], 1 if order.delivery_action == "drop" else 2))
+            orders.append(OrderVRP(100, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
         pick_vrp =  PickledVRPInstance(current_instance=vrp_instance)
         pick_vrp.save()
         # manager, routing, solution = vrp_instance.process_VRP()
-        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Trip":Trip,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
         sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
