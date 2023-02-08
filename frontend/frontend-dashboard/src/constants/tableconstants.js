@@ -1,10 +1,10 @@
 export const INVENTORY_COLUMNS = {
-    category:false,
+  delivery_action:false,
     rider: false,
   };
   export const REPOSITORY_HISTORY_COLUMNS = {
     status:false,
-    category:false
+    delivery_action:false
   };
   export const REPOSITORY_INHOUSE_COLUMNS = {
      status:false,

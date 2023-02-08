@@ -7,6 +7,7 @@ import { LOCAL_SERVER_URL_IP } from "../constants/config";
 function App() {
   const [file, setFile] = useState();
   const [data, setData] = useState([]);
+  const [pickupFile, setPickupFile] = useState();
 
   function handleChange(event) {
     setFile(event.target.files[0]);
@@ -24,10 +25,13 @@ function App() {
     return bytes;
   }
   function saveByteArray(reportName, byte) {
+    // console.log(typeof(byte))
     var blob = new Blob([byte], { type: "application/zip" });
+    // console.log(blob.keys())
     var link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
     var fileName = reportName;
+    console.log(1)
     link.download = fileName;
     link.click();
   }
@@ -45,46 +49,35 @@ function App() {
     };
     axios.post(url, formData, config).then((response) => {
       console.log(response);
-      
+      var sampleArr = base64ToArrayBuffer(response.data);
+      console.log(sampleArr)
+      saveByteArray("FileName.zip", sampleArr);
+    });
+  }
+
+  function handlePickupChange(event) {
+    setPickupFile(event.target.files[0]);
+    console.log(event.target.files[0]);
+  }
+
+  function handlePickupSubmit(event) {
+    event.preventDefault();
+    // const url = 'http://localhost:8000/core/demo/';
+    const url = `${LOCAL_SERVER_URL_IP}/demoPickup/`;
+    const formData = new FormData();
+    formData.append("file", pickupFile);
+    formData.append("fileName", pickupFile.name);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios.post(url, formData, config).then((response) => {
+      console.log(response);
       // var sampleArr = base64ToArrayBuffer(response.data);
-      // console.log(sampleArr);
+      // console.log(sampleArr)
       // saveByteArray("FileName.zip", sampleArr);
     });
-    // .then((response) => response.arrayBuffer())
-    // .then((buffer) => {
-    //   const uint8Array = new Uint8Array(buffer);
-    //   if (
-    //     uint8Array[0] === 80 &&
-    //     uint8Array[1] === 75 &&
-    //     uint8Array[2] === 3 &&
-    //     uint8Array[3] === 4
-    //   ) {
-    //     const blob = new Blob([buffer], { type: "application/zip" });
-    //     const link = document.createElement("a");
-    //     link.href = URL.createObjectURL(blob);
-    //     link.download = "file.zip";
-    //     link.click();
-    //   } else {
-    //     console.error("Not a valid Zip file");
-    //   }
-    // });
-    // .then((response) => {
-    // console.log(response);
-
-    // var binary = response.data;
-    // var len = binary.length;
-    // var buffer = new ArrayBuffer(len);
-    // var view = new Uint8Array(buffer);
-    // for (var i = 0; i < len; i++) {
-    //   view[i] = binary.charCodeAt(i);
-    // }
-    // // const blob = new Blob([view], { type: "application/zip" });
-    // const file = new File([binary], { type: "application/zip" });
-    // const link = document.createElement("a");
-    // link.href = window.URL.createObjectURL(file);
-    // link.download = "filename.zip";
-    // link.click();
-    // });
   }
   const coordinates = [
     {
@@ -132,17 +125,39 @@ function App() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            height: "400px",
+            height: "60vh",
             backgroundColor: "white",
             padding: "30px",
             borderRadius: "5px",
           }}
         >
+          Upload Excel file for dispatch items:
           <form onSubmit={handleSubmit}>
             <input
               style={{ margin: "20px" }}
               type="file"
               onChange={handleChange}
+            />
+            <button
+              style={{
+                margin: "20px",
+                backgroundColor: "black",
+                width: "100px",
+                height: "40px",
+                borderRadius: "5px",
+                color: "white",
+              }}
+              type="submit"
+            >
+              <p style={{ fontSize: "14px" }}>Upload</p>
+            </button>
+          </form>
+          Upload excel file for pickup values: 
+          <form onSubmit={handlePickupSubmit}>
+            <input
+              style={{ margin: "20px" }}
+              type="file"
+              onChange={handlePickupChange}
             />
             <button
               style={{

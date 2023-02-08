@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GSLogo from "../../Shared/Icons/GSLogo";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,6 +12,7 @@ import {
   setIsBagScanned,
   addPackages,
 } from "../../features/rider/riderSlice";
+import { LOCAL_SERVER_URL_IP } from "../../constants/config";
 
 const Login = (props) => {
   const navigate = useNavigate();
@@ -83,6 +84,14 @@ const Login = (props) => {
       login();
     }
   }
+
+  useEffect(()=>{
+    const generateTrip = async () => {
+      const res = await axios.get(`${LOCAL_SERVER_URL_IP}/solve_initial/`);
+      console.log(res?.data)
+    };
+    generateTrip();
+  },[])
 
   return (
     <div className="flex flex-col h-screen items-center bg-[#F8F8F7]">
