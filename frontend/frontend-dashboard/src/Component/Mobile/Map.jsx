@@ -7,7 +7,7 @@ import delivery from './delivery.svg'
 import Pins from './Pins.svg'
 import Mapmarker from "../Global/Marker/Mapmarker";
 import ReactDOMServer from 'react-dom/server';
-import R from './R.svg'
+import R from './R.svg';
 
 function createIcon(url) {
   return new L.Icon({
@@ -26,7 +26,7 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [coordinates, setCoordinates] = useState(props.coordinates);
-  const pickupArray = orders!=undefined?orders.filter(order => order.delivery_action ==="pickup"):[]
+  const pickupArray = orders!=undefined?orders.filter(order => order.delivery_action ==="pickup"):[];
   function handleClick(e) {
     setSelectedIndex(e.target.options.index)
   }

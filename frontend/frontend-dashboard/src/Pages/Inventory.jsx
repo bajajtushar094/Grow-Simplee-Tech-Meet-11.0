@@ -13,6 +13,8 @@ import { Link, useParams, useLocation } from 'react-router-dom';
 import cx from 'classnames'
 import { LOCAL_SERVER_URL_IP } from "../constants/config";
 import { inventoryConstant } from "../constants/inventoryConst";
+import CubeWithArrowIcon from "../Shared/Icons/CubeWithArrowIcon";
+import TruckIcon from "../Shared/Icons/TruckIcon";
 
 
 const Inventory = () => {
@@ -29,7 +31,7 @@ const Inventory = () => {
     else
     setInventoryHeading(inventoryConstant[1])
   }, [warehouseTab]);
-
+ 
   useEffect(() => {
     const fetchOrders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/orders/all`);
@@ -48,6 +50,8 @@ const Inventory = () => {
       return delivery_action === "drop" && (order_status==="delayed" || order_status==="undelivered")
   }
   const displayedList = orders.filter(checkRoute);
+  console.log(orders)
+  console.log(displayedList)
   return (
     <Layout>
       <div className='w-full flex-col'>
@@ -62,7 +66,7 @@ const Inventory = () => {
             </div>
           </div>
           <div className="flex items-center pl-4 border-l-2">
-            <div><BoxesIcon /></div>
+            <div><TruckIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
               )}>15/01/23</h2>
@@ -70,7 +74,7 @@ const Inventory = () => {
             </div>
           </div>
           <div className="flex items-center pl-4 border-l-2">
-            <div><BoxesIcon /></div>
+            <div><CubeWithArrowIcon /></div>
             <div className="ml-4">
               <h2 className={cx("text-4xl font-bold",
               )}>{displayedList.length}</h2>

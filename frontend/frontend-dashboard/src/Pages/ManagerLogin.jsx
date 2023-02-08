@@ -27,7 +27,7 @@ const ManagerLogin = () => {
         localStorage.setItem("authTokens", token);
         setAuthorizationToken(token);
         console.log(token);
-        console.log(parseJwt(token))
+        console.log(parseJwt(token));
         dispatch(setCurrentUser(parseJwt(token)));
         navigate('/dashboard');
       })

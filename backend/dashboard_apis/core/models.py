@@ -3,11 +3,19 @@ from django.utils.translation import gettext_lazy as _
 from .choices import *
 import os
 from picklefield.fields import PickledObjectField
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+class User(AbstractUser):
+    username = password = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255, null=True, blank=True)
+    is_manager = models.BooleanField(default=False)
+    is_rider = models.BooleanField(default=False)
+
 
 class Manager(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True, default=None)
     name = models.CharField(max_length=250)
     contact_number = models.CharField(max_length=500, null=True)
     latitude = models.CharField(max_length=50, null=True)
@@ -19,6 +27,7 @@ class Manager(models.Model):
 
 
 class Rider(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=250)
     photoURL = models.CharField(max_length=250, null=True)
     contact_number = models.CharField(max_length=10)
