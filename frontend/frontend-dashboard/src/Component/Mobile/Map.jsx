@@ -26,7 +26,8 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [coordinates, setCoordinates] = useState(props.coordinates);
-  const pickupArray = orders!=undefined?orders.filter(order => order.delivery_action ==="pickup"):[];
+  const pickupArray = orders.filter(order => order.delivery_action ==="pickup" );
+  console.log(pickupArray)
   function handleClick(e) {
     setSelectedIndex(e.target.options.index)
   }
@@ -58,9 +59,9 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
         time_to_reach: date.toLocaleString('en-IN', { hour: 'numeric', minute: 'numeric', hour12: true })
     });
 }
-
-  let latCenter = 26.148043;
-  let lonCenter = 91.731377;
+// const position = [12.9716,77.5946]
+  let latCenter = 12.9716;
+  let lonCenter = 77.5946;
   for(let i = 0; i < props.coordinates.length; i++) {
     latCenter += props.coordinates[i].latitude;
     lonCenter += props.coordinates[i].longitude;
@@ -76,9 +77,15 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
     route = <Marker position={[latCenter,lonCenter]}></Marker>;
     zoom = 9;
   }
+  if(latCenter<8.4 || latCenter>37.6){
+    latCenter=12.9716
+  }
+  if(lonCenter<68.7 || lonCenter>97.25){
+    lonCenter=77.5946
+  }
 
-
-  console.log(coordinates)
+  console.log(orders)
+  // console.log(lonCenter)
 
   
 
@@ -99,7 +106,7 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
         <Marker
           key={index}
           index={index}
-          position={[item.current_address.latitude,item.current_address.longitude]}
+          position={[item.current_order.latitude,item.current_order.longitude]}
           icon={rider(R)}
           // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
           // icon = {sus}
@@ -110,7 +117,7 @@ const Map = ({setRouteDetails,riderData,orders, ...props}) => {
         <Marker
           key={index}
           index={index}
-          position={[item.address.latitude,item.address.longitude]}
+          position={[item.latitude,item.longitude]}
           icon={createIcon(delivery)}
           // icon = {sus}
           onclick={handleClick}
