@@ -45,23 +45,46 @@ function App() {
     };
     axios.post(url, formData, config).then((response) => {
       console.log(response);
-      var sampleArr = base64ToArrayBuffer(data);
-      console.log(sampleArr)
-      saveByteArray("FileName.zip", sampleArr);
-      // var binary = response.data;
-      // var len = binary.length;
-      // var buffer = new ArrayBuffer(len);
-      // var view = new Uint8Array(buffer);
-      // for (var i = 0; i < len; i++) {
-      //   view[i] = binary.charCodeAt(i);
-      // }
-      // // const blob = new Blob([view], { type: "application/zip" });
-      // const file = new File([binary], { type: "application/zip" });
-      // const link = document.createElement("a");
-      // link.href = window.URL.createObjectURL(file);
-      // link.download = "filename.zip";
-      // link.click();
+      
+      // var sampleArr = base64ToArrayBuffer(response.data);
+      // console.log(sampleArr);
+      // saveByteArray("FileName.zip", sampleArr);
     });
+    // .then((response) => response.arrayBuffer())
+    // .then((buffer) => {
+    //   const uint8Array = new Uint8Array(buffer);
+    //   if (
+    //     uint8Array[0] === 80 &&
+    //     uint8Array[1] === 75 &&
+    //     uint8Array[2] === 3 &&
+    //     uint8Array[3] === 4
+    //   ) {
+    //     const blob = new Blob([buffer], { type: "application/zip" });
+    //     const link = document.createElement("a");
+    //     link.href = URL.createObjectURL(blob);
+    //     link.download = "file.zip";
+    //     link.click();
+    //   } else {
+    //     console.error("Not a valid Zip file");
+    //   }
+    // });
+    // .then((response) => {
+    // console.log(response);
+
+    // var binary = response.data;
+    // var len = binary.length;
+    // var buffer = new ArrayBuffer(len);
+    // var view = new Uint8Array(buffer);
+    // for (var i = 0; i < len; i++) {
+    //   view[i] = binary.charCodeAt(i);
+    // }
+    // // const blob = new Blob([view], { type: "application/zip" });
+    // const file = new File([binary], { type: "application/zip" });
+    // const link = document.createElement("a");
+    // link.href = window.URL.createObjectURL(file);
+    // link.download = "filename.zip";
+    // link.click();
+    // });
   }
   const coordinates = [
     {
