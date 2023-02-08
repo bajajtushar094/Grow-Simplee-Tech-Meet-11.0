@@ -66,6 +66,7 @@ urlpatterns = [
     path('geocode/', views.getGeoCode.as_view()),
     path('demo/', views.demo.as_view()),
     path('locations/rider', views.getRiderLocations.as_view()),
+    path('demoPickup/', views.demoPickup.as_view()),
 
     #pagination urls
     path('pagination/rider/<int:limit>/<int:offset>', views.getRidersPaginate.as_view()),
