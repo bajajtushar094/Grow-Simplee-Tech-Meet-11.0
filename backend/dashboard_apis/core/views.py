@@ -144,6 +144,7 @@ class getRiders(APIView):
                 else:
                     data['riders'][i]['progress'] = orders_completed / \
                         (len(orders_id)) * 100
+                data['riders'][i]['bag_volume'] = trip.bag.length * trip.bag.width * trip.bag.height
         return Response(data)
 
 
