@@ -1,6 +1,6 @@
 import cv2
 # from realsense_depth import *
-from opt_realsense import *
+from .opt_realsense import *
 import matplotlib.pyplot as plt
 import rembg
 import numpy.ma as ma
@@ -32,6 +32,8 @@ class VolumeCalc:
         self.queue = deque([])
         self.MIN_VOL_THRESHOLD = 27
         self.SPHERE_THRESHOLD = 0.3
+
+    def startProcess(self):
         self.queue.clear()
         self.processImage(queue=self.queue)
         self.saveHandler(queue=self.queue)
