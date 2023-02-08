@@ -42,7 +42,7 @@ class Rider(models.Model):
     current_trip_id = models.CharField(max_length=50, null=True)
     earnings = models.IntegerField(blank=True, null=True)
     bag_volume = models.FloatField(null=True)
-
+    
     def __str__(self):
         return f"{self.name} + {self.id}"
 

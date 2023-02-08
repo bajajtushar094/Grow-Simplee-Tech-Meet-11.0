@@ -62,5 +62,10 @@ urlpatterns = [
     path('bin-packing/<str:id>', views.binPacking.as_view()),
 
     path('geocode/', views.getGeoCode.as_view()),
-    path('demo/', views.demo.as_view())
+    path('demo/', views.demo.as_view()),
+    path('locations/rider', views.getRiderLocations.as_view()),
+
+    #pagination urls
+    path('pagination/rider/<int:limit>/<int:offset>', views.getRidersPaginate.as_view()),
+    path('pagination/order/<int:limit>/<int:offset>', views.getOrdersPaginate.as_view()),
 ]

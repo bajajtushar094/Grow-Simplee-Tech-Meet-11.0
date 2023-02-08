@@ -33,6 +33,8 @@ from shapely.geometry import Point, LineString
 import geopandas as gpd
 from django.core.files.storage import default_storage
 
+url = "http://localhost:8000/"
+
 class getRiderManagementMap(APIView):
     permission_class = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
@@ -232,7 +234,7 @@ class getRiderOrders(APIView):
 class getRiderById(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
-        rider = Rider.objects.get(id=rider_id)
+        rider = Rider.objects.get(id=int(rider_id))
         rider_serialized = RiderSerializer(rider).data
         return Response(rider_serialized)
 
@@ -414,4 +416,53 @@ class generateRerouteSolution(APIView):
         sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
+
+class getRiderLocations(APIView):
+    def get(self, request, *args, **kwargs):
+        riders = Rider.objects.all()
+        trip_ids = [RiderSerializer(rider).data['current_trip_id'] for rider in riders]
+        locs = []
+        for trip_id in trip_ids:
+            print("Trip_id = ", trip_id)
+            trip_db = Trip.objects.get(id = int(trip_id))
+            order_ids = TripSerializer(trip_db).data['orders']
+            print(order_ids)
+            order_arr = order_ids.split(',')
+            print("Array of order ids is:", order_arr)
+            for order in order_arr: 
+                order_db = Order.objects.get(order_id = order)
+                location = [OrderSerializer(order_db).data['latitude'], OrderSerializer(order_db).data['longitude']]
+                print(location)
+                if location not in locs:
+                    locs.append(location)
+        print(locs)
+        data = {}
+        data['locations'] = locs
+        return Response(data)
+    
+class getRidersPaginate(APIView):
+    def get(self, request, *args, **kwargs):
+        # print(request.__dict__)
+        lim = kwargs["limit"]
+        off = kwargs["offset"]
+        riders = Rider.objects.all()[off: off+lim]
+        rider_data = [RiderSerializer(rider).data for rider in riders]
+        data = {}
+        data["next"] = f"{url}/core/pagination/rider/{lim}/{off+lim}"
+        data["riders"] = rider_data
+        return Response(data)
+    
+class getOrdersPaginate(APIView):
+    def get(self, request, *args, **kwargs):
+        # print(request.__dict__)
+        lim = kwargs["limit"]
+        off = kwargs["offset"]
+        orders = Order.objects.all()[off: off+lim]
+        order_data = [OrderSerializer(rider).data for rider in orders]
+        data = {}
+        data["next"] = f"{url}/core/pagination/order/{lim}/{off+lim}"
+        data["riders"] = order_data
+        return Response(data)
+    
+
 

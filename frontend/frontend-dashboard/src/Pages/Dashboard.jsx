@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [manager, setManager] = useState({})
   const [upcomingCount, setUpcomingCount] = useState({})
   const [riderCount, setRiderCount] = useState(0)
+  const [riderlocations, setriderlocations] = useState([])
   
   useEffect(()=>{
 
@@ -37,10 +38,17 @@ const Dashboard = () => {
       console.log(response)
       setRiderCount(response['count'])
     }
+    const fetchRiderLocations = async () => {
+      const res = await fetch("http://localhost:8000/core/locations/rider")
+      const response = await res.json()
+      console.log(response)
+      setriderlocations(response['locations'])
+    }
 
     fetchManager()
     fetchUpcomingCount()
     fetchRiderCount()
+    fetchRiderLocations()
   }, [])
   return (
     <Layout isLeftSidebarPresent={false} flex_dir={"col"}>
@@ -117,7 +125,7 @@ const Dashboard = () => {
         </div>
         <div className='text flex font-bold py-5 m-3'>
           <div className="w-full px-5" style={{maxHeight:"100%"}} id="mapbox_div">
-          <MapBox />
+          <MapBox markerLocations={riderlocations}/>
           </div>
             <div className="w-full px-5">
             <div className="w-full px-5 py-3 border-b-4">
