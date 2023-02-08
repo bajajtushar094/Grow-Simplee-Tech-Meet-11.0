@@ -94,8 +94,8 @@ class getOrders(APIView):
         data["orders"] = []
 
         for i in range(len(all_orders)):
-            if all_orders[i].delivery_action == "pickup":
-                continue
+            # if all_orders[i].delivery_action == "pickup":
+            #     continue
             date_time_now = datetime.now().replace(tzinfo=utc)
             if date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
                 all_orders[i].delay_status = "delayed"
