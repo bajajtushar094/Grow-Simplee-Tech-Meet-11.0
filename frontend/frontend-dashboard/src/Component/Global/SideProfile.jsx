@@ -52,6 +52,7 @@ function SideProfile({ selectedRider, toggleSidebar, ...props }) {
       style={{
         backgroundColor: "white",
         width: "464px",
+        height: "100vh",
         padding: "20px",
         borderRadius: props.borderRadius ? props.borderRadius : "0px",
       }}
@@ -214,7 +215,7 @@ function SideProfile({ selectedRider, toggleSidebar, ...props }) {
                 style={{ fontSize: "16px" }}
                 className="text-[16px] font-medium"
               >
-                {selectedRider?.upcoming_order.id}{" "}
+                {selectedRider?.upcoming_order?.id}{" "}
               </p>
             </div>
           </div>
@@ -242,7 +243,7 @@ function SideProfile({ selectedRider, toggleSidebar, ...props }) {
             }}
           >
             <p style={{ fontSize: "12px", textAlign: "center" }}>
-              {selectedRider?.upcoming_order.order_status}
+              {selectedRider?.upcoming_order?.order_status}
             </p>
           </div>
           <div
@@ -257,7 +258,7 @@ function SideProfile({ selectedRider, toggleSidebar, ...props }) {
               Name
             </p>
             <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-              {selectedRider?.upcoming_order.owner_name}
+              {selectedRider?.upcoming_order?.owner_name}
             </p>
           </div>
 
@@ -273,7 +274,7 @@ function SideProfile({ selectedRider, toggleSidebar, ...props }) {
               Address
             </p>
             <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-              {selectedRider?.upcoming_order.location}
+              {selectedRider?.upcoming_order?.location}
             </p>
           </div>
 
@@ -307,7 +308,7 @@ function SideProfile({ selectedRider, toggleSidebar, ...props }) {
                 EDD
               </p>
               <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-                {dayjs(selectedRider?.upcoming_order.edd).format(
+                {dayjs(selectedRider?.upcoming_order?.edd).format(
                   "dddd, Dd MMM'YY"
                 )}
               </p>

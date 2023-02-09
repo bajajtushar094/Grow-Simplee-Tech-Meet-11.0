@@ -245,6 +245,7 @@ const RiderMapContainer = ({ riderData, orders }) => {
             position: "absolute",
             zIndex: "99",
             right: "0",
+            top: "0",
           }}
         >
           <SideProfile
@@ -286,9 +287,10 @@ const RiderMapContainer = ({ riderData, orders }) => {
           <CancelOrder />
         </div>
       )} */}
-      <div
+      {/* <div
         style={{
           position: "absolute",
+          bottom: "25px",
           display: "flex",
           flexDirection: "row",
           backgroundColor: "white",
@@ -362,46 +364,8 @@ const RiderMapContainer = ({ riderData, orders }) => {
             <p style={{ fontWeight: "600", color: "red" }}>2</p>
             <p style={{ fontSize: "12px" }}>Not on route</p>
           </div>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          marginTop: "474px",
-          position: "absolute",
-          marginLeft: "1300px",
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "40px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "10px",
-            borderRadius: "10px",
-          }}
-        >
-          <img src={plus} alt="" />
-        </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "40px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "10px",
-            borderRadius: "10px",
-          }}
-        >
-          <img src={minus} alt="" />
-        </div>
-      </div>
+        </div> 
+      </div>*/}
     </>
   );
 };

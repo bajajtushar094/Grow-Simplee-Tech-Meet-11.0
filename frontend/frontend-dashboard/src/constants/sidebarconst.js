@@ -5,9 +5,10 @@ import cx from "classnames";
 import { useLocation } from "react-router-dom";
 import CartIcon from "../Shared/Icons/CartIcon";
 import NotebookIcon from "../Shared/Icons/NotebookIcon";
+import DashboardIcon from "../Shared/Icons/DashboardIcon";
 
 export const routePaths = {
-  dashboard: "/",
+  dashboard: "/dashboard",
   ridermanagement: "/ridermanagement/listView",
   warehouse: "/warehouse",
   inventory: "/warehouse/inventory",
@@ -56,7 +57,7 @@ export const LHS_TABS = [
   },
   {
     id: "gs_task_1",
-    label: "Volume Estimation",
+    label: "Vol Estimation",
     value: routePaths.volumeEstimation,
   },
 ];
@@ -128,6 +129,14 @@ export const LHS_BOTTOM_TABS_ICON = (options) => {
 export const TOP_TABS_ICON = (options, location) => {
   let icon;
   switch (options.value) {
+    case routePaths.dashboard:
+      icon = (<DashboardIcon className={cx("", {
+        "!stroke-gs-blue stroke-1":
+          options.value.indexOf(location?.pathname.split("/")[2]) > -1,
+        })}
+        />
+      );
+      break;
     case routePaths.ridermanagement:
       icon = (
         <CartIcon
@@ -142,7 +151,7 @@ export const TOP_TABS_ICON = (options, location) => {
       icon = (
         <NotebookIcon
           className={cx("", {
-            "!stroke-gs-blue stroke-1":
+            "!stroke-gs-blue !fill-gs-blue":
               options.value.indexOf(location?.pathname.split("/")[2]) > -1,
           })}
         />

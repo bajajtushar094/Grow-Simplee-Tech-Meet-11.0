@@ -103,9 +103,30 @@ function RiderDetails() {
     }
   };
 
+  const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[2].value);
+  const [activeTab, setActiveTab] = useState(TOP_TABS[0].value);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [hideTopBar, setHideTopBar] = useState(false);
+  const toggleSideBar = () => {
+    setIsSideBarOpen(!isSideBarOpen);
+  };
+  const handleTopTabChange = (option) => {
+    setActiveTopTab(option.value);
+    navigate(option.value);
+  };
+  const handleTabChange = (option) => {
+    setActiveTab(option.value);
+    navigate(option.value);
+  };
+
   return (
     <div>
-      <Topbar topTabs={TOP_TABS} />
+      <Topbar
+        topTabs={TOP_TABS}
+        activeTab={activeTopTab}
+        onTopTabClick={handleTopTabChange}
+        location={location}
+      />
 
       <div style={{ backgroundColor: "white" }}>
         <div

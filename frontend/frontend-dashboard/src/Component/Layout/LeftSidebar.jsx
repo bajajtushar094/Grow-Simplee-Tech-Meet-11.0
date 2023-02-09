@@ -18,9 +18,11 @@ const LeftSidebar = (props) => {
   } = props;
   return (
     <div className="max-w-[224px] w-full p-6">
-      <div className="text-2xl font-bold pb-5">Inventory</div>
+      {/* {
+          <div className="text-2xl font-bold pb-5">Inventory</div>
+      } */}
+
       <div>
-        <div className="text-gs-text-gray font-semibold ">ALL DRONES</div>
         <div className="">
           {lhsOptions.map((options, index) => {
             return (

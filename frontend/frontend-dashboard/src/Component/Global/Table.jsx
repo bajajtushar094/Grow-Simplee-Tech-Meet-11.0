@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import cx from "classnames";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import { Avatar } from "@mui/material";
 import CallMadeIcon from "../../Shared/Icons/CallMadeIcon";
 import { useState, useEffect } from "react";
@@ -12,14 +12,19 @@ import {
   REPOSITORY_INHOUSE_COLUMNS,
 } from "../../constants/tableconstants";
 
-export default function AntDesignGrid({ tab = "", displayedList , checkboxSelection=true, className='' }) {
-  const rows = displayedList
+export default function AntDesignGrid({
+  tab = "",
+  displayedList,
+  checkboxSelection = true,
+  className = "",
+}) {
+  const rows = displayedList;
   const riderColumn = [
     {
       field: "id",
       headerName: "View",
       width: 50,
-      headerClassName: 'bg-[#F8F8F7]',
+      headerClassName: "bg-[#F8F8F7]",
       renderCell: () => (
         <div className="flex items-center justify-between">
           <CallMadeIcon />
@@ -30,37 +35,42 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
       field: "name",
       headerName: "Rider",
       width: 200,
-      headerClassName: 'bg-[#F8F8F7]',
+      headerClassName: "bg-[#F8F8F7]",
       renderCell: (params) => (
         <div className="flex items-center justify-between">
-          {params.row.photoURL &&<Avatar
-            sx={{ width: 21, height: 21 }}
-            src={params.row.photoURL}
-          />}
+          {params.row.photoURL && (
+            <Avatar sx={{ width: 21, height: 21 }} src={params.row.photoURL} />
+          )}
           <h4 className="mx-2">{params.row.name}</h4>
           <CallMadeIcon />
         </div>
       ),
     },
-    { field: "range", headerName: "Range", headerClassName: 'bg-[#F8F8F7]', width: 130 },
+    {
+      field: "range",
+      headerName: "Range",
+      headerClassName: "bg-[#F8F8F7]",
+      width: 130,
+    },
     {
       field: "current_order",
-      headerClassName: 'bg-[#F8F8F7]',
+      headerClassName: "bg-[#F8F8F7]",
       headerName: "Latest Location",
       flex: 0.8,
       sortable: false,
       width: 400,
-      renderCell: (params) => (
-        <div>
-          {params.row.current_order.location}
-        </div>
-      ),
+      renderCell: (params) => <div>{params.row.current_order?.location}</div>,
     },
-    { field: "progress", headerName: "Progress %",headerClassName: 'bg-[#F8F8F7]', width: 130 },
+    {
+      field: "progress",
+      headerName: "Progress %",
+      headerClassName: "bg-[#F8F8F7]",
+      width: 130,
+    },
     {
       field: "rider_status",
       headerName: "Status",
-      headerClassName: 'bg-[#F8F8F7]',
+      headerClassName: "bg-[#F8F8F7]",
       renderCell: (params) => (
         <div
           className={cx("bg-[#12B76A] text-white py-1 px-2 rounded-lg", {
@@ -72,16 +82,23 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
         </div>
       ),
     },
-  ]
+  ];
 
   const inventoryColumn = [
     { field: "id", headerName: "Order ID", width: 130 },
     { field: "volume", headerName: "Volume (ml)", width: 130 },
-    { field: "edd", headerName: "Delivery Date", width: 150, renderCell: (params) => (
-      <div>
-        {tab==="inventory"? dayjs().format("MMMM D, YYYY"): dayjs(params.row.edd).format("dddd, Dd MMM'YY")}
-      </div>
-    ), },
+    {
+      field: "edd",
+      headerName: "Delivery Date",
+      width: 150,
+      renderCell: (params) => (
+        <div>
+          {tab === "inventory"
+            ? dayjs().format("MMMM D, YYYY")
+            : dayjs(params.row.edd).format("dddd, Dd MMM'YY")}
+        </div>
+      ),
+    },
     {
       field: "location",
       headerName: "Delivery Address",
@@ -127,17 +144,16 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
         </div>
       ),
     },
-  ]
-  const columns = useMemo(() => tab==="listView"? riderColumn:inventoryColumn);
+  ];
+  const columns = useMemo(() =>
+    tab === "listView" ? riderColumn : inventoryColumn
+  );
   const [columnVisible, setColumnVisible] = useState(INVENTORY_COLUMNS);
 
   useEffect(() => {
-    if (tab === "inventory")
-     setColumnVisible(INVENTORY_COLUMNS);
-    else if (tab === "history")
-      setColumnVisible(REPOSITORY_HISTORY_COLUMNS);
-    else if(tab==="inhouse")
-     setColumnVisible(REPOSITORY_INHOUSE_COLUMNS);
+    if (tab === "inventory") setColumnVisible(INVENTORY_COLUMNS);
+    else if (tab === "history") setColumnVisible(REPOSITORY_HISTORY_COLUMNS);
+    else if (tab === "inhouse") setColumnVisible(REPOSITORY_INHOUSE_COLUMNS);
   }, [tab]);
 
   return (
@@ -148,7 +164,7 @@ export default function AntDesignGrid({ tab = "", displayedList , checkboxSelect
         columnVisibilityModel={columnVisible}
         getRowId={(row) => row.id}
         pagination
-        checkboxSelection = {checkboxSelection}
+        checkboxSelection={checkboxSelection}
       />
     </div>
   );
