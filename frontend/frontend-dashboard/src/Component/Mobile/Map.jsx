@@ -17,16 +17,24 @@ function createIcon(url) {
 
 // const rider=L.divIcon({ className: "custom icon", html: ReactDOMServer.renderToString( <Mapmarker image = {}/> ) })
 
-function rider(img) {
+function rider(img, progress) {
   return L.divIcon({
     className: "custom icon",
-    html: ReactDOMServer.renderToString(<Mapmarker image={img} />),
+    html: ReactDOMServer.renderToString(
+      <Mapmarker image={img} progress={progress} />
+    ),
   });
 }
-var latCenter = 26.148043
-var lonCenter = 91.731377
-const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, ...props}) => {
-
+var latCenter = 26.148043;
+var lonCenter = 91.731377;
+const Map = ({
+  setRouteSummary,
+  riderData,
+  orders,
+  toggleSidebar,
+  setSelectedRider,
+  ...props
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [coordinates, setCoordinates] = useState(props.coordinates);
 
@@ -68,47 +76,52 @@ const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, .
   // const position = [12.9716,77.5946]
   let latCenter = 0;
   let lonCenter = 0;
-  for (let i = 0; i < props.coordinates.length; i++) {
-    latCenter += props.coordinates[i].latitude;
-    lonCenter += props.coordinates[i].longitude;
-  }
-  latCenter /= props.coordinates.length;
-  lonCenter /= props.coordinates.length;
 
   let route = null;
   let zoom = 9;
 
-  if (props.coordinates.length > 1) {
-    route = (
-      <RoutineMachine
-        coordinates={props.coordinates}
-        onChange={changeCoordinates}
-        setRouteSummary={setRouteSummary}
-      />
-    );
-  } else {
-    route = (
-      <Marker
-        key={1}
-        index={1}
-        position={[
-          props.coordinates[0].latitude,
-          props.coordinates[0].longitude,
-        ]}
-        //icon={rider(R)}
-        // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
-        // icon = {sus}
-        onclick={() => {}}
-      />
-    );
-    zoom = 12;
+  if (props.coordinates) {
+    for (let i = 0; i < props.coordinates.length; i++) {
+      latCenter += props.coordinates[i].latitude;
+      lonCenter += props.coordinates[i].longitude;
+    }
+    latCenter /= props.coordinates.length;
+    lonCenter /= props.coordinates.length;
+
+    if (props.coordinates.length > 1) {
+      route = (
+        <RoutineMachine
+          coordinates={props.coordinates}
+          onChange={changeCoordinates}
+          setRouteSummary={setRouteSummary}
+        />
+      );
+    } else {
+      route = (
+        <Marker
+          key={1}
+          index={1}
+          position={[
+            props.coordinates[0].latitude,
+            props.coordinates[0].longitude,
+          ]}
+          //icon={rider(R)}
+          // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
+          // icon = {sus}
+          onclick={() => {}}
+        />
+      );
+      zoom = 12;
+    }
   }
-    if (latCenter < 8.4 || latCenter > 37.6) {
+  if (latCenter < 8.4 || latCenter > 37.6) {
     latCenter = 12.9716;
   }
   if (lonCenter < 68.7 || lonCenter > 97.25) {
     lonCenter = 77.5946;
   }
+
+  console.log(riderData);
 
   return (
     <MapContainer
@@ -130,17 +143,17 @@ const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, .
             key={index}
             index={index}
             position={[
-              item.current_order.latitude,
-              item.current_order.longitude,
+              parseFloat(item.current_order.latitude),
+              parseFloat(item.current_order.longitude),
             ]}
-            icon={rider(R)}
+            icon={rider(R, item.progress)}
             // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
             // icon = {sus}
             onclick={handleClick}
             eventHandlers={{
               click: (e) => {
-                setSelectedRider(item)
-                toggleSidebar()
+                setSelectedRider(item);
+                toggleSidebar();
               },
             }}
           />
@@ -150,7 +163,7 @@ const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, .
           <Marker
             key={index}
             index={index}
-            position={[item.latitude, item.longitude]}
+            position={[parseFloat(item.latitude), parseFloat(item.longitude)]}
             icon={createIcon(delivery)}
             // icon = {sus}
             onclick={handleClick}

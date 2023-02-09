@@ -14,7 +14,7 @@ const Riders = () => {
   useEffect(() => {
     const fetchRiders = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/riders/all`);
-      console.log(res.data.riders);
+      //console.log(res.data.riders);
       setRiders(res.data.riders);
     };
     const fetchOrders = async () => {

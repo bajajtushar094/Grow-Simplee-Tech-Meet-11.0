@@ -156,11 +156,11 @@ const BinPacking = () => {
             </div>
             <div className="flex-grow p-4 flex-row flex content-center items-center justify-center object-center">
               {" "}
-              <ThreeDBag
+              {/* <ThreeDBag
                 packages={packages}
                 currentPackage={currentPackage}
                 data={coordinates}
-              />{" "}
+              />{" "} */}
             </div>
             <div
               onClick={next}
