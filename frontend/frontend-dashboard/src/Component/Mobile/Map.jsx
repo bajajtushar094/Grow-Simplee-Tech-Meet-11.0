@@ -66,12 +66,12 @@ const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, .
     });
 } */
   // const position = [12.9716,77.5946]
-  let latCenter = 0;
+ /* let latCenter = 0;
   let lonCenter = 0;
   for (let i = 0; i < props.coordinates.length; i++) {
     latCenter += props.coordinates[i].latitude;
     lonCenter += props.coordinates[i].longitude;
-  }
+  }*/
   latCenter /= props.coordinates.length;
   lonCenter /= props.coordinates.length;
 
@@ -126,12 +126,14 @@ const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, .
 
       {riderData &&
         riderData.map((item, index) => (
-          <Marker
+          (item!=undefined && item.current_order!=undefined
+            &&(
+              <Marker
             key={index}
             index={index}
             position={[
-              item.current_order.latitude,
-              item.current_order.longitude,
+             parseFloat (item.current_order.latitude),
+              parseFloat(item.current_order.longitude)
             ]}
             icon={rider(R)}
             // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
@@ -144,13 +146,15 @@ const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, .
               },
             }}
           />
+            ))
+          
         ))}
-      {pickupArray &&
-        pickupArray.map((item, index) => (
+      {orders &&
+        orders.map((item, index) => (
           <Marker
             key={index}
             index={index}
-            position={[item.latitude, item.longitude]}
+            position={[parseFloat(item.latitude), parseFloat(item.longitude)]}
             icon={createIcon(delivery)}
             // icon = {sus}
             onclick={handleClick}
