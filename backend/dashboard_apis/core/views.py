@@ -199,17 +199,22 @@ class updateTrip(APIView):
 
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
-        volume = request.data["volume"]
+        order_id = request.data["awb"]
         latitude = request.data["latitude"]
         longitude = request.data["longitude"]
         location = request.data["location"]
         name = request.data["name"]
-        # address = Address(latitude=latitude, longitude=longitude,
-        #                   location=location, name=name)
-        # address.save()
-        order = Order(order_name=name, volume=volume,
-                      latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
+        order = Order(order_id=order_id, address_name=name, volume=1, length=1, width=1, height=1, owner_name=name, contact_number='0848234',
+                      order_status='undelivered', latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
         order.save()
+        PickledModelObject = PickledVRPInstance.objects.all()[len(PickledVRPInstance.objects.all())-1]
+        vrp_instance= PickledModelObject.current_instance
+        vrp_instance.add_dynamic_order(OrderVRP(1, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
+        all_riders = Rider.objects.all()
+        all_orders = Order.objects.all()
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
         return Response(OrderSerializer(order).data)
 
 
