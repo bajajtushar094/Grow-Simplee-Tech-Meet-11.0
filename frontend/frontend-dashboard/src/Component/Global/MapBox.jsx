@@ -6,8 +6,8 @@ const MapBox = (markerLocations=[]) => {
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX
 const mapContainer = useRef(null);
 const map = useRef(null);
-const [lng, setLng] = useState(-70.9);
-const [lat, setLat] = useState(42.35);
+const [lng, setLng] = useState(77.5946);
+const [lat, setLat] = useState(12.9716);
 const [zoom, setZoom] = useState(9);
 useEffect(()=>{
   if(markerLocations.length!=0){
