@@ -74,7 +74,7 @@ const Map = ({
     });
 } */
   // const position = [12.9716,77.5946]
- /* let latCenter = 0;
+  let latCenter = 0;
   let lonCenter = 0;
 
   let route = null;
@@ -138,30 +138,30 @@ const Map = ({
       {props.coordinates && route}
 
       {riderData &&
-        riderData.map((item, index) => (
-          (item!=undefined && item.current_order!=undefined
-            &&(
+        riderData.map(
+          (item, index) =>
+            item != undefined &&
+            item.current_order != undefined && (
               <Marker
-            key={index}
-            index={index}
-            position={[
-             parseFloat (item.current_order.latitude),
-              parseFloat(item.current_order.longitude)
-            ]}
-            icon={rider(R, item.progress)}
-            // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
-            // icon = {sus}
-            onclick={handleClick}
-            eventHandlers={{
-              click: (e) => {
-                setSelectedRider(item);
-                toggleSidebar();
-              },
-            }}
-          />
-            ))
-          
-        ))}
+                key={index}
+                index={index}
+                position={[
+                  parseFloat(item.current_order.latitude),
+                  parseFloat(item.current_order.longitude),
+                ]}
+                icon={rider(R, item.progress)}
+                // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
+                // icon = {sus}
+                onclick={handleClick}
+                eventHandlers={{
+                  click: (e) => {
+                    setSelectedRider(item);
+                    toggleSidebar();
+                  },
+                }}
+              />
+            )
+        )}
       {orders &&
         orders.map((item, index) => (
           <Marker
