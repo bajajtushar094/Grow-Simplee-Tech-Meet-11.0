@@ -346,7 +346,11 @@ class getGeoCode(APIView):
 
 class demo(APIView):
     def post(self, request, *args, **kwargs):
-        print(request.FILES)
+        Rider.objects.all().delete()
+        Order.objects.all().delete()
+        Trip.objects.all().delete()
+        User.objects.all().delete()
+        Manager.objects.all().delete()
         file = request.FILES['file']
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
@@ -366,16 +370,76 @@ class demo(APIView):
             geocode = extract_lat_long_via_address(address)
             if geocode[0] == None:
                 continue
+            
+            new_order = Order()
+            new_order.order_id = awb
+            new_order.sku = product_id
+            new_order.delivery_action = 'undelivered'
+            new_order.order_status = 'drop'
+            new_order.edd = datetime.now()
+            new_order.latitude = geocode[0]
+            new_order.longitude = geocode[1]
+            new_order.owner_name = name
+            new_order.location = address
+            new_order.address_name = name
+            new_order.delay_status = "not delayed"
+            new_order.volume = 1
+            new_order.length = 1
+            new_order.width = 1
+            new_order.height = 1
+            new_order.save()
             coordinates.append(geocode)
             awbs.append(awb)
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
-            if index==1:
-                break
+
+        user = User(username="Pete Davidson", password="password", is_manager=True)
+        user.save()
+        manager = Manager()
+        manager.name = "Pete Davidson"
+        manager.user = user
+        manager.contact_number = int(np.random.rand()*1000000)
+        manager.latitude = 12.909694
+        manager.longitude = 77.586607
+        manager.location = "JP Nagar"
+        manager.save()
        
         for i in range(int(len(orders)/30) + 1):
+            new_user = User(username="Rider" + str(i+1), password="dummypassword")
+            new_user.save()
+            new_rider = Rider()
+            new_rider.name = "Rider" + str(i+1)
+            new_rider.photoURL = "https://haircutinspiration.com/wp-content/uploads/Gentlemen-Hairstyles-1-1.jpg"
+            new_rider.rider_status = "at warehouse"
+            new_rider.current_trip_id = ''
+            new_rider.contact_number = "898932449"
+            new_rider.user = new_user
+            new_rider.current_trip_id = ''
+            new_rider.manager = manager
+            new_rider.save()
             vehicles.append(Vehicle(len(orders), start=depot, end=depot))
+
+        
+        depot = Node([12.944013565497546, 77.69623411806606], 0)
+        orders = []
+        vehicles = []
+
+        all_riders = Rider.objects.all()
+        for rider in all_riders:
+            vehicles.append(Vehicle(int(25), start=depot, end=depot))
+        
+        all_orders = Order.objects.all()
+        for order in all_orders:
+            orders.append(OrderVRP(1, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
+        # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
+        vrp_instance = VRP(depot, orders, vehicles)
+        pick_vrp =  PickledVRPInstance(current_instance=vrp_instance)
+        pick_vrp.save()
+        # manager, routing, solution = vrp_instance.process_VRP()
+        dct={"all_riders":all_riders,"all_orders":all_orders,"Trip":Trip,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
+        sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
+        print(sol.task_id)
 
         vrp_instance = VRP(depot, orders, vehicles)
         manager, routing, solution = vrp_instance.process_VRP()
