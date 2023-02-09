@@ -22,7 +22,7 @@ def populate_riders():
         rider = Rider()
         rider.user = user
         rider.name = rider_name[i]
-        rider.photoURL = "https://www.askideas.com/media/06/Funny-Human-Naomi-Grossman-Face.jpg"
+        rider.photoURL = "https://haircutinspiration.com/wp-content/uploads/Gentlemen-Hairstyles-1-1.jpg"
         rider.contact_number = int(np.random.rand()*1000000)
         rider.rider_status = 'trip'
         rider.manager = manager
