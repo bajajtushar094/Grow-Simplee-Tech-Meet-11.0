@@ -453,8 +453,6 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
-            if index==5:
-                break
 
         user = User(username="Pete Davidson", password="password", is_manager=True)
         user.save()
