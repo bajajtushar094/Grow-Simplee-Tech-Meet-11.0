@@ -100,7 +100,7 @@ class getOrders(APIView):
             # if all_orders[i].delivery_action == "pickup":
             #     continue
             date_time_now = datetime.now().replace(tzinfo=utc)
-            if date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
+            if all_orders[i].delivery_action == 'drop' and date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
                 all_orders[i].delay_status = "delayed"
                 all_orders[i].save()
             data['orders'].append(OrderSerializer(all_orders[i]).data)
@@ -199,9 +199,10 @@ class updateTrip(APIView):
 
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
-        order_id = request.data["awb"]
-        latitude = request.data["latitude"]
-        longitude = request.data["longitude"]
+        order_id = request.data["awbNumber"]
+        coordinates = request.data["coordinates"]
+        latitude = coordinates.split(",")[0]
+        longitude = coordinates.split(",")[1]
         location = request.data["location"]
         name = request.data["name"]
         order = Order(order_id=order_id, address_name=name, volume=1, length=1, width=1, height=1, owner_name=name, contact_number='0848234',
@@ -210,6 +211,9 @@ class addDynamicPickup(APIView):
         PickledModelObject = PickledVRPInstance.objects.all()[len(PickledVRPInstance.objects.all())-1]
         vrp_instance= PickledModelObject.current_instance
         vrp_instance.add_dynamic_order(OrderVRP(1, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
+        PickledModelObject.current_instance = vrp_instance
+        PickledModelObject.save()
+        print(len(vrp_instance.orders))
         all_riders = Rider.objects.all()
         all_orders = Order.objects.all()
         dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
@@ -379,8 +383,8 @@ class demo(APIView):
             new_order = Order()
             new_order.order_id = awb
             new_order.sku = product_id
-            new_order.delivery_action = 'undelivered'
-            new_order.order_status = 'drop'
+            new_order.delivery_action = 'drop'
+            new_order.order_status = 'undelivered'
             new_order.edd = datetime.now()
             new_order.latitude = geocode[0]
             new_order.longitude = geocode[1]
@@ -398,6 +402,8 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
+            if index==5:
+                break
 
         user = User(username="Pete Davidson", password="password", is_manager=True)
         user.save()
