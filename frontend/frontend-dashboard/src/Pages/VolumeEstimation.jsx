@@ -6,8 +6,10 @@ import RightArrow from "../Shared/Icons/RightArrow";
 import RightOrderDetails from "../Component/Layout/RightOrderDetails";
 import RaiseIssueIcon from "../Shared/Icons/RaiseIssueIcon";
 import IssueStatusIcon from "../Shared/Icons/IssueStatusIcon";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 
 const App = () => {
+  const navigate = useNavigate();
   const [src, setSrc] = useState("");
   const [src2, setSrc2] = useState("");
   const [currentFolder, setCurrentFolder] = useState(0);
@@ -98,7 +100,7 @@ const App = () => {
             </button>
           ) : null}
         </div>
-        <div className="ml-10 mt-20">
+        {/* <div className="ml-10 mt-20">
           <h4 className="text-sm font-semibold text-[#706D64]">SUPPORT</h4>
           <button className="block mt-6 ml-4 text-sm text-[#706D64] flex">
             {" "}
@@ -108,7 +110,7 @@ const App = () => {
             {" "}
             <IssueStatusIcon style={{ marginRight: "6px" }} /> Issue Status
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div className="absolute right-10 w-1/5">
@@ -148,7 +150,22 @@ const App = () => {
             </div>
           </>
         )}
+        {currentFolder !== 0 ? (
+          <div style={{position:"absolute", marginLeft:"70vw"}}>
+          <button
+            className="bg-black text-white px-4 py-2 rounded-xl w-32"
+            onClick={()=>{
+              navigate('/dashboard')
+            }}
+          >
+            {/* Next {currentFolder + 1} */}
+            Dashboard
+            <RightArrow className="inline ml-2" />
+          </button>
+          </div>
+        ) : null}
       </div>
+
       {/* <ProgressBar progress="1"/> */}
     </Layout>
   );
