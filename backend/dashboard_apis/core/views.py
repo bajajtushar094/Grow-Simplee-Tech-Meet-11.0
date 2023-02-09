@@ -128,9 +128,9 @@ class getRiders(APIView):
             #     'address_name':RiderSerializer(all_riders[i]).data['address_name'],
             # }
             trip_id = data['riders'][i]['current_trip_id']
-
-            if trip_id:
-                trip = Trip.objects.get(pk=trip_id)
+            print(all_riders[i].rider_status)
+            if trip_id and all_riders[i].rider_status == 'on trip':
+                trip = Trip.objects.get(id=trip_id)
                 data['riders'][i]['trip'] = TripSerializer(trip).data  # with trip deserializer
                 orders_id = trip.orders.split(',')
                 orders_completed = 0
@@ -147,7 +147,7 @@ class getRiders(APIView):
                 else:
                     data['riders'][i]['progress'] = orders_completed / \
                         (len(orders_id)) * 100
-                data['riders'][i]['bag_volume'] = trip.bag.length * trip.bag.width * trip.bag.height
+                # data['riders'][i]['bag_volume'] = trip.bag.length * trip.bag.width * trip.bag.height
         return Response(data)
 
 
@@ -482,11 +482,11 @@ class generateInitialSolution(APIView):
 
         all_riders = Rider.objects.all()
         for rider in all_riders:
-            vehicles.append(Vehicle(int(100), start=depot, end=depot))
+            vehicles.append(Vehicle(int(25), start=depot, end=depot))
         
         all_orders = Order.objects.all()
         for order in all_orders:
-            orders.append(OrderVRP(100, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
+            orders.append(OrderVRP(1, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
         pick_vrp =  PickledVRPInstance(current_instance=vrp_instance)

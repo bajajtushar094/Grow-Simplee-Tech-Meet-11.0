@@ -12,6 +12,10 @@ def solveVRP(all_riders,all_orders, Trip, Order, PickledVRPInstance):
     print(PickledModelObject.current_instance)
     # PickledModelObject.current_instance = vrp_instance
     # PickledModelObject.save()
+    for rider in all_riders:
+        rider.rider_status = 'at warehouse'
+        rider.current_trip_id = ''
+        rider.save()
     for route_number in range(routing.vehicles()):
         path = ''
         order = routing.Start(route_number)
@@ -28,34 +32,33 @@ def solveVRP(all_riders,all_orders, Trip, Order, PickledVRPInstance):
 
         if path != '':
             path = path[1:]
-        
-        data.append(path)
-    for (i, path) in enumerate(data):
-            for node in path.split(","):
-                if (node != "0"):
-                    curr_order = Order.objects.get(id=int(node))
-                    curr_order.rider_id = all_riders[i]
-                    curr_order.save()
+            data.append(path)
+    Trip.objects.all().delete()
     routes = []
     for (i,route) in enumerate(data):
         temp=[]
+        print(route)
         list_route = route.split(',')
-        trip = Trip(orders = "", rider_id=all_riders[i].id, trip_status="ongoing", created_time=datetime.now())
+        trip = Trip(orders = "", rider=all_riders[i], trip_status="ongoing", created_time=datetime.now())
         trip.save()
         order_ids=""
         for loc in list_route:
             if int(loc)==0:
                 continue
             else:
-                
+                all_orders[int(loc)-1].trip = trip
+                all_orders[int(loc)-1].rider = all_riders[i]
+                all_orders[int(loc)-1].save()
                 order_ids += f"{all_orders[int(loc)-1].order_id},"
                 temp.append([all_orders[int(loc)-1].order_id,float(all_orders[int(loc)-1].latitude), float(all_orders[int(loc)-1].longitude)])
         order_ids=order_ids[0:len(order_ids)-1]
         trip.orders = order_ids
         trip.save()
-        all_riders[i].delievery_orders = str(temp)
+        all_riders[i].current_trip_id = trip.id
+        all_riders[i].rider_status = 'on trip'
         all_riders[i].save()
         routes.append(temp)
+
 
 
     # list_riders = routes[0]
