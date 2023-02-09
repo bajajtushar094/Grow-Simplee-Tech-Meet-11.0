@@ -19,6 +19,7 @@ export const routePaths = {
   login: "/login",
   listView: "/ridermanagement/listView",
   mapView: "/ridermanagement/mapView",
+  volumeEstimation: "/volumeestimation"
 };
 export const TOP_TABS = [
   {
@@ -52,6 +53,11 @@ export const LHS_TABS = [
     id: "gs_inhouse",
     label: "Inhouse",
     value: routePaths.inhouse,
+  },
+  {
+    id: "gs_task_1",
+    label: "Volume Estimation",
+    value: routePaths.volumeEstimation,
   },
 ];
 export const LHS_TABS_VOL = [

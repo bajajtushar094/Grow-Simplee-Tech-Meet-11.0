@@ -38,8 +38,10 @@ from datetime import datetime
 
 url = "http://localhost:8000/"
 
+
 class getRiderManagementMap(APIView):
     permission_class = [permissions.IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         data = {}
@@ -89,6 +91,7 @@ class populateData(APIView):
 
 class getOrders(APIView):
     permission_class = [permissions.IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         utc = pytz.UTC
 
@@ -107,19 +110,21 @@ class getOrders(APIView):
 
         #data = {}
         #data["orders"] = [OrderSerializer(order).data for order in all_orders]
-        #for i in range(len(data["orders"])):
+        # for i in range(len(data["orders"])):
         #    data["orders"][i]["rider"] = RiderSerializer(all_orders[i].rider).data
 
-        #return Response(data)
+        # return Response(data)
 
         return Response(data)
 
 
 class getRiders(APIView):
     permission_class = [permissions.IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
-        data = {"riders": [RiderSerializer(rider).data for rider in all_riders]}
+        data = {"riders": [RiderSerializer(
+            rider).data for rider in all_riders]}
         for i in range(len(data['riders'])):
             # data['riders'][i]['current_address'] = {
             #     'latitude':RiderSerializer(all_riders[i]).data['latitude'],
@@ -135,19 +140,33 @@ class getRiders(APIView):
                 orders_id = trip.orders.split(',')
                 orders_completed = 0
                 data['riders'][i]["orders"] = []
-                for j in range (len(orders_id)):
+                for j in range(len(orders_id)):
                     order = Order.objects.get(order_id=int(orders_id[j]))
-                    data['riders'][i]["orders"].append(OrderSerializer(order).data)
+                    data['riders'][i]["orders"].append(
+                        OrderSerializer(order).data)
                     if order.order_status == 'delivered' or order.order_status == 'failed':
                         orders_completed = orders_completed + 1
-                current_order = Order.objects.get(order_id=orders_id[orders_completed-1])
-                data['riders'][i]['current_order'] = OrderSerializer(current_order).data
+                if orders_completed != 0:
+                    current_order = Order.objects.get(
+                        order_id=orders_id[orders_completed-1])
+                else:
+                    current_order = Order.objects.get(order_id=orders_id[0])
+                data['riders'][i]['current_order'] = OrderSerializer(
+                    current_order).data
+                if(orders_completed < len(orders_id)-1):
+                    upcoming_order = Order.objects.get(
+                        order_id=orders_id[orders_completed])
+                    data['riders'][i]['upcoming_order'] = OrderSerializer(
+                        upcoming_order).data
                 if len(orders_id) == 1:
                     data['riders'][i]['progress'] = "100"
                 else:
                     data['riders'][i]['progress'] = orders_completed / \
                         (len(orders_id)) * 100
-                # data['riders'][i]['bag_volume'] = trip.bag.length * trip.bag.width * trip.bag.height
+                #data['riders'][i]['bag_volume'] = trip.bag.length * \
+                #    trip.bag.width * trip.bag.height
+                data['riders'][i]['bag_volume'] = 80 * 80 * 100
+
         return Response(data)
 
 
@@ -157,7 +176,7 @@ class cancelOrder(APIView):  # should not be needed
         order = Order.objects.get(order_id=order_id)
         order.order_status = "failed"
         #rider_orders = order.rider.delievery_orders.split(",")
-        #rider_orders.remove(str(order_id))
+        # rider_orders.remove(str(order_id))
         order_rider = Rider.objects.get(rider_id=order.rider.rider_id)
         # print(rider_orders)
         # print(order_rider)
@@ -166,7 +185,7 @@ class cancelOrder(APIView):  # should not be needed
         # print(order_rider.delievery_orders)
         # print(order.rider.delievery_orders)
         order.save()
-        #order_rider.save()
+        # order_rider.save()
         return Response(OrderSerializer(order).data)
 
 
@@ -184,6 +203,7 @@ class updateOrder(APIView):
         order.save()
         return Response(OrderSerializer(order).data)
 
+
 class updateTrip(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -194,7 +214,6 @@ class updateTrip(APIView):
         trip.save()
 
         return Response('success')
-
 
 
 class addDynamicPickup(APIView):
@@ -229,6 +248,7 @@ class getBags(APIView):
         data["bags"] = [BagSerializer(bag).data for bag in all_bags]
         return Response(data)
 
+
 class getManager(APIView):
     # permission_classes = (IsAuthenticated, )
     def get(self, request, *args, **kwargs):
@@ -237,6 +257,7 @@ class getManager(APIView):
         print(manager[0].__dict__)
         data['manager'] = [ManagerSerializer(man).data for man in manager]
         return Response(data)
+
 
 class getUpcomingCount(APIView):
     # permission_classes = (IsAuthenticated, )
@@ -247,9 +268,12 @@ class getUpcomingCount(APIView):
         orders_error = Order.objects.filter(order_status = "failed")
         data = {}
         # print(orders[0].__dict__)
-        data['Upcoming Count'] = len([OrderSerializer(man).data for man in orders_upcoming])
-        data['Delivered Count'] = len([OrderSerializer(man).data for man in orders_delivered])
-        data['Error Count'] = len([OrderSerializer(man).data for man in orders_error])
+        data['Upcoming Count'] = len(
+            [OrderSerializer(man).data for man in orders_upcoming])
+        data['Delivered Count'] = len(
+            [OrderSerializer(man).data for man in orders_delivered])
+        data['Error Count'] = len(
+            [OrderSerializer(man).data for man in orders_error])
         return Response(data)
 
 
@@ -261,22 +285,49 @@ class countRiders(APIView):
         return Response(data)
 
 
-
 class getRiderOrders(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=rider_id)
-        orders = rider.order_set.all()
-        orders_serialized = [OrderSerializer(o).data for o in orders]
+        trip = Trip.objects.get(id=rider.current_trip_id)
+        order_ids = trip.orders.split(',')
+        orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
         return Response(orders_serialized)
 
 
 class getRiderById(APIView):
     def get(self, request, *args, **kwargs):
+        data = {}
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=int(rider_id))
         rider_serialized = RiderSerializer(rider).data
-        return Response(rider_serialized)
+        print(rider_serialized)
+        trips = rider.trip_set.all()
+        current_orders = []
+        upcoming_orders = []
+        completed_orders = []
+        for trip in trips:
+            if trip.trip_status == 'ongoing':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                current_orders = orders_serialized
+            if trip.trip_status == 'completed':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                completed_orders = orders_serialized
+            if trip.trip_status == 'upcoming':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                upcoming_orders = orders_serialized
+        print(rider_serialized)
+        current_trip = Trip.objects.get(pk=rider_serialized['current_trip_id'])
+        data['current_trip'] = TripSerializer(current_trip).data
+        data['current_orders'] = current_orders
+        data['completed_orders'] = completed_orders
+        data['upcoming_orders'] = upcoming_orders
+        data['rider'] = rider_serialized
+
+        return Response(data)
 
 
 class getTripById(APIView):
@@ -290,11 +341,10 @@ class getTripById(APIView):
         data = []
         for j in range(len(orders_id)):
             order = Order.objects.get(order_id=orders_id[j])
-            #trip_serialized["order_objects"].append(OrderSerializer(order).data)
+            # trip_serialized["order_objects"].append(OrderSerializer(order).data)
             data.append(OrderSerializer(order).data)
 
         return Response(data)
-
 
 
 class startButton(APIView):
@@ -305,13 +355,13 @@ class startButton(APIView):
         folderPath = os.path.join(base_path, 'static', 'folder1')
         folderExist = os.path.exists(folderPath)
         data = {}
-        data['status']='Unsuccessful'
-        data['folder']=None
-        data['howManyFolders']=0
+        data['status'] = 'Unsuccessful'
+        data['folder'] = None
+        data['howManyFolders'] = 0
         if folderExist:
-            data['status']='Successful'
-            data['folder']='1'
-            data['howManyFolders']=len(next(os.walk(os.getcwd()))[1])
+            data['status'] = 'Successful'
+            data['folder'] = '1'
+            data['howManyFolders'] = len(next(os.walk(os.getcwd()))[1])
             return Response(data, status=status.HTTP_200_OK)
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
@@ -324,8 +374,8 @@ class getFolder(APIView):
         folderPath = os.path.join(base_path, 'static', 'folder')+folderNumber
         with open(os.path.join(folderPath, 'details.json'), "r") as file:
             file_data = json.load(file)
-        data={}
-        data['details']=file_data
+        data = {}
+        data['details'] = file_data
         print(file_data)
         return Response(data, status=status.HTTP_200_OK)
 
@@ -345,6 +395,7 @@ class binPacking(APIView):
 
         data = box.pack()
         return Response(data)
+
 
 class getGeoCode(APIView):
     def post(self, request, *args, **kwargs):
@@ -469,7 +520,8 @@ class demo(APIView):
                     node = manager.IndexToNode(order)
                     if (node != 0):
                         route.append(coordinates[node-1])
-                        route_coords.append([awbs[node-1], coordinates[node-1]])
+                        route_coords.append(
+                            [awbs[node-1], coordinates[node-1]])
                     else:
                         route.append(depot_coordinates)
 
@@ -482,13 +534,14 @@ class demo(APIView):
         geo_routes = []
         geo_routes_map = []
         data = pd.DataFrame({'Route': [str(i+1) for i in range(len(routes))]})
-        #http://router.project-osrm.org/route/v1/driving/77.586607,12.909694;77.652492,12.91763?overview=full&geometries=geojson
+        # http://router.project-osrm.org/route/v1/driving/77.586607,12.909694;77.652492,12.91763?overview=full&geometries=geojson
         osrm_url_base = "https://routing.openstreetmap.de/routed-bike/route/v1/driving/"
         for route in routes:
             points_list = []
             for point in route:
-                points_list.append(str(point[1])  + "," + str(point[0]))
-            osrm_url = osrm_url_base + ";".join(points_list) + "?overview=full&geometries=geojson"
+                points_list.append(str(point[1]) + "," + str(point[0]))
+            osrm_url = osrm_url_base + \
+                ";".join(points_list) + "?overview=full&geometries=geojson"
             print(osrm_url)
             r = requests.get(osrm_url)
             t = json.loads(r.text)
@@ -500,11 +553,13 @@ class demo(APIView):
                 points_list_map.append([point[0], point[1]])
             geo_routes.append(LineString(points_list))
             geo_routes_map.append(points_list_map)
-        
-        routes_data_map = pd.DataFrame({'S. No.': [str(i+1) for i in range(len(geo_routes_map))], 'Route': geo_routes_map})
+
+        routes_data_map = pd.DataFrame(
+            {'S. No.': [str(i+1) for i in range(len(geo_routes_map))], 'Route': geo_routes_map})
         routes_data_map.to_csv('all_routes_map.csv', index=False)
 
-        routes_data = pd.DataFrame({'S. No.': [str(i+1) for i in range(len(routes_with_order))], 'Route': routes_with_order})
+        routes_data = pd.DataFrame({'S. No.': [str(
+            i+1) for i in range(len(routes_with_order))], 'Route': routes_with_order})
         routes_data.to_csv('all_routes.csv', index=False)
 
         json_data = {}
@@ -521,15 +576,16 @@ class demo(APIView):
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
         myGDF.to_file(filename='myshapefile', driver='ESRI Shapefile')
 
-        vrp_instance.city_graph.city.plot(facecolor="lightgrey", edgecolor="grey", linewidth=0.3)
+        vrp_instance.city_graph.city.plot(
+            facecolor="lightgrey", edgecolor="grey", linewidth=0.3)
         vrp_instance.vehicle_output_plot()
 
-        filenames = ["myshapefile/myshapefile.shp", "all_routes_map.csv", "all_routes.csv", "static/Routes4.png"]
-        
+        filenames = ["myshapefile/myshapefile.shp",
+                     "all_routes_map.csv", "all_routes.csv", "static/Routes4.png"]
+
         with zipfile.ZipFile('solution.zip', 'w') as f:
             for filename in filenames:
                 f.write(filename)
-        
 
         with open('solution.zip', 'rb') as file:
             resp = HttpResponse(base64.b64encode(file.read()))
@@ -537,7 +593,8 @@ class demo(APIView):
         resp['Content-Type'] = 'application/zip'
 
         return resp
-    
+
+
 class demoPickup(APIView):
     def post(self, request, *args, **kwargs):
         print("Pickup file received")
@@ -564,22 +621,25 @@ class generateInitialSolution(APIView):
             orders.append(OrderVRP(1, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
         # depot, orders, vehicles = helper.generate_random_problem(num_orders=20)
         vrp_instance = VRP(depot, orders, vehicles)
-        pick_vrp =  PickledVRPInstance(current_instance=vrp_instance)
+        pick_vrp = PickledVRPInstance(current_instance=vrp_instance)
         pick_vrp.save()
         # manager, routing, solution = vrp_instance.process_VRP()
-        dct={"all_riders":all_riders,"all_orders":all_orders,"Trip":Trip,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
-        sol=solveVRP.apply_async(kwargs=dct, serializer="pickle")
+        dct = {"all_riders": all_riders, "all_orders": all_orders, "Trip": Trip,
+               "Order": Order, "PickledVRPInstance": PickledVRPInstance}
+        sol = solveVRP.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
 
+
 class checkCeleryStatus(APIView):
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         task_id = kwargs['task_id']
         res = AsyncResult(task_id).status
         return Response(res)
 
+
 class getResultCelery(APIView):
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         task_id = kwargs['task_id']
         res = AsyncResult(task_id)
         routes = res.get()
@@ -590,26 +650,30 @@ class generateRerouteSolution(APIView):
     def get(self, request, *args, **kwargs):
         all_riders = Rider.objects.all()
         all_orders = Order.objects.all()
-        dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
-        sol=solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
+        dct = {"all_riders": all_riders, "all_orders": all_orders,
+               "Order": Order, "PickledVRPInstance": PickledVRPInstance}
+        sol = solveVRPReroute.apply_async(kwargs=dct, serializer="pickle")
         print(sol.task_id)
         return Response(sol.task_id)
+
 
 class getRiderLocations(APIView):
     def get(self, request, *args, **kwargs):
         riders = Rider.objects.all()
-        trip_ids = [RiderSerializer(rider).data['current_trip_id'] for rider in riders]
+        trip_ids = [RiderSerializer(rider).data['current_trip_id']
+                    for rider in riders]
         locs = []
         for trip_id in trip_ids:
             print("Trip_id = ", trip_id)
-            trip_db = Trip.objects.get(id = int(trip_id))
+            trip_db = Trip.objects.get(id=int(trip_id))
             order_ids = TripSerializer(trip_db).data['orders']
             print(order_ids)
             order_arr = order_ids.split(',')
             print("Array of order ids is:", order_arr)
-            for order in order_arr: 
-                order_db = Order.objects.get(order_id = order)
-                location = [OrderSerializer(order_db).data['latitude'], OrderSerializer(order_db).data['longitude']]
+            for order in order_arr:
+                order_db = Order.objects.get(order_id=order)
+                location = [OrderSerializer(order_db).data['latitude'], OrderSerializer(
+                    order_db).data['longitude']]
                 print(location)
                 if location not in locs:
                     locs.append(location)
@@ -617,7 +681,8 @@ class getRiderLocations(APIView):
         data = {}
         data['locations'] = locs
         return Response(data)
-    
+
+
 class getRidersPaginate(APIView):
     def get(self, request, *args, **kwargs):
         # print(request.__dict__)
@@ -629,7 +694,8 @@ class getRidersPaginate(APIView):
         data["next"] = f"{url}/core/pagination/rider/{lim}/{off+lim}"
         data["riders"] = rider_data
         return Response(data)
-    
+
+
 class getOrdersPaginate(APIView):
     def get(self, request, *args, **kwargs):
         # print(request.__dict__)
@@ -641,6 +707,3 @@ class getOrdersPaginate(APIView):
         data["next"] = f"{url}/core/pagination/order/{lim}/{off+lim}"
         data["riders"] = order_data
         return Response(data)
-    
-
-

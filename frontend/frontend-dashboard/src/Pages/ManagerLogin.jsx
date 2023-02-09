@@ -4,7 +4,9 @@ import RightArrow from "../Shared/Icons/RightArrow";
 import BgMap from "../Shared/Images/BgMap.png";
 import axios from "axios";
 import { LOCAL_SERVER_URL_IP } from "../constants/config";
-import setAuthorizationToken, { parseJwt } from "../Component/Auth/setAuthorizationToken";
+import setAuthorizationToken, {
+  parseJwt,
+} from "../Component/Auth/setAuthorizationToken";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../redux/actions/auth";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
@@ -29,7 +31,7 @@ const ManagerLogin = () => {
         console.log(token);
         console.log(parseJwt(token));
         dispatch(setCurrentUser(parseJwt(token)));
-        navigate('/volumeestimation');
+        navigate("/volumeestimation");
       })
       .catch((error) => {
         console.log(error);
