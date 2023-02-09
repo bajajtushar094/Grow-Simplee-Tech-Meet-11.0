@@ -103,7 +103,7 @@ class getOrders(APIView):
             # if all_orders[i].delivery_action == "pickup":
             #     continue
             date_time_now = datetime.now().replace(tzinfo=utc)
-            if date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
+            if all_orders[i].delivery_action == 'drop' and date_time_now > all_orders[i].edd and all_orders[i].order_status == "undelivered":
                 all_orders[i].delay_status = "delayed"
                 all_orders[i].save()
             data['orders'].append(OrderSerializer(all_orders[i]).data)
@@ -218,9 +218,10 @@ class updateTrip(APIView):
 
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
-        order_id = request.data["awb"]
-        latitude = request.data["latitude"]
-        longitude = request.data["longitude"]
+        order_id = request.data["awbNumber"]
+        coordinates = request.data["coordinates"]
+        latitude = coordinates.split(",")[0]
+        longitude = coordinates.split(",")[1]
         location = request.data["location"]
         name = request.data["name"]
         order = Order(order_id=order_id, address_name=name, volume=1, length=1, width=1, height=1, owner_name=name, contact_number='0848234',
@@ -229,6 +230,9 @@ class addDynamicPickup(APIView):
         PickledModelObject = PickledVRPInstance.objects.all()[len(PickledVRPInstance.objects.all())-1]
         vrp_instance= PickledModelObject.current_instance
         vrp_instance.add_dynamic_order(OrderVRP(1, [float(order.latitude), float(order.longitude)], 1 if order.delivery_action == "drop" else 2))
+        PickledModelObject.current_instance = vrp_instance
+        PickledModelObject.save()
+        print(len(vrp_instance.orders))
         all_riders = Rider.objects.all()
         all_orders = Order.objects.all()
         dct={"all_riders":all_riders,"all_orders":all_orders,"Order":Order,"PickledVRPInstance":PickledVRPInstance}
@@ -285,17 +289,45 @@ class getRiderOrders(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=rider_id)
-        orders = rider.order_set.all()
-        orders_serialized = [OrderSerializer(o).data for o in orders]
+        trip = Trip.objects.get(id=rider.current_trip_id)
+        order_ids = trip.orders.split(',')
+        orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
         return Response(orders_serialized)
 
 
 class getRiderById(APIView):
     def get(self, request, *args, **kwargs):
+        data = {}
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=int(rider_id))
         rider_serialized = RiderSerializer(rider).data
-        return Response(rider_serialized)
+        print(rider_serialized)
+        trips = rider.trip_set.all()
+        current_orders = []
+        upcoming_orders = []
+        completed_orders = []
+        for trip in trips:
+            if trip.trip_status == 'ongoing':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                current_orders = orders_serialized
+            if trip.trip_status == 'completed':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                completed_orders = orders_serialized
+            if trip.trip_status == 'upcoming':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                upcoming_orders = orders_serialized
+        print(rider_serialized)
+        current_trip = Trip.objects.get(pk=rider_serialized['current_trip_id'])
+        data['current_trip'] = TripSerializer(current_trip).data
+        data['current_orders'] = current_orders
+        data['completed_orders'] = completed_orders
+        data['upcoming_orders'] = upcoming_orders
+        data['rider'] = rider_serialized
+
+        return Response(data)
 
 
 class getTripById(APIView):
@@ -402,8 +434,8 @@ class demo(APIView):
             new_order = Order()
             new_order.order_id = awb
             new_order.sku = product_id
-            new_order.delivery_action = 'undelivered'
-            new_order.order_status = 'drop'
+            new_order.delivery_action = 'drop'
+            new_order.order_status = 'undelivered'
             new_order.edd = datetime.now()
             new_order.latitude = geocode[0]
             new_order.longitude = geocode[1]

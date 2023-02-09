@@ -11,8 +11,10 @@ import arrow from "./arrow.svg";
 import dot from "./Dot.svg";
 import { Link } from "react-router-dom";
 
-function SideProfile({selectedRider,toggleSidebar,...props}) {
+function SideProfile2({selectedRider,orders,toggleSidebar,...props}) {
   console.log("Selectyed Rider : ", selectedRider);
+  console.log("Orders : ", orders);
+  const upcoming_order = orders[0];
   // const rider = props.rider;
   // const orders = props.orders;
 
@@ -53,7 +55,6 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
       style={{
         backgroundColor: "white",
         width: "464px",
-        height: "100vh",
         padding: "20px",
         borderRadius: props.borderRadius ? props.borderRadius : "0px",
       }}
@@ -167,7 +168,7 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
               EDD Of Current Order
             </p>
             <p style={{ fontSize: "10px", fontWeight: "bold" }}>
-              {dayjs(selectedRider?.current_order.edd).format(
+              {dayjs(orders[0].edd).format(
                 "dddd, Dd MMM'YY"
               )}
             </p>
@@ -216,7 +217,7 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
                 style={{ fontSize: "16px" }}
                 className="text-[16px] font-medium"
               >
-                {selectedRider?.upcoming_order?.id}{" "}
+                {upcoming_order.id}{" "}
               </p>
             </div>
           </div>
@@ -244,7 +245,7 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
             }}
           >
             <p style={{ fontSize: "12px", textAlign: "center" }}>
-              {selectedRider?.upcoming_order?.order_status}
+              {upcoming_order.order_status}
             </p>
           </div>
           <div
@@ -259,7 +260,7 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
               Name
             </p>
             <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-              {selectedRider?.upcoming_order?.owner_name}
+              {upcoming_order.owner_name}
             </p>
           </div>
 
@@ -275,7 +276,7 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
               Address
             </p>
             <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-              {selectedRider?.upcoming_order?.location}
+              {upcoming_order.location}
             </p>
           </div>
 
@@ -309,7 +310,7 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
                 EDD
               </p>
               <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-                {dayjs(selectedRider?.upcoming_order?.edd).format(
+                {dayjs(upcoming_order.edd).format(
                   "dddd, Dd MMM'YY"
                 )}
               </p>
@@ -338,4 +339,4 @@ function SideProfile({selectedRider,toggleSidebar,...props}) {
   );
 }
 
-export default SideProfile;
+export default SideProfile2;

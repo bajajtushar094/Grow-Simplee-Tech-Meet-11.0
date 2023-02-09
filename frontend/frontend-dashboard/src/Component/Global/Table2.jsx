@@ -58,22 +58,20 @@ Row.propTypes = {
   }).isRequired,
 };
 
-const rows = [createData(1212, "bangalore", "12:00", "pending")];
-
 export default function CollapsibleTable(props) {
   let rows = [];
   if (props.orders.length > 0) {
     rows = props.orders.map((order) => {
-      return createData(order.id, order.address, order.edd, order.order_status);
+      return createData(order.order_id, order.location, order.edd, order.order_status.charAt(0).toUpperCase() + order.order_status.slice(1));
     });
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
+    <TableContainer component={Paper} style={{ width: 70 + 'vw' }}>
+      <Table aria-label="collapsible table" >
         <TableHead>
           <TableRow>
-            <TableCell>
+            <TableCell style={{ width: 10 + 'vw' }}>
               {" "}
               <p style={{ fontWeight: "bold" }}>Order ID</p>
             </TableCell>
@@ -81,9 +79,9 @@ export default function CollapsibleTable(props) {
               {" "}
               <p style={{ fontWeight: "bold" }}>Delivary Address</p>
             </TableCell>
-            <TableCell align="left">
+            <TableCell align="left" style={{ width: 10 + 'vw' }}>
               {" "}
-              <p style={{ fontWeight: "bold" }}>ETA</p>
+              <p style={{ fontWeight: "bold" }}>EDD</p>
             </TableCell>
             <TableCell align="left">
               <p style={{ fontWeight: "bold" }}>Status</p>
