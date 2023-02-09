@@ -29,7 +29,7 @@ const ManagerLogin = () => {
         console.log(token);
         console.log(parseJwt(token));
         dispatch(setCurrentUser(parseJwt(token)));
-        navigate('/dashboard');
+        navigate('/volumeestimation');
       })
       .catch((error) => {
         console.log(error);
