@@ -23,14 +23,14 @@ function rider(img) {
     html: ReactDOMServer.renderToString(<Mapmarker image={img} />),
   });
 }
-var latCenter = 26.148043;
-var lonCenter = 91.731377;
+var latCenter = 26.148043
+var lonCenter = 91.731377
+const Map = ({setRouteSummary,riderData,orders,toggleSidebar,setSelectedRider, ...props}) => {
 
-const Map = ({ setRouteSummary, riderData, orders, ...props }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [coordinates, setCoordinates] = useState(props.coordinates);
 
-  const pickupArray = [];
+  let pickupArray = [];
   if (orders) {
     pickupArray = orders.filter((order) => order.delivery_action === "pickup");
 
@@ -103,17 +103,17 @@ const Map = ({ setRouteSummary, riderData, orders, ...props }) => {
     );
     zoom = 12;
   }
-  /*   if (latCenter < 8.4 || latCenter > 37.6) {
+    if (latCenter < 8.4 || latCenter > 37.6) {
     latCenter = 12.9716;
   }
   if (lonCenter < 68.7 || lonCenter > 97.25) {
     lonCenter = 77.5946;
-  } */
+  }
 
   return (
     <MapContainer
       doubleClickZoom={false}
-      className="flex-grow z-0 w-full h-full"
+      className="flex-grow z-0 w-full h-[100vh]"
       zoom={zoom}
       center={[latCenter, lonCenter]}
     >
@@ -137,6 +137,12 @@ const Map = ({ setRouteSummary, riderData, orders, ...props }) => {
             // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
             // icon = {sus}
             onclick={handleClick}
+            eventHandlers={{
+              click: (e) => {
+                setSelectedRider(item)
+                toggleSidebar()
+              },
+            }}
           />
         ))}
       {pickupArray &&

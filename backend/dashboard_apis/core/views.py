@@ -147,6 +147,7 @@ class getRiders(APIView):
                 else:
                     data['riders'][i]['progress'] = orders_completed / \
                         (len(orders_id)) * 100
+                data['riders'][i]['bag_volume'] = trip.bag.length * trip.bag.width * trip.bag.height
         return Response(data)
 
 
@@ -430,6 +431,17 @@ class demo(APIView):
 
         routes_data = pd.DataFrame({'S. No.': [str(i+1) for i in range(len(routes_with_order))], 'Route': routes_with_order})
         routes_data.to_csv('all_routes.csv', index=False)
+
+        json_data = {}
+        for (i, route) in enumerate(routes_with_order):
+            json_data['route' + str(i+1)] = [ details[1] for details in routes_with_order[i] ]
+            json_data['route' + str(i+1)].insert(0, depot_coordinates)
+            json_data['route' + str(i+1)].append(depot_coordinates)
+        
+        json_object = json.dumps(json_data, indent=4)
+
+        with open("static/map_routes.json", "w") as outfile:
+            outfile.write(json_object)
 
         myGDF = gpd.GeoDataFrame(data, geometry=geo_routes)
         myGDF.to_file(filename='myshapefile', driver='ESRI Shapefile')

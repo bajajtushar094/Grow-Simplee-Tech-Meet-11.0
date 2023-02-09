@@ -7,41 +7,44 @@ import vector from "./Vector.svg";
 import line from "./line.svg";
 import arrow from "./arrow.svg";
 import dot from "./Dot.svg";
+import { useState } from "react";
 
-function SideProfile(props) {
-  const rider = props.rider;
-  const orders = props.orders;
+function SideProfile({selectedRider,toggleSidebar,...props}) {
+  // const rider = props.rider;
+  // const orders = props.orders;
+  
+  // const [show,setShow] = useState(false);
 
-  console.log(props);
+  // console.log(props);
 
-  const ordersOrder = rider.delievery_orders;
-  const ordersOrderArray = ordersOrder.split(",");
-  ordersOrderArray.shift();
-  ordersOrderArray.pop();
+  // const ordersOrder = rider.delievery_orders;
+  // const ordersOrderArray = ordersOrder.split(",");
+  // ordersOrderArray.shift();
+  // ordersOrderArray.pop();
 
-  let UpcomingOrder = orders[0];
+  // let UpcomingOrder = orders[0];
   // with the element of ordersOrderArray as the the 'id' of an order in the orders array, find the first order with order_status === 'Undelivered'
-  for (let i = 0; i < ordersOrderArray.length; i++) {
-    const o = orders.find((order) => order.id === ordersOrderArray[i]);
-    try {
-      if (o.order_status === "Undelivered") {
-        UpcomingOrder = o;
-        break;
-      }
-    } catch {
-      console.log("Could not find a undelivered order");
-    }
-  }
+  // for (let i = 0; i < ordersOrderArray.length; i++) {
+  //   const o = orders.find((order) => order.id === ordersOrderArray[i]);
+  //   try {
+  //     if (o.order_status === "Undelivered") {
+  //       UpcomingOrder = o;
+  //       break;
+  //     }
+  //   } catch {
+  //     console.log("Could not find a undelivered order");
+  //   }
+  // }
 
-  const date_string = UpcomingOrder.edd;
-  var date = new Date(date_string);
-  //get the time in the format of 12:00 AM from date
-  const time = date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  });
-
+  // const date_string = UpcomingOrder.edd;
+  // var date = new Date(date_string);
+  // //get the time in the format of 12:00 AM from date
+  // const time = date.toLocaleTimeString("en-US", {
+  //   hour: "numeric",
+  //   minute: "numeric",
+  //   hour12: true,
+  // });
+console.log(selectedRider)
   return (
     <div
       style={{
@@ -59,20 +62,24 @@ function SideProfile(props) {
           alignItems: "center",
           justifyContent: "center",
           margin: "5px",
+         
         }}
       >
-        {/* toplogo */}
-        <CloseIcon sx={{ fontSize: "medium" }} />
+        <div className="cursor-pointer">
+{/* toplogo */}
+<CloseIcon sx={{ fontSize: "medium" }} onClick ={toggleSidebar}  />
         Close
       </div>
+        </div>
+        
 
       <div>
         {/* profilePic */}
-        <Avatar />
+        <Avatar src={selectedRider?.photoURL} sx={{ width: 80, height: 80 }}/>
       </div>
       <div style={{}}>
         {/* name */}
-        <p style={{ fontWeight: "600", fontSize: "23px" }}> {rider.name}</p>
+        <p style={{ fontWeight: "600", fontSize: "23px" }}> {selectedRider?.name}</p>
       </div>
 
       <div
@@ -83,13 +90,13 @@ function SideProfile(props) {
           alignItems: "center",
           width: "93px",
           height: "28px",
-          backgroundColor: props.status == "ontime" ? "#12B76A" : "red",
+          backgroundColor:"#12B76A",
           borderRadius: "16px",
           marginTop: "18px",
         }}
       >
-        <img style={{ height: "8px", margin: "5px" }} src={dot} alt="" />
-        <p style={{ fontSize: "14px" }}>{props.status}</p>
+        <img style={{ height: "6px", marginRight: "4px" }} src={dot} alt="" />
+        <p className="text-white" style={{ fontSize: "12px" }}>ontime</p>
       </div>
       <div
         style={{
@@ -129,7 +136,7 @@ function SideProfile(props) {
             </p>
             <p style={{ fontSize: "10px", fontWeight: "bold" }}>
               {" "}
-              {rider.bag_volume_used}%
+              {selectedRider.bag_volume}%
             </p>
           </div>
           {/* bag */}
@@ -150,7 +157,7 @@ function SideProfile(props) {
               ETF
             </p>
             <p style={{ fontSize: "10px", fontWeight: "bold" }}>
-              {UpcomingOrder.etf} mins
+              {selectedRider?.current_order.edd} mins
             </p>
           </div>
           {/* time */}
@@ -189,7 +196,7 @@ function SideProfile(props) {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <p style={{ fontSize: "13px" }}>AWB ID</p>
             <p style={{ fontSize: "13px" }} className="text-[16px] font-medium">
-              {UpcomingOrder.id}{" "}
+              {selectedRider?.current_order.id}{" "}
             </p>
           </div>
         </div>
@@ -216,7 +223,7 @@ function SideProfile(props) {
           }}
         >
           <p style={{ fontSize: "12px", textAlign: "center" }}>
-            {UpcomingOrder.delivery_action}
+            {selectedRider?.current_order.order_status}
           </p>
         </div>
         <div
@@ -229,7 +236,7 @@ function SideProfile(props) {
         >
           <p style={{ fontSize: "14px" }}>Name</p>
           <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-            {UpcomingOrder.order_name}
+            {selectedRider?.current_order.ownwer_name}
           </p>
         </div>
 
@@ -243,7 +250,7 @@ function SideProfile(props) {
         >
           <p style={{ fontSize: "14px" }}>Address</p>
           <p style={{ fontWeight: "bold", fontSize: "16px" }}>
-            {UpcomingOrder.address}
+            {selectedRider?.current_order.location}
           </p>
         </div>
 
@@ -273,7 +280,7 @@ function SideProfile(props) {
                 </div> */}
           <div style={{ display: "flex", flexDirection: "Column" }}>
             <p style={{ fontSize: "14px" }}>Time</p>
-            <p style={{ fontWeight: "bold", fontSize: "16px" }}>{time}</p>
+            <p style={{ fontWeight: "bold", fontSize: "16px" }}>time</p>
           </div>
         </div>
       </div>
@@ -297,3 +304,7 @@ function SideProfile(props) {
 }
 
 export default SideProfile;
+
+
+
+ 
