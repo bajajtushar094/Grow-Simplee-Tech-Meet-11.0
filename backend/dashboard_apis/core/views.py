@@ -285,17 +285,45 @@ class getRiderOrders(APIView):
     def get(self, request, *args, **kwargs):
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=rider_id)
-        orders = rider.order_set.all()
-        orders_serialized = [OrderSerializer(o).data for o in orders]
+        trip = Trip.objects.get(id=rider.current_trip_id)
+        order_ids = trip.orders.split(',')
+        orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
         return Response(orders_serialized)
 
 
 class getRiderById(APIView):
     def get(self, request, *args, **kwargs):
+        data = {}
         rider_id = kwargs['id']
         rider = Rider.objects.get(id=int(rider_id))
         rider_serialized = RiderSerializer(rider).data
-        return Response(rider_serialized)
+        print(rider_serialized)
+        trips = rider.trip_set.all()
+        current_orders = []
+        upcoming_orders = []
+        completed_orders = []
+        for trip in trips:
+            if trip.trip_status == 'ongoing':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                current_orders = orders_serialized
+            if trip.trip_status == 'completed':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                completed_orders = orders_serialized
+            if trip.trip_status == 'upcoming':
+                order_ids = trip.orders.split(',')
+                orders_serialized = [OrderSerializer(Order.objects.get(order_id=o)).data for o in order_ids]
+                upcoming_orders = orders_serialized
+        print(rider_serialized)
+        current_trip = Trip.objects.get(pk=rider_serialized['current_trip_id'])
+        data['current_trip'] = TripSerializer(current_trip).data
+        data['current_orders'] = current_orders
+        data['completed_orders'] = completed_orders
+        data['upcoming_orders'] = upcoming_orders
+        data['rider'] = rider_serialized
+
+        return Response(data)
 
 
 class getTripById(APIView):

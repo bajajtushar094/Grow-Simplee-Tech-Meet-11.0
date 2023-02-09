@@ -1,6 +1,7 @@
 import { borderColor } from "@mui/system";
 import React from "react";
 import SideProfile from "../Component/Global/SideProfile";
+import SideProfile2 from "../Component/Global/SideProfile2";
 import Topbar from "../Component/Layout/TopBar";
 import Layout from "../Component/Layout/Layout";
 import Table2 from "../Component/Global/Table2";
@@ -28,39 +29,30 @@ function RiderDetails() {
   const [upcomingOrders, setUpcomingOrders] = useState([]);
   const [currentOrders, setCurrentOrders] = useState([]);
 
-  const riderId = "65";
+  const riderId = "2";
 
   const fetchData = async () => {
     const response = await fetch(
-      "http://127.0.0.1:8000/core/orders/rider/" + riderId
+      "http://127.0.0.1:8000/core/rider/" + riderId
     );
     const data = await response.json();
     console.log(data);
-    setOrders(data);
 
-    //filter all the orders with order.order_status = 'delivered'
-    const completed = data.filter(
-      (order) => order.order_status === "delivered"
-    );
-    setCompletedOrders(completed);
 
-    //filter all the orders with order.order_status = 'upcoming'
-    const upcoming = data.filter((order) => order.order_status === "upcoming");
-    setUpcomingOrders(upcoming);
+    setCompletedOrders(data.completed_orders);
 
-    //filter all the remaining orders
-    const current = data.filter(
-      (order) =>
-        order.order_status !== "delivered" && order.order_status !== "upcoming"
-    );
-    setCurrentOrders(current);
+    setUpcomingOrders(data.upcoming_orders);
 
-    const response2 = await fetch(
-      "http://127.0.0.1:8000/core/rider/" + riderId
-    );
-    const data2 = await response2.json();
-    console.log(data2);
-    setRider(data2);
+    setCurrentOrders(data.current_orders);
+
+    if(currentOrders.length>0)
+    {setOrders(data.current_orders);}
+    else
+    {setOrders(data.completed_orders);}
+
+    //console.log("current orders : ", data.current_orders)
+
+    setRider(data.rider);
 
     return;
   };
@@ -96,8 +88,9 @@ function RiderDetails() {
    } */
 
   const sidePanel = () => {
+    console.log('orders', orders)
     if (orders.length > 0 && rider.id) {
-      return <SideProfile display="none" rider={rider} orders={orders} />;
+      return <SideProfile2 display="none" selectedRider={rider} orders={orders} />;
     } else {
       return null;
     }
