@@ -153,7 +153,7 @@ const App = () => {
         {currentFolder !== 0 ? (
           <div style={{position:"absolute", marginLeft:"70vw"}}>
           <button
-            className="bg-black text-white px-4 py-2 rounded-xl w-32"
+            className="bg-black text-white px-4 py-2 rounded-xl w-40"
             onClick={()=>{
               navigate('/dashboard')
             }}
