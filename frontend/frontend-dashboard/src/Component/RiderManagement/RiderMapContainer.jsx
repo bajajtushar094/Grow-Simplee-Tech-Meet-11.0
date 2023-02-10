@@ -15,7 +15,7 @@ import DynamicPicups from "../Global/DynamicPicups";
 import CancelOrder from "../Global/CancelOrder";
 import Map from "../Mobile/Map";
 
-const Rider = [
+/* const Rider = [
   {
     image: "",
     name: "Rider 1",
@@ -70,7 +70,7 @@ const Rider = [
     adress: "play arena",
     customer: "Customer 1",
   },
-];
+]; */
 
 /* const data = [
   {
@@ -148,10 +148,10 @@ const RiderMapContainer = ({ riderData, orders }) => {
   const [dynamicPicups, setdynamicPicups] = useState(false);
   const [cancelOrder, setCancelOrder] = useState(false);
 
-  const handleClick = (e) => {
+  /* const handleClick = (e) => {
     setRider(Rider[e.target.id]);
     setIsSelected(true);
-  };
+  }; */
   const toggleSidebar = () => {
     setSideprofile(!sideprofile);
   };
@@ -185,7 +185,6 @@ const RiderMapContainer = ({ riderData, orders }) => {
       >
         {/* <MapBox/> */}
         <Map
-          setRouteSummary={(summary) => {}}
           //data={data}
           riderData={riderData}
           orders={orders}

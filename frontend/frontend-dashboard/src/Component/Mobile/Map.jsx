@@ -1,21 +1,21 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import * as L from "leaflet";
-import RoutineMachine from "./RoutineMachine";
+import RoutineMachine from "./RoutineMachine2";
 import { useState } from "react";
 import delivery from "./delivery.svg";
 import Pins from "./Pins.svg";
 import Mapmarker from "../Global/Marker/Mapmarker";
 import ReactDOMServer from "react-dom/server";
+import pickup from "./pickup.svg";
 import R from "./R.svg";
+import warehouse from "./warehouse.svg";
 
 function createIcon(url) {
   return new L.Icon({
     iconUrl: url,
   });
 }
-
-// const rider=L.divIcon({ className: "custom icon", html: ReactDOMServer.renderToString( <Mapmarker image = {}/> ) })
 
 function rider(img, progress) {
   return L.divIcon({
@@ -25,10 +25,8 @@ function rider(img, progress) {
     ),
   });
 }
-var latCenter = 26.148043;
-var lonCenter = 91.731377;
+
 const Map = ({
-  setRouteSummary,
   riderData,
   orders,
   toggleSidebar,
@@ -56,63 +54,20 @@ const Map = ({
     return Mapmarker;
   }
 
-  /*   const setRouteSummary = (summary) => {
-    let distance = Math.round(summary.totalDistance / 100)/10;
-    let time_required = '';
-    if(Math.round(summary.totalTime / (60*60)) !== 0){
-        time_required = Math.round(summary.totalTime / (60*60)) + ' h ' + Math.round(summary.totalTime % 3600 / 60) + ' min'; 
-    }else{
-        time_required = Math.round(summary.totalTime % 3600 / 60) + ' min';
-    }
-    let date = new Date();
-    date = new Date(date.getTime() + (summary.totalTime * 1000));
-
-    setRouteDetails({
-        distance: distance,
-        time_required: time_required,
-        time_to_reach: date.toLocaleString('en-IN', { hour: 'numeric', minute: 'numeric', hour12: true })
-    });
-} */
-  // const position = [12.9716,77.5946]
   let latCenter = 0;
   let lonCenter = 0;
 
   let route = null;
   let zoom = 9;
 
-  if (props.coordinates) {
-    for (let i = 0; i < props.coordinates.length; i++) {
-      latCenter += props.coordinates[i].latitude;
-      lonCenter += props.coordinates[i].longitude;
+  if (orders.length > 0) {
+    console.log(orders);
+    for (let i = 0; i < orders.length; i++) {
+      latCenter += orders[i].latitude;
+      lonCenter += orders[i].longitude;
     }
-    latCenter /= props.coordinates.length;
-    lonCenter /= props.coordinates.length;
-
-    if (props.coordinates.length > 1) {
-      route = (
-        <RoutineMachine
-          coordinates={props.coordinates}
-          onChange={changeCoordinates}
-          setRouteSummary={setRouteSummary}
-        />
-      );
-    } else {
-      route = (
-        <Marker
-          key={1}
-          index={1}
-          position={[
-            props.coordinates[0].latitude,
-            props.coordinates[0].longitude,
-          ]}
-          //icon={rider(R)}
-          // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
-          // icon = {sus}
-          onclick={() => {}}
-        />
-      );
-      zoom = 12;
-    }
+    latCenter /= orders.length;
+    lonCenter /= orders.length;
   }
   if (latCenter < 8.4 || latCenter > 37.6) {
     latCenter = 12.9716;
@@ -135,8 +90,44 @@ const Map = ({
         url="https://api.mapbox.com/styles/v1/triangulum66/cldh9spaw00a201r00lpktwhy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJpYW5ndWx1bTY2IiwiYSI6ImNsZGV6ZGxncjBpcDgzbnBmemYzOWVrOXQifQ.BpyXvqLPQHOBy_-qJJr2Vw"
       />
 
-      {props.coordinates && route}
-      {props.orders && route}
+      {/* {riderData[0].orders.length > 1 && (
+        <RoutineMachine
+          orders={orders}
+          onChange={changeCoordinates}
+          riderId={riderData[0].id}
+          setRouteSummary={() => {}}
+        />
+      )} */}
+
+      {orders &&
+        orders.map((item, index) => (
+          <Marker
+            key={index}
+            index={index}
+            position={[parseFloat(item.latitude), parseFloat(item.longitude)]}
+            icon={
+              item.delivery_action === "pickup"
+                ? createIcon(pickup)
+                : createIcon(delivery)
+            }
+            // icon = {sus}
+            onclick={handleClick}
+          />
+        ))}
+      {riderData.map((rider, index) => {
+        if (rider.orders.length > 1) {
+          return (
+            <RoutineMachine
+              orders={rider.orders}
+              onChange={changeCoordinates}
+              riderId={rider.id}
+              setRouteSummary={() => {}}
+            />
+          );
+        } else {
+          return null;
+        }
+      })}
 
       {riderData &&
         riderData.map(
@@ -163,17 +154,13 @@ const Map = ({
               />
             )
         )}
-      {orders &&
-        orders.map((item, index) => (
-          <Marker
-            key={index}
-            index={index}
-            position={[parseFloat(item.latitude), parseFloat(item.longitude)]}
-            icon={createIcon(delivery)}
-            // icon = {sus}
-            onclick={handleClick}
-          />
-        ))}
+
+      {/* warehouse */}
+      <Marker
+        position={[12.9716, 77.5946]}
+        icon={createIcon(warehouse)}
+        onclick={handleClick}
+      />
     </MapContainer>
   );
 };

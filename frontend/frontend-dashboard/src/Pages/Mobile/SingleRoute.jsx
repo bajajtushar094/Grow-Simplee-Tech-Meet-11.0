@@ -64,8 +64,8 @@ const SingleRoute = () => {
   };
 
   const warehouse = {
-    latitude: 26.099605193409417,
-    longitude: 91.69294796870521,
+    latitude: 12.9716,
+    longitude: 77.5946,
     status: "warehouse",
   };
 
