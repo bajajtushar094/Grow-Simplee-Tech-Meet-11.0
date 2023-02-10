@@ -10,8 +10,6 @@ def solveVRP(all_riders,all_orders, Trip, Order, PickledVRPInstance):
     manager, routing, solution = vrp_instance.process_VRP()
     data = []
     print(PickledModelObject.current_instance)
-    PickledModelObject.current_instance = vrp_instance
-    PickledModelObject.save()
     for rider in all_riders:
         rider.rider_status = 'at warehouse'
         rider.current_trip_id = ''

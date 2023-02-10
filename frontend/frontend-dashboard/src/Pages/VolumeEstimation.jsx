@@ -29,18 +29,18 @@ const App = () => {
   };
   const startEstimation = () => {
     if (currentFolder >= 1) setCurrentFolder(() => 0);
-    // axios
-    //   .get(`${LOCAL_SERVER_URL_IP}/start-process/`)
-    //   .then((res) => {
-    //     console.log(res);
-    //     setCurrentFolder(() => 2);
-    //     console.log(currentFolder);
-    //     updateImg(currentFolder + 1);
-    //     howManyOrders = res.data.howManyOrders;
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .get(`${LOCAL_SERVER_URL_IP}/start-process/`)
+      .then((res) => {
+        console.log(res);
+        setCurrentFolder(() => 2);
+        console.log(currentFolder);
+        updateImg(currentFolder + 1);
+        howManyOrders = res.data.howManyOrders;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     axios
       .get(`${LOCAL_SERVER_URL_IP}/orders/json/` + 1)
       .then((res) => {

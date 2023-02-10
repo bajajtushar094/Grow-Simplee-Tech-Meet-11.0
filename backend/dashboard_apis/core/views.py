@@ -35,6 +35,7 @@ import geopandas as gpd
 from django.core.files.storage import default_storage
 import base64
 from datetime import datetime
+import numpy as np
 
 url = "http://localhost:8000/"
 
@@ -219,10 +220,11 @@ class updateTrip(APIView):
 class addDynamicPickup(APIView):
     def post(self, request, *args, **kwargs):
         order_id = request.data["awbNumber"]
-        coordinates = request.data["coordinates"]
-        latitude = coordinates.split(",")[0]
-        longitude = coordinates.split(",")[1]
         location = request.data["location"]
+        latitude,longitude=extract_lat_long_via_address(location)
+        # latitude = coordinates.split(",")[0]
+        # longitude = coordinates.split(",")[1]
+        
         name = request.data["name"]
         order = Order(order_id=order_id, address_name=name, volume=1, length=1, width=1, height=1, owner_name=name, contact_number='0848234',
                       order_status='undelivered', latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
@@ -454,10 +456,6 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
-<<<<<<< HEAD
-            if index==20:
-                break
-=======
 
         user = User(username="Pete Davidson", password="password", is_manager=True)
         user.save()
@@ -469,7 +467,6 @@ class demo(APIView):
         manager.longitude = 77.586607
         manager.location = "JP Nagar"
         manager.save()
->>>>>>> d4ce25b9e624f85c400f1caddb81783518dec142
        
         for i in range(int(len(orders)/30) + 1):
             new_user = User(username="Rider" + str(i+1), password="dummypassword")
