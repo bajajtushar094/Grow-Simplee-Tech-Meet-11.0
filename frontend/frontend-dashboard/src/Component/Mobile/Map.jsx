@@ -121,7 +121,7 @@ const Map = ({
     lonCenter = 77.5946;
   }
 
-  console.log(riderData);
+  console.log(orders);
 
   return (
     <MapContainer
@@ -136,6 +136,7 @@ const Map = ({
       />
 
       {props.coordinates && route}
+      {props.orders && route}
 
       {riderData &&
         riderData.map(

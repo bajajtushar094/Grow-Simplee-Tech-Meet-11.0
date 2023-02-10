@@ -108,6 +108,32 @@ function App() {
     time_to_reach: "",
   });
 
+  const setRouteSummary = (summary) => {
+    let distance = Math.round(summary.totalDistance / 1000);
+    let time_required = "";
+    if (Math.round(summary.totalTime / (60 * 60)) !== 0) {
+      time_required =
+        Math.round(summary.totalTime / (60 * 60)) +
+        " h " +
+        Math.round((summary.totalTime % 3600) / 60) +
+        " min";
+    } else {
+      time_required = Math.round((summary.totalTime % 3600) / 60) + " min";
+    }
+    let date = new Date();
+    date = new Date(date.getTime() + summary.totalTime * 1000);
+
+    setRouteDetails({
+      distance: distance,
+      time_required: time_required,
+      time_to_reach: date.toLocaleString("en-IN", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      }),
+    });
+  };
+
   const [activeTopTab, setActiveTopTab] = useState(TOP_TABS[2].value);
   const [activeTab, setActiveTab] = useState(TOP_TABS[0].value);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -143,7 +169,7 @@ function App() {
           {isImage == 0 ? (
             <Map
               coordinates={coordinates}
-              setRouteDetails={setRouteDetails}
+              setRouteSummary={setRouteSummary}
               data={data}
               className="flex-grow z-0"
             ></Map>

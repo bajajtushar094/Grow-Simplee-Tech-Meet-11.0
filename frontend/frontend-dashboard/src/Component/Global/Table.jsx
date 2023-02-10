@@ -51,6 +51,7 @@ export default function AntDesignGrid({
       headerName: "Range",
       headerClassName: "bg-[#F8F8F7]",
       width: 130,
+      renderCell: (params) => <div>{params.row.delay_status}</div>,
     },
     {
       field: "current_order",
