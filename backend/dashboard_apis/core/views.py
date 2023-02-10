@@ -388,7 +388,8 @@ class binPacking(APIView):
         rider = Rider.objects.get(id=rider_id)
         url = "http://localhost:4550"
         trip = Trip.objects.get(id=rider.current_trip_id)
-        box = Packer(url, trip.bag.length, trip.bag.width, trip.bag.height)
+        # box = Packer(url, trip.bag.length, trip.bag.width, trip.bag.height)
+        box = Packer(url, 80, 80, 100)
         order_ids = trip.orders.split(",")
         for (i, order_id) in enumerate(order_ids):
             order = Order.objects.get(order_id=order_id)

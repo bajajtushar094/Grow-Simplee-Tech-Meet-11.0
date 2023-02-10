@@ -71,6 +71,7 @@ const initialState = {
         }, */
         
     ],
+    threeDCoordinates: [],
     loggedIn: false,
     userId: null,
     bagId: null,
@@ -97,6 +98,10 @@ export const riderSlice = createSlice({
             }
         },
 
+        setThreeDCoordinates: (state, action) => {
+            state.threeDCoordinates = action.payload;
+        },
+
         setUserId: (state, action) => {
             state.userId = action.payload;
         },
@@ -115,6 +120,14 @@ export const riderSlice = createSlice({
 
         setIsAtWarehouse: (state, action) => {
             state.isAtWarehouse = action.payload;
+        },
+
+        setIsScanned: (state, action) => {
+            state.packages.forEach((item) => {
+                if(item.orderId === action.payload.orderId) {
+                    item.isScanned = action.payload.isScanned;
+                }
+            })
         },
 
         setIsInBag: (state, action) => {
@@ -174,7 +187,7 @@ export const riderSlice = createSlice({
     }
 });
 
-export const {setLoggedIn, setUserId, setBagId, setTripId, setIsBagScanned, setIsAtWarehouse, setIsInBag, setIsCancelled, setIsDelivered, setIsNew, setIsFailed, addPackage, removePackage, addPackages} = riderSlice.actions;
+export const {setLoggedIn, setUserId, setBagId, setTripId, setIsBagScanned, setIsAtWarehouse, setIsScanned, setIsInBag, setIsCancelled, setIsDelivered, setIsNew, setIsFailed, addPackage, removePackage, addPackages, setThreeDCoordinates} = riderSlice.actions;
 
 export const getPackages = (state) => state.rider.packages;
 export const getLoggedIn = (state) => state.rider.loggedIn;
@@ -184,5 +197,6 @@ export const getTripId = (state) => state.rider.tripId;
 export const getIsBagScanned = (state) => state.rider.isBagScanned;
 export const getTotalDelivered = (state) => state.rider.totalDelivered;
 export const getIsAtWarehouse = (state) => state.rider.isAtWarehouse;
+export const getThreeDCoordinates = (state) => state.rider.threeDCoordinates;
 
 export default riderSlice.reducer;

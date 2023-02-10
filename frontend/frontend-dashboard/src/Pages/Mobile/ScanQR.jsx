@@ -15,6 +15,7 @@ import {
   getPackages,
   setIsCancelled,
   setIsAtWarehouse,
+  setIsScanned,
 } from "../../features/rider/riderSlice";
 
 const App = (props) => {
@@ -69,7 +70,7 @@ const App = (props) => {
       }
     } else if (type === "packageScan") {
       if (data === item.orderId) {
-        //dispatch(setIsInBag({orderId: item.orderId, isInBag: true}));
+        dispatch(setIsScanned({ orderId: item.orderId, isScanned: true }));
         navigate("/createBag");
       } else {
         alert("Wrong Package ID");
@@ -94,8 +95,8 @@ const App = (props) => {
       dispatch(setIsBagScanned(true));
       navigate("/createBag");
     } else if (type === "packageScan") {
-      //dispatch(setIsInBag({ orderId: item.orderId, isInBag: true }));
-      //dispatch(setIsCancelled({ orderId: item.orderId, isCancelled: true }));
+      dispatch(setIsScanned({ orderId: item.orderId, isScanned: true }));
+      dispatch(setIsCancelled({ orderId: item.orderId, isCancelled: true }));
       navigate("/createBag");
     } else if (type === "packageDelivery") {
       dispatch(setIsDelivered({ orderId: item.orderId, isDelivered: true }));

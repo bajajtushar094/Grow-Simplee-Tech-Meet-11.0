@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MobileLayout from "../../Component/Layout/MobileLayout";
 import { Link, useNavigate } from "react-router-dom";
-import Map from "../../Component/Mobile/Map";
+import Map2 from "../../Component/Mobile/Map2";
 import PackageDetails from "../../Component/Mobile/PackageDetails";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -98,11 +98,11 @@ const SingleRoute = () => {
       <>
         <PackageDetails coordinates={coordinates[1]} />
 
-        <Map
+        <Map2
           coordinates={coordinates}
           setRouteSummary={setRouteSummary}
           className="flex-grow z-0"
-        ></Map>
+        ></Map2>
         <div className="rounded-t-[12px] bg-white px-4 py-6 border border-[#D2D1CC] z-10">
           {/* <div className='w-full flex place-content-center pb-4'><div className='top_pill w-6 rounded-full h-[3px] bg-[#B4B4B4] '></div></div> */}
           <div>

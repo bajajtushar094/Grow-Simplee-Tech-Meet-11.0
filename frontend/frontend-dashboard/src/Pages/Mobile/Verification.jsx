@@ -29,9 +29,9 @@ const Verification = (props) => {
   const orderId = location.state.orderId;
   let item = null;
 
-  if (!isBagScanned) {
+  /* if (!isBagScanned) {
     navigate("/login");
-  }
+  } */
 
   //if(orderId){
   item = packages.find((p) => p.orderId === orderId);

@@ -11,9 +11,11 @@ import {
   setTripId,
   setIsBagScanned,
   addPackages,
+  setThreeDCoordinates,
 } from "../../features/rider/riderSlice";
 import { LOCAL_SERVER_URL_IP } from "../../constants/config";
-import axios from 'axios';
+import axios from "axios";
+import { InfinitySpin } from "react-loader-spinner";
 
 const Login = (props) => {
   const navigate = useNavigate();
@@ -25,10 +27,23 @@ const Login = (props) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    /* if (loggedIn) {
+      navigate("/scanQR", {
+        state: {
+          //id: id,
+          //bagId: 'RO10-445',
+          type: "scanBag",
+        },
+      });
+    } */
+  });
   const login = async () => {
-    const response = await fetch(" http://127.0.0.1:8000/core/rider/" + id);
-    const rider = await response.json();
+    const response = await fetch("http://127.0.0.1:8000/core/rider/" + id);
+    const data = await response.json();
+    const rider = data.rider;
     console.log(rider);
     if (rider.current_trip_id) {
       dispatch(setTripId(rider.current_trip_id));
@@ -46,53 +61,67 @@ const Login = (props) => {
           isCancelled: false,
           isDelivered: false,
           isFailed: false,
+          isScanned: false,
           latitude: parseFloat(order.latitude),
           longitude: parseFloat(order.longitude),
           type: "delivery",
-          textAddress: order.address_name,
+          textAddress: order.location,
           isNew: false,
         };
         packages.push(item);
       });
       dispatch(addPackages(packages));
+
+      const response3 = await fetch(
+        "http://127.0.0.1:8000/core/bin-packing/" + id
+      );
+      const data3 = await response3.json();
+      console.log(data3);
+      dispatch(setThreeDCoordinates(data3));
     }
     dispatch(setLoggedIn({ loggedIn: true, id: id }));
     dispatch(setUserId(id));
     dispatch(setBagId("RO10-445"));
     dispatch(setIsBagScanned(false));
-    navigate("/scanQR", {
-      state: {
-        //id: id,
-        //bagId: 'RO10-445',
-        type: "scanBag",
-      },
-    });
+    if (!isBagScanned) {
+      navigate("/scanQR", {
+        state: {
+          type: "scanBag",
+        },
+      });
+    } else {
+      navigate("/createBag");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === "123") {
-      login();
+      setLoading(true);
+      login().then(() => {
+        setLoading(false);
+        console.log("Logged In");
+      });
     } else {
       setError("Wrong Credentials!");
     }
   };
 
-  if (loggedIn) {
+  /* if (loggedIn) {
     if (isBagScanned) {
       navigate("/createBag");
     } else {
       login();
     }
-  }
+  } */
 
-  useEffect(()=>{
+  useEffect(() => {
     const generateTrip = async () => {
       const res = await axios.get(`${LOCAL_SERVER_URL_IP}/solve_initial/`);
-      console.log(res?.data)
+      console.log(res?.data);
     };
     generateTrip();
-  },[])
+  }, []);
 
   return (
     <div className="flex flex-col h-screen items-center bg-[#F8F8F7]">
@@ -143,6 +172,11 @@ const Login = (props) => {
       <div className="text-center w-full py-6 text-[#aa0000] px-4 font-medium text-[14px]">
         {error}
       </div>
+      {loading && (
+        <div className="fixed t-0 b-0 r-0 l-0 w-full h-full bg-[#000000]/[.5] flex items-center justify-center">
+          <InfinitySpin width="200" color="#ffffff" />
+        </div>
+      )}
     </div>
   );
 };

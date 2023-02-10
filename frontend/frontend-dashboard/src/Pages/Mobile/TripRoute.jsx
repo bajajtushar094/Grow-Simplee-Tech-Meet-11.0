@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MobileLayout from "../../Component/Layout/MobileLayout";
 import { Link, useNavigate } from "react-router-dom";
-import Map from "../../Component/Mobile/Map";
+import Map2 from "../../Component/Mobile/Map2";
 import DeliveryStatus from "../../Component/Mobile/DeliveryStatus";
 import PickupStatus from "../../Component/Mobile/PickupStatus";
 import { useSelector, useDispatch } from "react-redux";
@@ -95,7 +95,7 @@ const TripRoute = () => {
           <div className="h-1"></div>
           <PickupStatus />
         </div>
-        <Map
+        <Map2
           coordinates={coordinates}
           setRouteSummary={setRouteSummary}
           className="flex-grow z-0"

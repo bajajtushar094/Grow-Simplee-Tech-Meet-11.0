@@ -62,9 +62,9 @@ const ThreeDBag = (props) => {
     };
   }
 
-  for (i = 0; i < packages.length; i++) {
-    console.log("packages[i]", i);
-    console.log("currentPackage", currentPackage);
+  for (i = 0; i < data1.length; i++) {
+    //console.log("packages[i]", i);
+    //console.log("currentPackage", currentPackage);
     if (i < currentPackage) {
       let item = orderwise_coordinates[packages[i].orderId];
       item.opacity = 0.2;
@@ -72,8 +72,38 @@ const ThreeDBag = (props) => {
     } else if (i === currentPackage) {
       let item = orderwise_coordinates[packages[i].orderId];
       coordinates.push(item);
+    } else {
+      let item = orderwise_coordinates[packages[i].orderId];
+      item.opacity = 0;
+      coordinates.push(item);
     }
   }
+
+  coordinates.push({
+    type: "mesh3d",
+    alphahull: 0,
+    opacity: 0,
+    color: randomColor(0),
+    flatshading: true,
+    name: "case",
+    showlegend: false,
+    x: [0, 0, 0, 0, 0, 0, 0, 0],
+    y: [0, 0, 0, 0, 0, 0, 0, 0],
+    z: [0, 0, 0, 0, 0, 0, 0, 0],
+  });
+
+  coordinates.push({
+    type: "mesh3d",
+    alphahull: 0,
+    opacity: 0,
+    color: randomColor(0),
+    flatshading: true,
+    name: "case",
+    showlegend: false,
+    x: [80, 80, 80, 80, 80, 80, 80, 80],
+    y: [80, 80, 80, 80, 80, 80, 80, 80],
+    z: [100, 100, 100, 100, 100, 100, 100, 100],
+  });
 
   console.log(coordinates);
 
@@ -82,6 +112,9 @@ const ThreeDBag = (props) => {
       className=""
       data={coordinates}
       layout={{
+        xaxis: { range: [0, 80], fixedrange: true },
+        yaxis: { range: [0, 80], fixedrange: true },
+        zaxis: { range: [0, 100], fixedrange: true },
         width: 350,
         height: 500,
         showlegend: false,
@@ -92,7 +125,7 @@ const ThreeDBag = (props) => {
           l: 0,
           r: 0,
         },
-        xaxis: {
+        /* xaxis: {
           visible: false,
           zeroline: false,
         },
@@ -103,7 +136,7 @@ const ThreeDBag = (props) => {
         zaxis: {
           visible: false,
           zeroline: false,
-        },
+        }, */
       }}
       config={{ displayModeBar: false }}
     />
