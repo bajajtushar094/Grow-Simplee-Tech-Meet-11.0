@@ -1,6 +1,6 @@
 RIDER_STATUS = [
-    ('on trip', 'On Trip'),
-    ('at warehouse', 'At Warehouse')
+    ('at warehouse', 'At Warehouse'),
+    ('on trip', 'On Time')
 ]
 ORDER_STATUS = [
     ('unassigned', 'Unassigned'),

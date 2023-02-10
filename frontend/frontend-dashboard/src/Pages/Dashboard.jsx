@@ -13,6 +13,7 @@ import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import ProgressBar from "../Component/Layout/ProgressBar";
 import { useState } from "react";
 import MapBox from "../Component/Global/MapBox";
+import { LOCALHOST_URL } from "../constants/config";
 
 const Dashboard = () => {
   const [manager, setManager] = useState({})
@@ -24,25 +25,25 @@ const Dashboard = () => {
 
 
     const fetchManager = async () => {
-      const res = await fetch("http://localhost:8000/core/manager")
+      const res = await fetch(`${LOCALHOST_URL}/core/manager`)
       const response = await res.json()
       console.log(response)
       setManager(response.manager[0])
     }
     const fetchUpcomingCount = async () => {
-      const res = await fetch("http://localhost:8000/core/orders/upcoming")
+      const res = await fetch(`${LOCALHOST_URL}/core/orders/upcoming`)
       const response = await res.json()
       console.log(response)
       setUpcomingCount(response)
     }
     const fetchRiderCount = async () => {
-      const res = await fetch("http://localhost:8000/core/count/riders")
+      const res = await fetch(`${LOCALHOST_URL}/core/count/riders`)
       const response = await res.json()
       console.log(response)
       setRiderCount(response['count'])
     }
     const fetchRiderLocations = async () => {
-      const res = await fetch("http://localhost:8000/core/locations/rider")
+      const res = await fetch(`${LOCALHOST_URL}/core/locations/rider`)
       const response = await res.json()
       console.log(response)
       setriderlocations(response['locations'])
@@ -136,7 +137,7 @@ const Dashboard = () => {
                     {riderCount}
                 </div>
                 <h4 className="text-md text-[#5F5D59] font-semibold">
-                    Riders Available
+                    Riders Delayed
                   </h4>
               </div>
             

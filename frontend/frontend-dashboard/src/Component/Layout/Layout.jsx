@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import cx from "classnames";
 import TopBar from "./TopBar";
 import LeftSidebar from "./LeftSidebar";

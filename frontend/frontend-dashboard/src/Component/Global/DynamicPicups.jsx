@@ -16,9 +16,7 @@ function DynamicPicups() {
     console.log(inputs);
     const addDynamicPickup = async () => {
       try {
-        const address = {address:inputs.location}
-        const latLong = await axios.post(`${LOCAL_SERVER_URL_IP}/geocode/`, address);
-        const resp = await axios.post(`${LOCAL_SERVER_URL_IP}/orders/add`, {latitude:latLong.data[0],longitude:latLong.data[1],...inputs});
+        const resp = await axios.post(`${LOCAL_SERVER_URL_IP}/orders/add`, {...inputs});
             console.log(resp.data);
       } catch (err) {
         // Handle Error Here
@@ -149,10 +147,12 @@ function DynamicPicups() {
               <img style={{ color: "red" }} src={arrow} alt="" />
             </div>
             <input
-            
+              name='coordinates'
               type="text"
               className='p-4 bg-[#F8F8F7] mt-2 text-base'
               placeholder="Enter location as string"
+              value={inputs.coordinates || ""}
+              onChange={handleChange}
             />
           </div>
           <button onClick={handleSubmit} style={{height:"44px",width:'416px', backgroundColor:'black', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', marginTop:"50px", borderRadius:'8px'}}>

@@ -4,7 +4,7 @@ import Icon from "./Icon.svg";
 import Icon2 from "./Icon2.svg";
 import plus from "./plus.svg";
 import minus from "./minus.svg";
-import SideProfile from '../Global/SideProfile'
+import SideProfile from "../Global/SideProfile";
 import Boxsvg from "../Global/Box.svg";
 import Box from "@mui/material/Box";
 // import MapBox from '../Component/Global/MapBox'
@@ -72,7 +72,7 @@ const Rider = [
   },
 ];
 
-const data = [
+/* const data = [
   {
     name: "Guwahati",
     fillColor: "#7FC9FF",
@@ -118,11 +118,11 @@ const data = [
       lng: 94.9125,
     },
   },
-];
+]; */
 
-const RiderMapContainer = ({riderData, orders}) => {
-  const [sideprofile,setSideprofile] = useState(false);
-  const [selectedRider, setSelectedRider] = useState({})
+const RiderMapContainer = ({ riderData, orders }) => {
+  const [sideprofile, setSideprofile] = useState(false);
+  const [selectedRider, setSelectedRider] = useState({});
   const [open, setOpen] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -152,19 +152,19 @@ const RiderMapContainer = ({riderData, orders}) => {
     setRider(Rider[e.target.id]);
     setIsSelected(true);
   };
-  const toggleSidebar = ()=>{
-        setSideprofile(!sideprofile)
-  }
+  const toggleSidebar = () => {
+    setSideprofile(!sideprofile);
+  };
 
   console.log(rider);
 
   useEffect(() => {}, [rider]);
 
-  const coordinates = [
+  /* const coordinates = [
     { latitude: "", longitude: "", status: "delivery" },
     { latitude: "", longitude: "", status: "pickup" },
     //{latitude: 25.5119243264636, longitude: 92.73516653680502}
-  ];
+  ]; */
   const s = (routeSummary) => {};
 
   const style = {
@@ -175,7 +175,7 @@ const RiderMapContainer = ({riderData, orders}) => {
     width: 400,
     p: 4,
   };
- console.log(selectedRider)
+  console.log(selectedRider);
   return (
     <>
       <div
@@ -185,17 +185,16 @@ const RiderMapContainer = ({riderData, orders}) => {
       >
         {/* <MapBox/> */}
         <Map
-          coordinates={coordinates}
-          setRouteDetails={setRouteDetails}
-          data={data}
+          setRouteSummary={(summary) => {}}
+          //data={data}
           riderData={riderData}
           orders={orders}
           toggleSidebar={toggleSidebar}
-          setSelectedRider = {setSelectedRider}
+          setSelectedRider={setSelectedRider}
           className="flex-grow z-0 h-full]"
         ></Map>
         <div
-        onClick={handleOpenCancelModal}
+          onClick={handleOpenCancelModal}
           style={{
             display: "flex",
             flexDirection: "row",
@@ -209,7 +208,7 @@ const RiderMapContainer = ({riderData, orders}) => {
             top: "200px",
             marginLeft: "20px",
           }}
-          className='cursor-pointer'
+          className="cursor-pointer"
         >
           <p style={{ color: "white", fontSize: "14px", margin: "10px" }}>
             Cancel Orders
@@ -240,18 +239,23 @@ const RiderMapContainer = ({riderData, orders}) => {
           <img style={{ height: "15px", margin: "10px" }} src={arrow} alt="" />
         </div>
       </div>
-      { sideprofile && 
-      <div
-        style={{
-          position: "absolute",
-          zIndex: "99",
-          right: "0",
-        }}
-      >
-        <SideProfile borderRadius='10px' selectedRider={selectedRider} toggleSidebar={toggleSidebar} {...rider}/>
-      </div> }
-
-    
+      {sideprofile && (
+        <div
+          style={{
+            position: "absolute",
+            zIndex: "99",
+            right: "0",
+            top: "0",
+          }}
+        >
+          <SideProfile
+            borderRadius="10px"
+            selectedRider={selectedRider}
+            toggleSidebar={toggleSidebar}
+            {...rider}
+          />
+        </div>
+      )}
 
       <Modal
         open={open}
@@ -270,7 +274,7 @@ const RiderMapContainer = ({riderData, orders}) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <CancelOrder />
+          <CancelOrder />
         </Box>
       </Modal>
       {/* { dynamicPicups &&
@@ -283,9 +287,10 @@ const RiderMapContainer = ({riderData, orders}) => {
           <CancelOrder />
         </div>
       )} */}
-      <div
+      {/* <div
         style={{
           position: "absolute",
+          bottom: "25px",
           display: "flex",
           flexDirection: "row",
           backgroundColor: "white",
@@ -359,46 +364,8 @@ const RiderMapContainer = ({riderData, orders}) => {
             <p style={{ fontWeight: "600", color: "red" }}>2</p>
             <p style={{ fontSize: "12px" }}>Not on route</p>
           </div>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          marginTop: "474px",
-          position: "absolute",
-          marginLeft: "1300px",
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "40px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "10px",
-            borderRadius: "10px",
-          }}
-        >
-          <img src={plus} alt="" />
-        </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "40px",
-            height: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "10px",
-            borderRadius: "10px",
-          }}
-        >
-          <img src={minus} alt="" />
-        </div>
-      </div>
+        </div> 
+      </div>*/}
     </>
   );
 };

@@ -178,8 +178,8 @@ class VRP:
 
         if equalize_routes:
             routing.AddConstantDimension(
-                1, # increment by one every time
-                self.customers.number, # large enough
+                1,  # increment by one every time
+                self.customers.number,  # large enough
                 True,  # set count to zero
             'Count')
 
