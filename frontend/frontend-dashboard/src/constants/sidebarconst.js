@@ -84,7 +84,7 @@ export const LHS_TABS_VOL = [
 export const LHS_RIDER_MANAGEMENT_TABS = [
   {
     id: "gs_raise_issue",
-    label: "list View",
+    label: "List View",
     value: routePaths.listView,
   },
   {

@@ -78,6 +78,8 @@ class Trip(models.Model):
 
 
 class Order(models.Model):
+    # order = Order(owner_name=name, volume=volume,
+    #                   latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
     rider = models.ForeignKey(
         Rider, on_delete=models.CASCADE, null=True, blank=True
     )
@@ -86,10 +88,10 @@ class Order(models.Model):
     )
     order_id = models.CharField(max_length=50, null=True)
     shape = models.CharField(max_length=50, null=True, blank=True)
-    volume = models.FloatField(blank=True)
-    length = models.FloatField(blank=True)
-    width = models.FloatField(blank=True)
-    height = models.FloatField(blank=True)
+    volume = models.FloatField(blank=True, null=True)
+    length = models.FloatField(default=2.00, blank=True, null=True)
+    width = models.FloatField(default=2.00,blank=True, null=True)
+    height = models.FloatField(default=2.00,blank=True, null=True)
     sku = models.CharField(max_length=50, null=True, blank=True)
     delivery_action = models.CharField(
         _("delivery action"), max_length=50, choices=DELIVERY_ACTION, blank=True
@@ -109,8 +111,6 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_id
-
-
 
 def get_upload_to(instance, filename):
     return os.path.join("media/", str(instance.order.order_id), filename)

@@ -6,6 +6,9 @@ import Table from "../Component/Global/Table";
 import Layout from "../Component/Layout/Layout";
 import TickedWindowIcon from "../Shared/Icons/TickedWindowIcon";
 import DroneIcon from "../Shared/Icons/DroneIcon";
+import TruckIcon from "../Shared/Icons/TruckIcon";
+import IssueStatusIcon from "../Shared/Icons/IssueStatusIcon"
+import DeliveryTruckIcon from "../Shared/Icons/DeliveryTruckIcon"
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import ProgressBar from "../Component/Layout/ProgressBar";
 import { useState } from "react";
@@ -80,7 +83,7 @@ const Dashboard = () => {
         </div>
         <div className='text flex font-bold py-5 m-3'>
           <div className="w-full px-5">
-          <DroneIcon/>
+          <TruckIcon/>
               <div className='text-2xl font-bold'>
                 Upcoming Deliveries
               </div>
@@ -92,7 +95,7 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="w-full px-5">
-            <DroneIcon/>
+            <TruckIcon/>
               <div className='text-2xl font-bold'>
                 Orders Delivered
               </div>
@@ -104,7 +107,7 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="w-full px-5">
-            <DroneIcon/>
+            <TruckIcon/>
               <div className='text-2xl font-bold'>
                 Errors
               </div>

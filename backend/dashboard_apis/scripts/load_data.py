@@ -1,7 +1,7 @@
 # from ..core.models import *
 import sys,os
-csv_path = '/home/aditya/Grow-Simplee-Tech-Meet-11.0/backend/dashboard_apis/scripts/bang_final_data.csv'
-sys.path.append('/home/aditya/Grow-Simplee-Tech-Meet-11.0/backend/')
+csv_path = '/home/gunjan/Desktop/GrowSimplee/Grow-Simplee-Tech-Meet-11.0/backend/dashboard_apis/bang_final_data.csv'
+# sys.path.append('/home/aditya/Grow-Simplee-Tech-Meet-11.0/backend/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'dashboard_apis.dashboard_apis.settings'
 import csv
 from dashboard_apis.core.models import *

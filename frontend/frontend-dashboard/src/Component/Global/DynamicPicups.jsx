@@ -155,10 +155,10 @@ function DynamicPicups() {
               placeholder="Enter location as string"
             />
           </div>
-          <div onClick={handleSubmit} style={{height:"44px",width:'416px', backgroundColor:'black', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', marginTop:"50px", borderRadius:'8px'}}>
+          <button onClick={handleSubmit} style={{height:"44px",width:'416px', backgroundColor:'black', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', marginTop:"50px", borderRadius:'8px'}}>
                  <p style={{color:"white", fontSize:"16px"}}>Add Pickup</p>
                  <img style={{height:"12px", marginLeft:'10px'}} src={arrow} alt="" />
-              </div>
+              </button>
         </div>
       </form>
     </div>

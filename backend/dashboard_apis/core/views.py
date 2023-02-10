@@ -207,7 +207,7 @@ class addDynamicPickup(APIView):
         # address = Address(latitude=latitude, longitude=longitude,
         #                   location=location, name=name)
         # address.save()
-        order = Order(order_name=name, volume=volume,
+        order = Order(owner_name=name, volume=volume,
                       latitude=latitude, longitude=longitude, location=location, delivery_action='pickup')
         order.save()
         return Response(OrderSerializer(order).data)
@@ -350,6 +350,7 @@ class demo(APIView):
         file = request.FILES['file']
         file_name = default_storage.save(file.name, file)
         file_url = default_storage.url(file_name)
+        print(f"file url = {file_url}")
         dataframe = pd.read_excel(file_url[1:])
         depot_coordinates = (12.944013565497546, 77.69623411806606)
         depot = Node([depot_coordinates[0], depot_coordinates[1]], 0)
@@ -371,7 +372,7 @@ class demo(APIView):
             orders.append(OrderVRP(1, [geocode[0], geocode[1]], 1, AWB=awb))
             print(name, end=": ")
             print(geocode)
-            if index==1:
+            if index==20:
                 break
        
         for i in range(int(len(orders)/30) + 1):

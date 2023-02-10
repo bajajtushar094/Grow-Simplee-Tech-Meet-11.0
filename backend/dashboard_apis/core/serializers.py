@@ -6,6 +6,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+        extra_kwargs = {"rider": {"required": False, "allow_null": True}, "trip":{"required": False, "allow_null": True},"length":{"required": False, "allow_null": True}}
 
 class RiderSerializer(serializers.ModelSerializer):
 
