@@ -3,23 +3,25 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import * as L from "leaflet";
 import RoutineMachine from "./RoutineMachine2";
 import { useState } from "react";
-import delivery from "./delivery.svg";
+import delivery from "./delivery2.svg";
 import Pins from "./Pins.svg";
 import Mapmarker from "../Global/Marker/Mapmarker";
 import ReactDOMServer from "react-dom/server";
-import pickup from "./pickup.svg";
+import pickup from "./pickup2.svg";
 import R from "./R.svg";
 import warehouse from "./warehouse.svg";
 
 function createIcon(url) {
   return new L.Icon({
     iconUrl: url,
+    iconAnchor: [12, 12],
   });
 }
 
 function rider(img, progress) {
   return L.divIcon({
     className: "custom icon",
+    iconAnchor: [26, 50],
     html: ReactDOMServer.renderToString(
       <Mapmarker image={img} progress={progress} />
     ),
