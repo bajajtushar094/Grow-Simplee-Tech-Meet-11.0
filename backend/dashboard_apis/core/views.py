@@ -21,6 +21,7 @@ from .forms import RiderRewardsForm, OrderForm
 from .models import Rider
 from .serializers import *
 from datetime import datetime
+import random
 import pytz
 from rest_framework import status
 from core.tasks import solveVRP, solveVRPReroute
@@ -447,10 +448,10 @@ class demo(APIView):
             new_order.location = address
             new_order.address_name = name
             new_order.delay_status = "not delayed"
-            new_order.volume = 1
-            new_order.length = 1
-            new_order.width = 1
-            new_order.height = 1
+            new_order.length = random.uniform(0.1, 0.2)
+            new_order.width = random.uniform(0.1, 0.3)
+            new_order.height = random.uniform(0.1, 0.4)
+            new_order.volume = new_order.length * new_order.width * new_order.height
             new_order.save()
             coordinates.append(geocode)
             awbs.append(awb)
