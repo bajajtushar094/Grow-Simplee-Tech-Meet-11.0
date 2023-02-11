@@ -22,16 +22,6 @@ function createIcon(url) {
   });
 }
 
-function rider(img, progress) {
-  return L.divIcon({
-    className: "custom icon",
-    html: ReactDOMServer.renderToString(
-      <Mapmarker image={img} progress={progress} />
-    ),
-  });
-}
-//var latCenter = 26.148043;
-//var lonCenter = 91.731377;
 const Map = ({ setRouteSummary, ...props }) => {
   let latCenter = 0;
   let lonCenter = 0;
@@ -70,21 +60,12 @@ const Map = ({ setRouteSummary, ...props }) => {
               iconAnchor: [24, 36],
             })
           }
-          //icon={rider(R)}
-          // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
-          // icon = {sus}
           onclick={() => {}}
         />
       );
       zoom = 12;
     }
   }
-  /* if (latCenter < 8.4 || latCenter > 37.6) {
-    latCenter = 12.9716;
-  }
-  if (lonCenter < 68.7 || lonCenter > 97.25) {
-    lonCenter = 77.5946;
-  } */
 
   return (
     <MapContainer
@@ -120,7 +101,6 @@ const Map = ({ setRouteSummary, ...props }) => {
         ))}
       {props.coordinates &&
         props.coordinates.length === 2 &&
-        // create a marker for each each coordinate. Make the icon a custom icon based on the status of the item
         props.coordinates.map((item, index) => (
           <Marker
             key={index}
