@@ -69,7 +69,7 @@ const DestinationReached = () => {
       <>
         <PackageDetails coordinates={destination} />
         <Map2 coordinates={[destination]} className="flex-grow z-0"></Map2>
-        <div className="bottom_bar absolute inset-x-0 bottom-0 rounded-t-[12px] bg-white px-4 py-6 border border-[#D2D1CC] z-10">
+        <div className="rounded-t-[12px] bg-white px-4 py-6 border border-[#D2D1CC] z-10">
           <div className="buttons flex text-center font-semibold">
             <Link
               to="/scanQR"

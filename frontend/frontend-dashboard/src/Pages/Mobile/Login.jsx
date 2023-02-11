@@ -96,7 +96,7 @@ const Login = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === "123") {
+    if (password === "123456789") {
       setLoading(true);
       login().then(() => {
         setLoading(false);

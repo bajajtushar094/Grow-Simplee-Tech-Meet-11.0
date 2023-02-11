@@ -142,6 +142,7 @@ const Map = ({
                   parseFloat(item.current_order.longitude),
                 ]}
                 icon={rider(R, item.progress)}
+                zIndexOffset={10000}
                 // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
                 // icon = {sus}
                 onclick={handleClick}

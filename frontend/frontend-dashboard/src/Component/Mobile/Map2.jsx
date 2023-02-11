@@ -3,15 +3,22 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import * as L from "leaflet";
 import RoutineMachine from "./RoutineMachine";
 import { useState } from "react";
-import delivery from "./delivery.svg";
 import Pins from "./Pins.svg";
 import Mapmarker from "../Global/Marker/Mapmarker";
 import ReactDOMServer from "react-dom/server";
 import R from "./R.svg";
+import delivery2 from "./delivery2.svg";
+import warehouse from "./warehouse.svg";
+import pickup2 from "./pickup2.svg";
+import pickup from "./pickup.svg";
+import delivery from "./delivery.svg";
+import start from "./start.svg";
+import destination from "./destination.svg";
 
 function createIcon(url) {
   return new L.Icon({
     iconUrl: url,
+    iconAnchor: [18, 18],
   });
 }
 
@@ -57,6 +64,12 @@ const Map = ({ setRouteSummary, ...props }) => {
             props.coordinates[0].latitude,
             props.coordinates[0].longitude,
           ]}
+          icon={
+            new L.Icon({
+              iconUrl: destination,
+              iconAnchor: [24, 36],
+            })
+          }
           //icon={rider(R)}
           // icon={item.type==='pickup'?createIcon(delivery):rider(R)}
           // icon = {sus}
@@ -86,6 +99,45 @@ const Map = ({ setRouteSummary, ...props }) => {
       />
 
       {props.coordinates && route}
+
+      {props.coordinates &&
+        props.coordinates.length > 2 &&
+        // create a marker for each each coordinate. Make the icon a custom icon based on the status of the item
+        props.coordinates.map((item, index) => (
+          <Marker
+            key={index}
+            index={index}
+            position={[item.latitude, item.longitude]}
+            icon={
+              item.status === "warehouse"
+                ? createIcon(warehouse)
+                : item.status === "pickup"
+                ? createIcon(pickup2)
+                : createIcon(delivery2)
+            }
+            onclick={() => {}}
+          />
+        ))}
+      {props.coordinates &&
+        props.coordinates.length === 2 &&
+        // create a marker for each each coordinate. Make the icon a custom icon based on the status of the item
+        props.coordinates.map((item, index) => (
+          <Marker
+            key={index}
+            index={index}
+            position={[item.latitude, item.longitude]}
+            icon={
+              item.status === "warehouse"
+                ? createIcon(warehouse)
+                : index === 0
+                ? createIcon(start)
+                : item.status === "pickup"
+                ? createIcon(pickup)
+                : createIcon(delivery)
+            }
+            onclick={() => {}}
+          />
+        ))}
     </MapContainer>
   );
 };
