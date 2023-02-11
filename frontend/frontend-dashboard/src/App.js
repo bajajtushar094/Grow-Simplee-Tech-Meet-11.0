@@ -56,7 +56,6 @@ function App() {
 
         {/* Demo */}
         <Route path="/demo" element={<Demo/>}/>
-        {/* <Route path="/riderDetails" element={<RiderDetails/>}/> */}
         <Route path="/marker" element={<Mapmarker/>}/>
 
       </Routes>
